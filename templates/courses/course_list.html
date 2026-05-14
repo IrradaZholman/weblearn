@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% block title %}Курсы — WebLearn{% endblock %}
+
+{% block extra_css %}
+<style>
+    .course-section {
+        margin-bottom: 4rem;
+    }
+    .section-header {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+    }
+    .course-card {
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    .course-card:hover {
+        transform: translateY(-8px);
+    }
+    .course-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold mb-3">Курсы по веб-программированию</h1>
+        <p class="lead text-muted">Выбери курс и начни учиться веб-программированию с нуля</p>
+    </div>
+
+    {% if courses %}
+    <!-- Основы HTML -->
+    <div class="course-section">
+        <div class="section-header">
+            <h2 class="h3 fw-bold mb-2">📝 Основы HTML</h2>
+            <p class="mb-0">Изучи основы языка разметки HTML. Научись создавать структуру веб-страниц.</p>
+        </div>
+        <div class="row g-4">
+            {% for course in courses %}
+                {% if 'HTML' in course.title and 'Основы' in course.title or 'html' in course.title|lower and 'основы' in course.title|lower %}
+                <div class="col-md-6 col-lg-4">
+                    <a href="{% url 'courses:course_detail' course.slug %}" class="text-decoration-none">
+                        <div class="card card-custom course-card h-100 border-0 overflow-hidden">
+                            <div class="card-body p-4">
+                                <div class="text-center course-icon">📄</div>
+                                <h5 class="card-title fw-bold text-dark mb-2">{{ course.title }}</h5>
+                                <p class="card-text text-muted small mb-3">{{ course.description|truncatewords:15 }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-primary bg-opacity-25 text-primary">{{ course.lessons_count }} уроков</span>
+                                    <span class="text-primary">→</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Продвинутый HTML -->
+    <div class="course-section">
+        <div class="section-header" style="background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);">
+            <h2 class="h3 fw-bold mb-2">🚀 Продвинутый HTML</h2>
+            <p class="mb-0">Углубленное изучение HTML: семантические элементы, формы, мультимедиа.</p>
+        </div>
+        <div class="row g-4">
+            {% for course in courses %}
+                {% if 'HTML' in course.title and 'Продвинутый' in course.title or 'html' in course.title|lower and 'продвинутый' in course.title|lower %}
+                <div class="col-md-6 col-lg-4">
+                    <a href="{% url 'courses:course_detail' course.slug %}" class="text-decoration-none">
+                        <div class="card card-custom course-card h-100 border-0 overflow-hidden">
+                            <div class="card-body p-4">
+                                <div class="text-center course-icon">⚡</div>
+                                <h5 class="card-title fw-bold text-dark mb-2">{{ course.title }}</h5>
+                                <p class="card-text text-muted small mb-3">{{ course.description|truncatewords:15 }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-primary bg-opacity-25 text-primary">{{ course.lessons_count }} уроков</span>
+                                    <span class="text-primary">→</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Изучение CSS -->
+    <div class="course-section">
+        <div class="section-header" style="background: linear-gradient(135deg, #1572b6 0%, #33a9dc 100%);">
+            <h2 class="h3 fw-bold mb-2">🎨 Изучение CSS</h2>
+            <p class="mb-0">Освой каскадные таблицы стилей. Создавай красивые и современные веб-страницы.</p>
+        </div>
+        <div class="row g-4">
+            {% for course in courses %}
+                {% if 'CSS' in course.title or 'css' in course.title|lower %}
+                <div class="col-md-6 col-lg-4">
+                    <a href="{% url 'courses:course_detail' course.slug %}" class="text-decoration-none">
+                        <div class="card card-custom course-card h-100 border-0 overflow-hidden">
+                            <div class="card-body p-4">
+                                <div class="text-center course-icon">💅</div>
+                                <h5 class="card-title fw-bold text-dark mb-2">{{ course.title }}</h5>
+                                <p class="card-text text-muted small mb-3">{{ course.description|truncatewords:15 }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-primary bg-opacity-25 text-primary">{{ course.lessons_count }} уроков</span>
+                                    <span class="text-primary">→</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Изучение JavaScript -->
+    <div class="course-section">
+        <div class="section-header" style="background: linear-gradient(135deg, #f7df1e 0%, #f0db4f 100%); color: #000;">
+            <h2 class="h3 fw-bold mb-2">⚙️ Изучение JavaScript</h2>
+            <p class="mb-0">Изучи JavaScript и добавь интерактивность своим веб-страницам.</p>
+        </div>
+        <div class="row g-4">
+            {% for course in courses %}
+                {% if 'JavaScript' in course.title or 'javascript' in course.title|lower or 'JS' in course.title %}
+                <div class="col-md-6 col-lg-4">
+                    <a href="{% url 'courses:course_detail' course.slug %}" class="text-decoration-none">
+                        <div class="card card-custom course-card h-100 border-0 overflow-hidden">
+                            <div class="card-body p-4">
+                                <div class="text-center course-icon">🔧</div>
+                                <h5 class="card-title fw-bold text-dark mb-2">{{ course.title }}</h5>
+                                <p class="card-text text-muted small mb-3">{{ course.description|truncatewords:15 }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-primary bg-opacity-25 text-primary">{{ course.lessons_count }} уроков</span>
+                                    <span class="text-primary">→</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Все остальные курсы -->
+    {% for course in courses %}
+        {% if 'HTML' not in course.title and 'CSS' not in course.title and 'JavaScript' not in course.title and 'JS' not in course.title %}
+        {% if forloop.first %}
+        <div class="course-section">
+            <div class="section-header" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);">
+                <h2 class="h3 fw-bold mb-2">📚 Другие курсы</h2>
+            </div>
+            <div class="row g-4">
+        {% endif %}
+                <div class="col-md-6 col-lg-4">
+                    <a href="{% url 'courses:course_detail' course.slug %}" class="text-decoration-none">
+                        <div class="card card-custom course-card h-100 border-0 overflow-hidden">
+                            <div class="card-body p-4">
+                                <div class="text-center course-icon">📖</div>
+                                <h5 class="card-title fw-bold text-dark mb-2">{{ course.title }}</h5>
+                                <p class="card-text text-muted small mb-3">{{ course.description|truncatewords:15 }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-primary bg-opacity-25 text-primary">{{ course.lessons_count }} уроков</span>
+                                    <span class="text-primary">→</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+        {% if forloop.last %}
+            </div>
+        </div>
+        {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% else %}
+    <div class="alert alert-info">
+        <p class="mb-0">Курсы пока не добавлены. Зайди в админ-панель и создай первый курс!</p>
+        <a href="/admin/" class="btn btn-primary mt-3">Открыть админку</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Дополнительные задания — WebLearn{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Курсы</a></li>
+            <li class="breadcrumb-item active">Дополнительные задания</li>
+        </ol>
+    </nav>
+
+    <div class="mb-4">
+        <h1 class="fw-bold mb-2">Дополнительные задания</h1>
+        <p class="lead text-muted">Выполняй задания отдельно, даже без прохождения всей темы. Отправляй работы на проверку и получай обратную связь.</p>
+    </div>
+
+    {% if assignments %}
+    <div class="row g-4">
+        {% for assignment in assignments %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card card-custom h-100 border-0">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge 
+                            {% if assignment.difficulty == 'easy' %}bg-success
+                            {% elif assignment.difficulty == 'medium' %}bg-warning
+                            {% else %}bg-danger{% endif %}">
+                            {{ assignment.get_difficulty_display }}
+                        </span>
+                    </div>
+                    <h5 class="card-title fw-bold text-dark mb-3">{{ assignment.title }}</h5>
+                    <p class="card-text text-muted small mb-4">{{ assignment.description|truncatewords:20 }}</p>
+                    <a href="{% url 'editor:standalone_assignment' assignment.id %}" class="btn btn-primary w-100">Выполнить задание</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <p class="mb-0">Дополнительные задания пока не добавлены.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

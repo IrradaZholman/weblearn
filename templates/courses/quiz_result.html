@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Результат теста — WebLearn{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card card-custom border-0 text-center">
+                <div class="card-body p-5">
+                    {% if attempt.passed %}
+                    <div class="display-1 mb-4">🎉</div>
+                    <h1 class="h2 fw-bold text-success mb-3">Поздравляем!</h1>
+                    <p class="lead mb-4">Вы успешно прошли тест</p>
+                    {% else %}
+                    <div class="display-1 mb-4">📝</div>
+                    <h1 class="h2 fw-bold text-warning mb-3">Тест не пройден</h1>
+                    <p class="lead mb-4">Попробуйте еще раз</p>
+                    {% endif %}
+
+                    <div class="mb-4">
+                        <div class="display-4 fw-bold text-primary mb-2">{{ attempt.score }}%</div>
+                        <p class="text-muted">Проходной балл: {{ attempt.quiz.passing_score }}%</p>
+                    </div>
+
+                    <div class="d-flex gap-3 justify-content-center">
+                        {% if attempt.quiz.lesson %}
+                        <a href="{% url 'courses:lesson_detail' attempt.quiz.lesson.course.slug attempt.quiz.lesson.slug %}" 
+                           class="btn btn-primary">Вернуться к уроку</a>
+                        {% elif attempt.quiz.course %}
+                        <a href="{% url 'courses:course_detail' attempt.quiz.course.slug %}" 
+                           class="btn btn-primary">Вернуться к курсу</a>
+                        {% endif %}
+                        <a href="{% url 'courses:quiz_detail' attempt.quiz.id %}" 
+                           class="btn btn-outline-primary">Пройти еще раз</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

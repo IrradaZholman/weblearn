@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Мои работы — WebLearn{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="fw-bold mb-4">Мои работы</h1>
+
+    {% if submissions %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Задание</th>
+                    <th>Курс</th>
+                    <th>Статус</th>
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in submissions %}
+                <tr>
+                    <td>{{ s.assignment.title }}</td>
+                    <td>{{ s.assignment.lesson.course.title }}</td>
+                    <td>
+                        {% if s.status == 'accepted' %}
+                        <span class="badge bg-success">Принято</span>
+                        {% elif s.status == 'revision' %}
+                        <span class="badge bg-warning text-dark">Доработать</span>
+                        {% else %}
+                        <span class="badge bg-secondary">На проверке</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ s.created_at|date:"d.m.Y" }}</td>
+                </tr>
+                {% if s.reviewer_comment %}
+                <tr>
+                    <td colspan="4" class="bg-light small">
+                        <strong>Комментарий:</strong> {{ s.reviewer_comment }}
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <p class="mb-0">У вас пока нет отправленных работ. Выполните задание в любом уроке и отправьте его на проверку.</p>
+        <a href="{% url 'courses:course_list' %}" class="btn btn-primary mt-3">Перейти к курсам</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

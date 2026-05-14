@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ course.title }} — WebLearn{% endblock %}
+
+{% block extra_css %}
+<style>
+    .course-hero {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+    }
+    .course-image {
+        max-width: 100%;
+        border-radius: 16px;
+        box-shadow: 0 20px 25px -5px rgba(0,0,0,.1);
+    }
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+        border-radius: 16px;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,.1);
+    }
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .lesson-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+    .lesson-card:hover {
+        transform: translateX(8px);
+        border-left-color: #6366f1;
+    }
+    .lesson-completed {
+        border-left-color: #22c55e;
+        background: #f0fdf4;
+    }
+    .lesson-completed::before {
+        content: "✓";
+        color: #22c55e;
+        font-weight: bold;
+        margin-right: 8px;
+    }
+    .rating-stars {
+        color: #fbbf24;
+        font-size: 1.2rem;
+    }
+    .review-card {
+        border-left: 3px solid #6366f1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="course-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">{{ course.title }}</h1>
+                {% if course.short_description %}
+                <p class="lead mb-4">{{ course.short_description }}</p>
+                {% else %}
+                <p class="lead mb-4">{{ course.description|truncatewords:30 }}</p>
+                {% endif %}
+                <div class="d-flex gap-3 align-items-center flex-wrap">
+                    <span class="badge bg-light text-primary px-3 py-2 fs-6">{{ course.lessons.count }} уроков</span>
+                    {% if avg_rating %}
+                    <div class="rating-stars">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= avg_rating|floatformat:0|add:"0" %}
+                                ★
+                            {% else %}
+                                ☆
+                            {% endif %}
+                        {% endfor %}
+                        <span class="ms-2 text-white">{{ avg_rating }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% if course.image %}
+            <div class="col-lg-4 mt-4 mt-lg-0">
+                <img src="{{ course.image.url }}" alt="{{ course.title }}" class="course-image">
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Курсы</a></li>
+            <li class="breadcrumb-item active">{{ course.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-8">
+            {% if course.video_url %}
+            <div class="card card-custom border-0 mb-4">
+                <div class="card-body p-4">
+                    <h3 class="h5 fw-bold mb-3">Вводное видео</h3>
+                    <div class="video-container">
+                        {% if course.video_url %}
+                            <iframe src="{{ course.video_url }}" frameborder="0" allowfullscreen></iframe>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="card card-custom border-0 mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 fw-bold mb-3">О курсе</h2>
+                    <div class="course-description">
+                        {{ course.description|linebreaks }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-custom border-0 mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 fw-bold mb-4">Программа курса</h2>
+                    {% if course.lessons.all %}
+                    <div class="list-group list-group-flush">
+                        {% for lesson in course.lessons.all %}
+                        <a href="{% url 'courses:lesson_detail' course.slug lesson.slug %}" 
+                           class="list-group-item list-group-item-action lesson-card {% if lesson.id in completed_lessons %}lesson-completed{% endif %} border-0 px-0 py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-primary bg-opacity-10 text-primary me-2">Урок {{ forloop.counter }}</span>
+                                    <span class="fw-bold text-dark">{{ lesson.title }}</span>
+                                </div>
+                                {% if lesson.id in completed_lessons %}
+                                <span class="badge bg-success">Выполнено</span>
+                                {% else %}
+                                <span class="text-muted">→</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">В этом курсе пока нет уроков.</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if reviews %}
+            <div class="card card-custom border-0 mb-4">
+                <div class="card-body p-4">
+                    <h2 class="h4 fw-bold mb-4">Отзывы студентов</h2>
+                    {% for review in reviews %}
+                    <div class="review-card card mb-3 border-0 bg-light">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <strong>{{ review.user.username }}</strong>
+                                    <div class="rating-stars small">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= review.rating %}
+                                                ★
+                                            {% else %}
+                                                ☆
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <small class="text-muted">{{ review.created_at|date:"d.m.Y" }}</small>
+                            </div>
+                            {% if review.text %}
+                            <p class="mb-0 text-muted">{{ review.text }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card card-custom border-0 sticky-top" style="top: 20px;">
+                <div class="card-body p-4">
+                    <h3 class="h5 fw-bold mb-3">Информация о курсе</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <strong>Уроков:</strong> {{ course.lessons.count }}
+                        </li>
+                        {% if request.user.is_authenticated %}
+                        <li class="mb-2">
+                            <strong>Прогресс:</strong> 
+                            {% widthratio completed_lessons|length course.lessons.count 100 %}%
+                        </li>
+                        {% endif %}
+                        {% if avg_rating %}
+                        <li class="mb-2">
+                            <strong>Рейтинг:</strong> 
+                            <span class="rating-stars">{{ avg_rating }}</span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <a href="{% url 'courses:lesson_detail' course.slug course.lessons.first.slug %}" 
+                       class="btn btn-primary w-100 mt-3">
+                        Начать обучение
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

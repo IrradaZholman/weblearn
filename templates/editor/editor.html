@@ -1,0 +1,953 @@
+{% extends 'base.html' %}
+{% block title %}Редактор кода — WebLearn{% endblock %}
+
+{% block extra_css %}
+<style>
+    body.editor-page footer {
+        display: none;
+    }
+    .editor-wrapper { 
+        position: fixed;
+        top: 56px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0.5rem 0.75rem 0.75rem;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background: #f8fafc;
+        min-height: calc(100vh - 56px);
+        box-sizing: border-box;
+    }
+    /* Раньше .editor-container задавал flex-direction: column и ломал .row — колонки шли столбиком */
+    .editor-wrapper > .row.editor-container {
+        flex: 1 1 0;
+        min-height: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: stretch;
+    }
+    .row.editor-container > [class*="col-"] {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+    }
+    .row.editor-container > [class*="col-"] > .card {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,.1);
+        height: 100%;
+        overflow: hidden;
+    }
+    .editor-panel { 
+        flex: 1;
+        display: flex; 
+        flex-direction: column; 
+        min-height: 0;
+        position: relative;
+        height: 100%;
+    }
+    .code-editor-wrapper {
+        position: relative;
+        flex: 1 1 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
+        height: 100%;
+    }
+    .code-editor-main {
+        flex: 1 1 0;
+        display: flex;
+        flex-direction: row;
+        min-height: 0;
+        overflow: hidden;
+        align-items: stretch;
+    }
+    .line-numbers {
+        flex-shrink: 0;
+        width: 3.25rem;
+        min-width: 3rem;
+        background: #0f172a;
+        color: #64748b;
+        text-align: right;
+        padding: 1rem 0.4rem 1rem 0.35rem;
+        font-family: 'JetBrains Mono', 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        white-space: pre;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        user-select: none;
+        border-right: 1px solid #334155;
+        box-sizing: border-box;
+        scrollbar-width: none;
+    }
+    .line-numbers::-webkit-scrollbar {
+        display: none;
+    }
+    .code-editor-wrapper textarea {
+        flex: 1 1 0;
+        min-width: 0;
+        resize: none; 
+        font-family: 'JetBrains Mono', 'Courier New', monospace; 
+        font-size: 14px;
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 1rem 1rem 1rem 0.65rem;
+        line-height: 1.6;
+        border: none;
+        outline: none;
+        overflow-y: auto !important;
+        overflow-x: auto !important;
+        width: 100%;
+        box-sizing: border-box;
+        min-height: 0;
+        height: 100%;
+    }
+    .editor-panel textarea::placeholder {
+        color: #64748b;
+    }
+    .editor-header {
+        background: #f8fafc;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: #64748b;
+    }
+    .editor-header .icon {
+        font-size: 1.1rem;
+    }
+    
+    /* Улучшенные вкладки */
+    .nav-editor { 
+        background: #f1f5f9;
+        border-bottom: 2px solid #e2e8f0;
+        padding: 0;
+        display: flex;
+        gap: 0;
+    }
+    .nav-editor .nav-item {
+        flex: 1;
+    }
+    .nav-editor .nav-link { 
+        color: #475569 !important; 
+        font-weight: 700;
+        padding: 1rem 1.5rem;
+        border: none;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        letter-spacing: 0.5px;
+    }
+    .nav-editor .nav-link .icon,
+    .nav-editor .nav-link span { 
+        color: inherit !important; 
+    }
+    .nav-editor .nav-link:hover {
+        background: rgba(255,255,255,0.5);
+    }
+    .nav-editor .nav-link.active { 
+        background: white;
+        border-bottom-color: currentColor;
+    }
+    .nav-editor .nav-link[data-bs-target="#tab-html"] {
+        color: #475569 !important;
+    }
+    .nav-editor .nav-link[data-bs-target="#tab-html"].active {
+        color: #ffffff !important;
+        background: #000 !important;
+        border-bottom-color: #000 !important;
+    }
+    .nav-editor .nav-link[data-bs-target="#tab-css"] {
+        color: #475569 !important;
+    }
+    .nav-editor .nav-link[data-bs-target="#tab-css"].active {
+        color: #ffffff !important;
+        background: #1572b6 !important;
+        border-bottom-color: #1572b6 !important;
+    }
+    .nav-editor .nav-link[data-bs-target="#tab-js"] {
+        color: #475569 !important;
+    }
+    .nav-editor .nav-link[data-bs-target="#tab-js"].active {
+        color: #1e293b !important;
+        background: #f7df1e !important;
+        border-bottom-color: #f7df1e !important;
+    }
+    
+    .preview-frame { 
+        width: 100%; 
+        height: 100%; 
+        border: none; 
+        background: #fff; 
+        border-radius: 0 0 12px 12px;
+    }
+    .preview-container { 
+        flex: 1;
+        min-height: 0;
+        background: #ffffff; 
+        border-radius: 0 0 12px 12px;
+        overflow: hidden; 
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #e2e8f0;
+    }
+    .preview-header {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+    .preview-header::before {
+        content: "👁️";
+        font-size: 1.1rem;
+    }
+    .tab-content {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        background: #1e293b;
+        overflow: hidden;
+        height: 100%;
+        position: relative;
+    }
+    .tab-content .tab-pane {
+        flex: 1 1 auto;
+        display: none;
+        flex-direction: column;
+        min-height: 0;
+        height: 100%;
+        overflow: hidden;
+        width: 100%;
+    }
+    .tab-content .tab-pane.active {
+        display: flex !important;
+    }
+    .tab-content .tab-pane.show {
+        display: flex !important;
+    }
+    
+    .assignment-info {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        padding: 0.65rem 1rem;
+        border-radius: 10px;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(99, 102, 241, .2);
+        flex-shrink: 0;
+        max-height: 120px;
+        overflow-y: auto;
+    }
+    .assignment-info h3 {
+        color: white;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .assignment-info h3::before {
+        content: "📋";
+        font-size: 1.2rem;
+    }
+    .assignment-info p {
+        color: rgba(255,255,255,0.95);
+        margin-bottom: 0;
+        line-height: 1.6;
+    }
+    
+    .editor-top-bar {
+        background: white;
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-shrink: 0;
+    }
+    .editor-top-bar h1 {
+        margin: 0;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .editor-top-bar h1::before {
+        content: "💻";
+        font-size: 1.3rem;
+    }
+    
+    .submit-form {
+        background: white;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,.1);
+        margin-top: 0.5rem;
+        flex-shrink: 0;
+        max-height: 180px;
+        overflow-y: auto;
+    }
+    .submit-form h5 {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .submit-form h5::before {
+        content: "📤";
+        font-size: 1.2rem;
+    }
+    
+    .code-stats {
+        position: absolute;
+        bottom: 0.75rem;
+        right: 1rem;
+        background: rgba(30, 41, 59, 0.9);
+        color: #94a3b8;
+        padding: 0.35rem 0.65rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-family: 'JetBrains Mono', monospace;
+        z-index: 10;
+        pointer-events: none;
+    }
+    
+    .resize-handle {
+        width: 4px;
+        background: #e2e8f0;
+        cursor: col-resize;
+        transition: background 0.2s;
+        flex-shrink: 0;
+    }
+    .resize-handle:hover {
+        background: #6366f1;
+    }
+    
+    
+    /* Панель ошибок */
+    .errors-panel {
+        max-height: 160px;
+        overflow-y: auto;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        flex-shrink: 0;
+        transition: max-height 0.3s;
+    }
+    .errors-panel.collapsed { max-height: 40px; }
+    .errors-panel .errors-header {
+        padding: 0.5rem 1rem;
+        background: #fee2e2;
+        border-radius: 8px 8px 0 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 600;
+        color: #991b1b;
+    }
+    .errors-panel .errors-list { padding: 0.75rem 1rem; }
+    .errors-panel .error-item {
+        padding: 0.5rem 0.75rem;
+        margin-bottom: 0.5rem;
+        background: white;
+        border-radius: 6px;
+        border-left: 4px solid #ef4444;
+        cursor: pointer;
+        font-size: 0.875rem;
+    }
+    .error-item:hover { background: #fef2f2; }
+    .error-item .error-message { color: #991b1b; font-weight: 500; }
+    .error-item .error-hint { color: #64748b; font-size: 0.8rem; margin-top: 0.25rem; }
+    .error-item .error-loc { color: #6366f1; font-size: 0.75rem; }
+    
+    /* Чат-бот */
+    .chat-fab {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border: none;
+        box-shadow: 0 4px 14px rgba(99, 102, 241, .4);
+        cursor: pointer;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        transition: transform 0.2s;
+    }
+    .chat-fab:hover { transform: scale(1.05); }
+    .chat-panel {
+        position: fixed;
+        bottom: 90px;
+        right: 24px;
+        width: 380px;
+        max-height: 450px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0,0,0,.15);
+        z-index: 999;
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .chat-panel.open { display: flex; }
+    .chat-panel .chat-header {
+        padding: 1rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        font-weight: 700;
+        display: flex;
+        justify-content: space-between;
+    }
+    .chat-panel .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+        max-height: 280px;
+    }
+    .chat-msg { margin-bottom: 0.75rem; }
+    .chat-msg.user { text-align: right; }
+    .chat-msg .bubble {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
+        max-width: 90%;
+        font-size: 0.9rem;
+        white-space: pre-wrap;
+    }
+    .chat-msg.user .bubble { background: #e0e7ff; color: #3730a3; }
+    .chat-msg.bot .bubble { background: #f1f5f9; color: #334155; }
+    .chat-panel .chat-input-wrap { padding: 0.75rem; border-top: 1px solid #e2e8f0; }
+    .chat-panel .chat-input { width: 100%; padding: 0.75rem; border-radius: 10px; border: 1px solid #e2e8f0; resize: none; }
+</style>
+{% endblock %}
+
+{% block content %}
+<script>
+document.body.classList.add('editor-page');
+</script>
+<div class="editor-wrapper">
+    <div class="editor-top-bar">
+        <h1 class="h5 fw-bold mb-0">Редактор кода</h1>
+        {% if assignment %}
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-primary px-3 py-2">📝 Задание: {{ assignment.title }}</span>
+            <a href="{% url 'courses:lesson_detail' assignment.lesson.course.slug assignment.lesson.slug %}" class="btn btn-outline-primary btn-sm">← Вернуться</a>
+        </div>
+        {% elif standalone_assignment %}
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success px-3 py-2">⭐ Доп. задание: {{ standalone_assignment.title }}</span>
+            <a href="{% url 'courses:standalone_assignments' %}" class="btn btn-outline-success btn-sm">← Вернуться</a>
+        </div>
+        {% else %}
+        <div class="d-flex align-items-center gap-2">
+            <span class="text-muted small">Свободный редактор</span>
+            <a href="{% url 'courses:course_list' %}" class="btn btn-outline-primary btn-sm">📚 Курсы</a>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if assignment %}
+    <div class="assignment-info">
+        <h3 class="h6 fw-bold mb-2">Задание: {{ assignment.title }}</h3>
+        <p style="margin-bottom: 0;">{{ assignment.description|linebreaks }}</p>
+    </div>
+    {% elif standalone_assignment %}
+    <div class="assignment-info" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);">
+        <h3 class="h6 fw-bold mb-2">Дополнительное задание: {{ standalone_assignment.title }}</h3>
+        <p style="margin-bottom: 0;">{{ standalone_assignment.description|linebreaks }}</p>
+        <span class="badge bg-light text-dark mt-2">
+            Сложность: {{ standalone_assignment.get_difficulty_display }}
+        </span>
+    </div>
+    {% endif %}
+
+    <div class="row editor-container g-2 flex-grow-1" style="min-height: 0; overflow: hidden;">
+        <div class="col-12 col-md-6 d-flex flex-column min-h-0">
+            <div class="card border-0 shadow-sm h-100 flex-grow-1 d-flex flex-column min-h-0" style="min-height: 0;">
+                <ul class="nav nav-tabs nav-editor" role="tablist" style="flex-shrink: 0;">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#tab-html" title="HTML — разметка и структура страницы">
+                            <span class="icon">📄</span>
+                            <span>HTML</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#tab-css" title="CSS — стили и оформление">
+                            <span class="icon">🎨</span>
+                            <span>CSS</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#tab-js" title="JavaScript — интерактивность">
+                            <span class="icon">⚙️</span>
+                            <span>JavaScript</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content" style="flex: 1; display: flex; flex-direction: column; min-height: 0; position: relative;">
+                    <div class="tab-pane fade show active editor-panel" id="tab-html">
+                        <div class="code-editor-wrapper" style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
+                            <div class="editor-header" style="flex-shrink: 0;">
+                                <span class="icon">📄</span>
+                                <span>HTML код</span>
+                            </div>
+                            <div class="code-editor-main">
+                            <div class="line-numbers" id="html-line-numbers" aria-hidden="true">1</div>
+                            <textarea id="html-code" class="form-control border-0" style="flex: 1; min-height: 0; display: block !important; visibility: visible !important;" placeholder="<!DOCTYPE html>
+<html>
+<head>
+  <title>Мой сайт</title>
+</head>
+<body>
+  <h1>Привет, мир!</h1>
+</body>
+</html>">{% if assignment %}{% else %}<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Мой сайт</title>
+</head>
+<body>
+  <h1>Привет, мир!</h1>
+  <p>Напиши здесь свой код</p>
+</body>
+</html>{% endif %}</textarea>
+                            </div>
+                            <div class="code-stats" id="html-stats">0 строк</div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade editor-panel" id="tab-css">
+                        <div class="code-editor-wrapper" style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
+                            <div class="editor-header" style="flex-shrink: 0;">
+                                <span class="icon">🎨</span>
+                                <span>CSS стили</span>
+                            </div>
+                            <div class="code-editor-main">
+                            <div class="line-numbers" id="css-line-numbers" aria-hidden="true">1</div>
+                            <textarea id="css-code" class="form-control border-0" style="flex: 1; min-height: 0; display: block !important; visibility: visible !important;" placeholder="/* Добавь стили */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #6366f1;
+}">{% if assignment %}{% else %}body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+h1 {
+  color: #6366f1;
+}{% endif %}</textarea>
+                            </div>
+                            <div class="code-stats" id="css-stats">0 строк</div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade editor-panel" id="tab-js">
+                        <div class="code-editor-wrapper" style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
+                            <div class="editor-header" style="flex-shrink: 0;">
+                                <span class="icon">⚙️</span>
+                                <span>JavaScript код</span>
+                            </div>
+                            <div class="code-editor-main">
+                            <div class="line-numbers" id="js-line-numbers" aria-hidden="true">1</div>
+                            <textarea id="js-code" class="form-control border-0" style="flex: 1; min-height: 0; display: block !important; visibility: visible !important;" placeholder="// Добавь интерактивность
+console.log('Привет, мир!');
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Твой код здесь
+});">{% if assignment %}{% else %}// Добавь интерактивность
+console.log('Привет!');{% endif %}</textarea>
+                            </div>
+                            <div class="code-stats" id="js-stats">0 строк</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="errors-panel collapsed" id="errors-panel">
+                    <div class="errors-header" id="errors-toggle">
+                        <span>⚠️ Ошибки в коде (<span id="errors-count">0</span>)</span>
+                        <span id="errors-chevron">▼</span>
+                    </div>
+                    <div class="errors-list" id="errors-list"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 d-flex flex-column min-h-0">
+            <div class="card border-0 shadow-sm h-100 flex-grow-1 d-flex flex-column min-h-0">
+                <div class="preview-header">
+                    Превью результата
+                </div>
+                <div class="preview-container">
+                    <iframe id="preview" class="preview-frame" title="Превью"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if assignment or standalone_assignment %}
+    <div class="submit-form">
+        <h5 class="fw-bold mb-3">Отправить работу на проверку</h5>
+        <form method="post" action="{% url 'editor:submit' %}">
+            {% csrf_token %}
+            {% if assignment %}
+            <input type="hidden" name="assignment_id" value="{{ assignment.id }}">
+            {% else %}
+            <input type="hidden" name="standalone_assignment_id" value="{{ standalone_assignment.id }}">
+            {% endif %}
+            <input type="hidden" name="code" id="submit-code">
+            <div class="mb-2">
+                <label class="form-label fw-semibold small">Комментарий (необязательно)</label>
+                <textarea name="comment" class="form-control form-control-sm" rows="2" placeholder="Опиши, что ты сделал..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-success btn-lg px-4" id="submit-btn">
+                <span>📤</span> Отправить на проверку
+            </button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Чат-помощник -->
+<button class="chat-fab" id="chat-fab" title="Помощник">💬</button>
+<div class="chat-panel" id="chat-panel">
+    <div class="chat-header">
+        <span>🤖 Помощник WebLearn</span>
+        <button type="button" class="btn btn-sm btn-light" id="chat-close">×</button>
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input-wrap">
+        <textarea class="chat-input" id="chat-input" rows="2" placeholder="Спросите о HTML, CSS, JS или об ошибке..."></textarea>
+        <button type="button" class="btn btn-primary btn-sm mt-2" id="chat-send">Отправить</button>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+'use strict';
+
+// Глобальные ссылки на редакторы (заполняются после инициализации)
+let htmlEditor, cssEditor, jsEditor;
+let useCodeMirror = true;
+let errorMarkers = { html: [], css: [], js: [] };
+let lastValidation = { html: [], css: [], js: [] };
+let validateTimeout = null;
+const VALIDATE_DEBOUNCE = 400;
+
+function getCsrfToken() {
+    const m = document.cookie.match(/csrftoken=([^;]+)/);
+    return m ? m[1] : '';
+}
+
+function getFullCode() {
+    const html = htmlEditor ? htmlEditor.getValue() : (document.getElementById('html-code')?.value || '');
+    const css = cssEditor ? cssEditor.getValue() : (document.getElementById('css-code')?.value || '');
+    const js = jsEditor ? jsEditor.getValue() : (document.getElementById('js-code')?.value || '');
+    return JSON.stringify({ html, css, js });
+}
+
+function updatePreview() {
+    const html = htmlEditor ? htmlEditor.getValue() : (document.getElementById('html-code')?.value || '');
+    const css = cssEditor ? cssEditor.getValue() : (document.getElementById('css-code')?.value || '');
+    const js = jsEditor ? jsEditor.getValue() : (document.getElementById('js-code')?.value || '');
+    const doc = document.getElementById('preview').contentDocument;
+    doc.open();
+    doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>' + css + '</style></head><body>' + html + '<script>' + js + '<\/script></body></html>');
+    doc.close();
+}
+
+function updateStats(editor, statsId) {
+    const el = document.getElementById(statsId);
+    if (!el) return;
+    let val = '';
+    if (editor && typeof editor.getValue === 'function') val = editor.getValue();
+    else if (editor && editor.value !== undefined) val = editor.value;
+    else {
+        const ta = document.getElementById(statsId.replace('-stats','-code'));
+        if (ta) val = ta.value || '';
+    }
+    el.textContent = val.split('\n').length + ' строк, ' + val.length + ' символов';
+}
+
+// Валидация кода через API
+function runValidation() {
+    const html = htmlEditor ? htmlEditor.getValue() : (document.getElementById('html-code') && document.getElementById('html-code').value) || '';
+    const css = cssEditor ? cssEditor.getValue() : (document.getElementById('css-code') && document.getElementById('css-code').value) || '';
+    const js = jsEditor ? jsEditor.getValue() : (document.getElementById('js-code') && document.getElementById('js-code').value) || '';
+    fetch('{% url "editor:api_validate" %}', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
+        body: JSON.stringify({ html, css, js })
+    }).then(r => r.json()).then(data => {
+        lastValidation = data;
+        applyErrorMarkers(htmlEditor, data.html, 'html');
+        applyErrorMarkers(cssEditor, data.css, 'css');
+        applyErrorMarkers(jsEditor, data.js, 'js');
+        renderErrorsPanel(data);
+    }).catch(() => {});
+}
+
+function clearMarkers(editor, key) {
+    (errorMarkers[key] || []).forEach(m => m.clear());
+    errorMarkers[key] = [];
+}
+
+function applyErrorMarkers(editor, errors, key) {
+    if (!editor) return;
+    clearMarkers(editor, key);
+    (errors || []).forEach(function(err) {
+        const from = { line: (err.line || 1) - 1, ch: err.column || 0 };
+        const to = err.end_line != null
+            ? { line: err.end_line - 1, ch: (err.end_column || 0) + 1 }
+            : { line: from.line, ch: from.ch + 20 };
+        try {
+            const m = editor.markText(from, to, { className: 'cm-error-line' });
+            errorMarkers[key].push(m);
+        } catch(e) {}
+    });
+}
+
+function renderErrorsPanel(data) {
+    const all = (data.html || []).map(function(e){ e.type='html'; return e; })
+        .concat((data.css || []).map(function(e){ e.type='css'; return e; }))
+        .concat((data.js || []).map(function(e){ e.type='js'; return e; }));
+    const list = document.getElementById('errors-list');
+    const count = document.getElementById('errors-count');
+    const panel = document.getElementById('errors-panel');
+    count.textContent = all.length;
+    if (all.length === 0) {
+        list.innerHTML = '<div class="text-muted small p-2">Ошибок не найдено</div>';
+        panel.classList.add('collapsed');
+        return;
+    }
+    panel.classList.remove('collapsed');
+    list.innerHTML = all.map(function(e) {
+        const codeSuffix = e.code ? ' (' + e.code + ')' : '';
+        return '<div class="error-item" data-type="' + (e.type || 'html') + '" data-line="' + (e.line||0) + '">' +
+            '<div class="error-loc">' + (e.type.toUpperCase() + ': ') + (e.line ? 'Строка ' + e.line + codeSuffix : '') + '</div>' +
+            '<div class="error-message">' + (e.message || '') + '</div>' +
+            (e.hint ? '<div class="error-hint">' + e.hint + '</div>' : '') +
+            '</div>';
+    }).join('');
+    list.querySelectorAll('.error-item').forEach(function(el) {
+        el.addEventListener('click', function() {
+            const type = el.dataset.type;
+            const line = parseInt(el.dataset.line, 10) || 1;
+            var tabLink = document.querySelector('.nav-link[data-bs-target="#tab-' + type + '"]');
+            if (tabLink) tabLink.click();
+            var ed = htmlEditor || cssEditor || jsEditor;
+            var ta = document.getElementById(type + '-code');
+            if (ed) {
+                ed.focus();
+                ed.setCursor({ line: Math.max(0, line - 1), ch: 0 });
+                if (ed.refresh) ed.refresh();
+            } else if (ta) {
+                ta.focus();
+                var lines = ta.value.split('\n');
+                var pos = 0;
+                for (var i = 0; i < Math.min(line - 1, lines.length); i++) pos += lines[i].length + 1;
+                ta.setSelectionRange(pos, pos);
+            }
+        });
+    });
+}
+
+function scheduleValidation() {
+    if (validateTimeout) clearTimeout(validateTimeout);
+    validateTimeout = setTimeout(runValidation, VALIDATE_DEBOUNCE);
+}
+
+function bindLineNumbers(ta, lineNumbersEl) {
+    if (!ta || !lineNumbersEl) return;
+    function refresh() {
+        const n = Math.max(1, (ta.value || '').split('\n').length);
+        const parts = [];
+        for (let i = 1; i <= n; i++) parts.push(String(i));
+        lineNumbersEl.textContent = parts.join('\n');
+    }
+    function syncFromTextarea() {
+        lineNumbersEl.scrollTop = ta.scrollTop;
+    }
+    function syncFromGutter() {
+        ta.scrollTop = lineNumbersEl.scrollTop;
+    }
+    ta.addEventListener('scroll', syncFromTextarea);
+    lineNumbersEl.addEventListener('scroll', syncFromGutter);
+    ta.addEventListener('input', function() {
+        refresh();
+        syncFromTextarea();
+    });
+    refresh();
+    syncFromTextarea();
+}
+
+function setupEditorHeight() {
+    const editorRow = document.querySelector('.row.editor-container') || document.querySelector('.editor-container');
+    if (!editorRow) return;
+    const editorWrapper = document.querySelector('.editor-wrapper');
+    const topBar = document.querySelector('.editor-top-bar');
+    const assignmentInfo = document.querySelector('.assignment-info');
+    const submitForm = document.querySelector('.submit-form');
+    const wrapperHeight = editorWrapper ? editorWrapper.offsetHeight : window.innerHeight - 56;
+    const topBarHeight = topBar ? topBar.offsetHeight + 16 : 0;
+    const assignmentHeight = assignmentInfo ? assignmentInfo.offsetHeight + 16 : 0;
+    const submitFormHeight = submitForm ? submitForm.offsetHeight + 16 : 0;
+    const availableForEditor = wrapperHeight - topBarHeight - assignmentHeight - submitFormHeight - 32;
+    if (availableForEditor > 300) {
+        editorRow.style.height = availableForEditor + 'px';
+        editorRow.style.minHeight = availableForEditor + 'px';
+    }
+    if (htmlEditor && htmlEditor.refresh) htmlEditor.refresh();
+    if (cssEditor && cssEditor.refresh) cssEditor.refresh();
+    if (jsEditor && jsEditor.refresh) jsEditor.refresh();
+}
+
+// Чат
+function appendChatMessage(text, isUser) {
+    const container = document.getElementById('chat-messages');
+    const div = document.createElement('div');
+    div.className = 'chat-msg ' + (isUser ? 'user' : 'bot');
+    div.innerHTML = '<div class="bubble">' + String(text).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>') + '</div>';
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+function sendChatMessage() {
+    const input = document.getElementById('chat-input');
+    const msg = (input.value || '').trim();
+    if (!msg) return;
+    input.value = '';
+    appendChatMessage(msg, true);
+    const html = htmlEditor ? htmlEditor.getValue() : (document.getElementById('html-code') && document.getElementById('html-code').value) || '';
+    const css = cssEditor ? cssEditor.getValue() : (document.getElementById('css-code') && document.getElementById('css-code').value) || '';
+    const js = jsEditor ? jsEditor.getValue() : (document.getElementById('js-code') && document.getElementById('js-code').value) || '';
+    const errs = (lastValidation.html||[]).map(function(e){ e.type='html'; return e; })
+        .concat((lastValidation.css||[]).map(function(e){ e.type='css'; return e; }))
+        .concat((lastValidation.js||[]).map(function(e){ e.type='js'; return e; }));
+    const errors = errs.map(function(e){ return { line: e.line, message: e.message, hint: e.hint, type: e.type }; });
+    fetch('{% url "editor:api_chat" %}', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
+        body: JSON.stringify({ message: msg, html, css, js, errors })
+    }).then(r => r.json()).then(function(data) {
+        appendChatMessage(data.response || data.error || 'Нет ответа', false);
+    }).catch(function() {
+        appendChatMessage('Ошибка соединения. Попробуйте позже.', false);
+    });
+}
+
+function initWithTextareas() {
+    useCodeMirror = false;
+    const htmlTa = document.getElementById('html-code');
+    const cssTa = document.getElementById('css-code');
+    const jsTa = document.getElementById('js-code');
+    function onInput(ta, statsId) {
+        updatePreview();
+        updateStats(ta, statsId);
+        scheduleValidation();
+    }
+    const lineEls = [
+        document.getElementById('html-line-numbers'),
+        document.getElementById('css-line-numbers'),
+        document.getElementById('js-line-numbers')
+    ];
+    [htmlTa, cssTa, jsTa].forEach(function(ta, i) {
+        if (!ta) return;
+        ta.style.display = 'block';
+        ta.style.visibility = 'visible';
+        ta.style.flex = '1 1 0';
+        ta.style.minHeight = '0';
+        var statsId = ['html-stats','css-stats','js-stats'][i];
+        ta.addEventListener('input', function() { onInput(ta, statsId); });
+        bindLineNumbers(ta, lineEls[i]);
+    });
+    updateStats(htmlTa, 'html-stats');
+    updateStats(cssTa, 'css-stats');
+    updateStats(jsTa, 'js-stats');
+    setupEditorHeight();
+    updatePreview();
+    runValidation();
+}
+
+// Инициализация — используем обычные textarea (надёжно работают везде)
+function initEditor() {
+    const htmlTa = document.getElementById('html-code');
+    const cssTa = document.getElementById('css-code');
+    const jsTa = document.getElementById('js-code');
+    if (!htmlTa || !cssTa || !jsTa) return;
+    initWithTextareas();
+}
+
+document.getElementById('errors-toggle').addEventListener('click', function() {
+    document.getElementById('errors-panel').classList.toggle('collapsed');
+});
+var submitBtn = document.getElementById('submit-btn');
+if (submitBtn) {
+    submitBtn.addEventListener('click', function(e) {
+        var form = submitBtn.closest('form');
+        if (form) {
+            var codeEl = form.querySelector('input[name="code"], #submit-code');
+            if (codeEl) codeEl.value = (function(){
+                var h = htmlEditor ? htmlEditor.getValue() : (document.getElementById('html-code')?.value || '');
+                var c = cssEditor ? cssEditor.getValue() : (document.getElementById('css-code')?.value || '');
+                var j = jsEditor ? jsEditor.getValue() : (document.getElementById('js-code')?.value || '');
+                return JSON.stringify({ html: h, css: c, js: j });
+            })();
+        }
+    });
+}
+document.getElementById('chat-fab').addEventListener('click', function() {
+    document.getElementById('chat-panel').classList.toggle('open');
+});
+document.getElementById('chat-close').addEventListener('click', function() {
+    document.getElementById('chat-panel').classList.remove('open');
+});
+document.getElementById('chat-send').addEventListener('click', sendChatMessage);
+document.getElementById('chat-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
+});
+
+window.addEventListener('resize', function() { setTimeout(setupEditorHeight, 100); });
+document.querySelectorAll('.nav-link[data-bs-toggle="tab"]').forEach(function(link) {
+    link.addEventListener('shown.bs.tab', function() { setTimeout(setupEditorHeight, 150); });
+});
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(initEditor, 150); });
+} else {
+    setTimeout(initEditor, 150);
+}
+})();
+</script>
+{% endblock %}

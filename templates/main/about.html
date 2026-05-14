@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}О проекте — WebLearn{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="fw-bold mb-4">О проекте WebLearn</h1>
+            <p class="lead text-muted">Визуальная учебная среда для обучения веб-программированию школьников.</p>
+
+            <div class="card card-custom border-0 p-4 mb-4">
+                <h3 class="h5 fw-bold mb-3">Цель проекта</h3>
+                <p>WebLearn создан для того, чтобы школьники могли осваивать основы веб-разработки в удобной визуальной среде. Ученики пишут HTML, CSS и JavaScript и сразу видят результат в превью, что делает обучение наглядным и понятным.</p>
+            </div>
+
+            <div class="card card-custom border-0 p-4 mb-4">
+                <h3 class="h5 fw-bold mb-3">Методика</h3>
+                <p>Используется подход «от простого к сложному»: сначала HTML-разметка, затем стили CSS, затем интерактивность на JavaScript. Каждый урок содержит теорию, примеры и практическое задание с возможностью отправки на ручную проверку преподавателю.</p>
+            </div>
+
+            <div class="card card-custom border-0 p-4">
+                <h3 class="h5 fw-bold mb-3">Технологии</h3>
+                <p>Сайт построен на Django и Bootstrap 5. Редактор кода работает в браузере и позволяет экспериментировать с HTML, CSS и JavaScript без установки дополнительных программ.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

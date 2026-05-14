@@ -1,0 +1,474 @@
+{% extends 'base.html' %}
+{% block title %}WebLearn — Учим веб-программирование визуально{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-gradient {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-gradient::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        opacity: 0.3;
+    }
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,.1);
+        transition: transform 0.3s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,.15);
+    }
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        margin: 0 auto 1.5rem;
+    }
+    .program-step {
+        position: relative;
+        padding-left: 3rem;
+        margin-bottom: 2rem;
+    }
+    .program-step::before {
+        content: counter(step-counter);
+        counter-increment: step-counter;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 2.5rem;
+        height: 2.5rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+    .program-container {
+        counter-reset: step-counter;
+    }
+    .tech-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: #f1f5f9;
+        border-radius: 8px;
+        margin: 0.25rem;
+        font-weight: 600;
+        color: #475569;
+    }
+    .testimonial-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,.1);
+        border-left: 4px solid #6366f1;
+    }
+    .faq-item {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,.05);
+        transition: all 0.3s ease;
+    }
+    .faq-item:hover {
+        box-shadow: 0 4px 8px rgba(0,0,0,.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-gradient text-white py-5">
+    <div class="container py-5 hero-content">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-4">Учись создавать сайты с нуля</h1>
+                <p class="lead mb-4">Визуальная среда для школьников. Пиши код, смотри результат сразу и получай обратную связь от преподавателя. Изучи HTML, CSS и JavaScript через практику.</p>
+                <div class="d-flex gap-3 flex-wrap mb-4">
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-light btn-lg px-4">
+                        <span>🚀</span> Начать обучение
+                    </a>
+                    <a href="{% url 'editor:standalone' %}" class="btn btn-outline-light btn-lg px-4">
+                        <span>💻</span> Попробовать редактор
+                    </a>
+                </div>
+                <div class="d-flex gap-4 text-white-50 small">
+                    <div><span class="fw-bold text-white">25+</span> уроков</div>
+                    <div><span class="fw-bold text-white">4</span> курса</div>
+                    <div><span class="fw-bold text-white">100%</span> бесплатно</div>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block">
+                <div class="bg-white bg-opacity-25 rounded-4 p-4 d-inline-block backdrop-blur">
+                    <pre class="code-font text-start text-white mb-0" style="font-size: 0.9rem;"><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ru"&gt;
+&lt;head&gt;
+  &lt;title&gt;Мой сайт&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Привет, мир!&lt;/h1&gt;
+  &lt;p&gt;Мой первый сайт&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.courses_count|default:4 }}</div>
+                    <div class="text-muted fw-semibold">Курсов</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.lessons_count|default:25 }}</div>
+                    <div class="text-muted fw-semibold">Уроков</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.submissions_count|default:0 }}</div>
+                    <div class="text-muted fw-semibold">Отправлено работ</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card">
+                    <div class="stat-number">{{ stats.users_count|default:0 }}</div>
+                    <div class="text-muted fw-semibold">Учеников</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why WebLearn Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Почему WebLearn?</h2>
+            <p class="lead text-muted">Современная платформа для изучения веб-программирования с нуля</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border-0">
+                    <div class="card-body text-center">
+                        <div class="feature-icon bg-primary bg-opacity-10">
+                            <span>👁️</span>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">Визуальный результат</h5>
+                        <p class="card-text text-muted">Видишь результат кода сразу в превью. Учись на практике, экспериментируй и сразу видь изменения.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border-0">
+                    <div class="card-body text-center">
+                        <div class="feature-icon bg-success bg-opacity-10">
+                            <span>📝</span>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">Проверка заданий</h5>
+                        <p class="card-text text-muted">Отправляй работы на проверку и получай подробные комментарии преподавателя. Узнавай свои ошибки и улучшайся.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border-0">
+                    <div class="card-body text-center">
+                        <div class="feature-icon bg-warning bg-opacity-10">
+                            <span>🚀</span>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">Без регистрации</h5>
+                        <p class="card-text text-muted">Начни учиться сразу. Регистрация нужна только для сохранения прогресса и получения оценок.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border-0">
+                    <div class="card-body text-center">
+                        <div class="feature-icon bg-info bg-opacity-10">
+                            <span>📚</span>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">25 подробных уроков</h5>
+                        <p class="card-text text-muted">От основ HTML до создания интерактивных сайтов. Каждый урок с примерами кода и практическими заданиями.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border-0">
+                    <div class="card-body text-center">
+                        <div class="feature-icon bg-danger bg-opacity-10">
+                            <span>✅</span>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">Тесты и проверка знаний</h5>
+                        <p class="card-text text-muted">После каждого урока проходи тест для закрепления материала. Проверяй свои знания и отслеживай прогресс.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border-0">
+                    <div class="card-body text-center">
+                        <div class="feature-icon bg-secondary bg-opacity-10">
+                            <span>💡</span>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">Интерактивные примеры</h5>
+                        <p class="card-text text-muted">В каждом уроке есть встроенный редактор с примером кода. Меняй код и сразу видь результат.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Program Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="display-5 fw-bold mb-4">Программа обучения</h2>
+                <p class="lead text-muted mb-4">Систематический подход к изучению веб-разработки</p>
+                <div class="program-container">
+                    <div class="program-step">
+                        <h5 class="fw-bold mb-2">Основы HTML</h5>
+                        <p class="text-muted">Изучи структуру веб-страниц, основные теги, работу с текстом, списками и ссылками.</p>
+                    </div>
+                    <div class="program-step">
+                        <h5 class="fw-bold mb-2">Продвинутый HTML</h5>
+                        <p class="text-muted">Формы, таблицы, семантические элементы HTML5, встраивание мультимедиа.</p>
+                    </div>
+                    <div class="program-step">
+                        <h5 class="fw-bold mb-2">Изучение CSS</h5>
+                        <p class="text-muted">Стилизация страниц, адаптивная верстка, современные техники оформления.</p>
+                    </div>
+                    <div class="program-step">
+                        <h5 class="fw-bold mb-2">Изучение JavaScript</h5>
+                        <p class="text-muted">Программирование, работа с DOM, обработка событий, валидация форм.</p>
+                    </div>
+                    <div class="program-step">
+                        <h5 class="fw-bold mb-2">Итоговый проект</h5>
+                        <p class="text-muted">Создай свой интерактивный сайт, используя все изученные технологии.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card card-custom border-0 p-4">
+                    <h4 class="fw-bold mb-3">Что ты научишься делать:</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <span class="badge bg-primary me-2">✓</span>
+                            Создавать структуру веб-страниц
+                        </li>
+                        <li class="mb-3">
+                            <span class="badge bg-primary me-2">✓</span>
+                            Оформлять сайты с помощью CSS
+                        </li>
+                        <li class="mb-3">
+                            <span class="badge bg-primary me-2">✓</span>
+                            Добавлять интерактивность на JavaScript
+                        </li>
+                        <li class="mb-3">
+                            <span class="badge bg-primary me-2">✓</span>
+                            Создавать адаптивные сайты
+                        </li>
+                        <li class="mb-3">
+                            <span class="badge bg-primary me-2">✓</span>
+                            Работать с формами и валидацией
+                        </li>
+                        <li class="mb-3">
+                            <span class="badge bg-primary me-2">✓</span>
+                            Использовать современные веб-технологии
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Technologies Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Технологии, которые ты изучишь</h2>
+            <p class="lead text-muted">Актуальные инструменты веб-разработки</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border-0 text-center">
+                    <div class="mb-3">
+                        <span style="font-size: 4rem;">📄</span>
+                    </div>
+                    <h4 class="fw-bold mb-3">HTML5</h4>
+                    <p class="text-muted">Современная разметка веб-страниц. Семантические элементы, формы, мультимедиа.</p>
+                    <div class="mt-3">
+                        <span class="tech-badge">Структура</span>
+                        <span class="tech-badge">Семантика</span>
+                        <span class="tech-badge">Формы</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border-0 text-center">
+                    <div class="mb-3">
+                        <span style="font-size: 4rem;">🎨</span>
+                    </div>
+                    <h4 class="fw-bold mb-3">CSS3</h4>
+                    <p class="text-muted">Стилизация и оформление. Flexbox, Grid, адаптивный дизайн, анимации.</p>
+                    <div class="mt-3">
+                        <span class="tech-badge">Flexbox</span>
+                        <span class="tech-badge">Grid</span>
+                        <span class="tech-badge">Адаптивность</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom h-100 p-4 border-0 text-center">
+                    <div class="mb-3">
+                        <span style="font-size: 4rem;">⚙️</span>
+                    </div>
+                    <h4 class="fw-bold mb-3">JavaScript</h4>
+                    <p class="text-muted">Программирование для веба. DOM, события, асинхронность, валидация.</p>
+                    <div class="mt-3">
+                        <span class="tech-badge">DOM</span>
+                        <span class="tech-badge">События</span>
+                        <span class="tech-badge">ES6+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <h2 class="text-center display-5 fw-bold mb-5">Как это работает?</h2>
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <a href="{% url 'courses:course_list' %}" class="text-decoration-none">
+                    <div class="card card-custom h-100 border-0 overflow-hidden">
+                        <div class="card-body p-4 text-center">
+                            <div class="bg-primary bg-opacity-10 rounded-3 p-4 mb-3 d-inline-block">
+                                <span class="fs-1">📚</span>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark mb-2">Выбери курс</h5>
+                            <p class="card-text text-muted">Начни с основ HTML или выбери интересующий раздел. Все курсы структурированы и идут от простого к сложному.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <a href="{% url 'editor:standalone' %}" class="text-decoration-none">
+                    <div class="card card-custom h-100 border-0 overflow-hidden">
+                        <div class="card-body p-4 text-center">
+                            <div class="bg-success bg-opacity-10 rounded-3 p-4 mb-3 d-inline-block">
+                                <span class="fs-1">✏️</span>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark mb-2">Изучай и практикуйся</h5>
+                            <p class="card-text text-muted">Читай теорию, смотри примеры кода и сразу пробуй в встроенном редакторе. Видь результат в реальном времени.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="card card-custom h-100 border-0 overflow-hidden">
+                    <div class="card-body p-4 text-center">
+                        <div class="bg-warning bg-opacity-10 rounded-3 p-4 mb-3 d-inline-block">
+                            <span class="fs-1">📤</span>
+                        </div>
+                        <h5 class="card-title fw-bold text-dark mb-2">Отправляй на проверку</h5>
+                        <p class="card-text text-muted">Выполняй задания и отправляй работы преподавателю. Получай обратную связь и улучшай свои навыки.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Часто задаваемые вопросы</h2>
+            <p class="lead text-muted">Ответы на популярные вопросы</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="faq-item">
+                    <h5 class="fw-bold mb-2">Нужна ли регистрация?</h5>
+                    <p class="text-muted mb-0">Нет, регистрация не обязательна. Ты можешь начать учиться сразу. Регистрация нужна только для сохранения прогресса и получения оценок за задания.</p>
+                </div>
+                <div class="faq-item">
+                    <h5 class="fw-bold mb-2">Сколько времени займет обучение?</h5>
+                    <p class="text-muted mb-0">Курс рассчитан на несколько недель при регулярных занятиях. Каждый урок занимает 30-60 минут. Ты можешь учиться в своем темпе.</p>
+                </div>
+                <div class="faq-item">
+                    <h5 class="fw-bold mb-2">Нужны ли предварительные знания?</h5>
+                    <p class="text-muted mb-0">Нет, курс подходит для начинающих. Мы начинаем с самых основ и постепенно переходим к более сложным темам.</p>
+                </div>
+                <div class="faq-item">
+                    <h5 class="fw-bold mb-2">Можно ли выполнять задания отдельно?</h5>
+                    <p class="text-muted mb-0">Да! У нас есть раздел "Дополнительные задания", где ты можешь выполнять задания разной сложности без прохождения всего курса.</p>
+                </div>
+                <div class="faq-item">
+                    <h5 class="fw-bold mb-2">Как проверяются задания?</h5>
+                    <p class="text-muted mb-0">Ты отправляешь свою работу через редактор, и преподаватель проверяет её вручную. Ты получишь оценку и комментарии с рекомендациями.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-white">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-4">Готов начать обучение?</h2>
+        <p class="lead text-muted mb-4">Присоединяйся к другим ученикам и начни создавать свои первые сайты уже сегодня!</p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{% url 'courses:course_list' %}" class="btn btn-primary btn-lg px-5">
+                <span>🚀</span> Начать обучение
+            </a>
+            <a href="{% url 'editor:standalone' %}" class="btn btn-outline-primary btn-lg px-5">
+                <span>💻</span> Попробовать редактор
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

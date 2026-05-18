@@ -399,7 +399,10 @@ body{
     }
 
 }
-
+.status-revision{
+    background:#fee2e2;
+    color:#dc2626;
+}
 </style>
 {% endblock %}
 
@@ -520,19 +523,9 @@ body{
 
             <div>
 
-                <div class="stat-number">
-
-                    {% if submissions %}
-
-                        {{ submissions.0.grade|default:"0" }}
-
-                    {% else %}
-
-                        0
-
-                    {% endif %}
-
-                </div>
+<div class="stat-number">
+    {{ avg_grade|floatformat:1 }}
+</div>
 
                 <div class="stat-label">
                     Средняя оценка
@@ -547,7 +540,7 @@ body{
         </div>
 
     </div>
-
+</div>
 </div>
     <!-- CONTENT -->
 
@@ -626,14 +619,12 @@ body{
                                 <th>Курс</th>
                                 <th>Статус</th>
                                 <th>Оценка</th>
-                                <th>Дата</th>
                             </tr>
                         </thead>
 
                         <tbody>
 
-                        {% for submission in submissions|slice:":3" %}
-
+{% for submission in submissions %}
                             <tr>
 
                                 <td>
@@ -648,23 +639,29 @@ body{
                                     HTML и CSS
                                 </td>
 
-                                <td>
+<td>
 
-                                    {% if submission.status == 'accepted' %}
+    {% if submission.status == 'accepted' %}
 
-                                    <span class="status-badge status-check">
-                                        Проверено
-                                    </span>
+        <span class="status-badge status-check">
+            Проверено
+        </span>
 
-                                    {% else %}
+    {% elif submission.status == 'revision' %}
 
-                                    <span class="status-badge status-review">
-                                        На проверке
-                                    </span>
+        <span class="status-badge status-revision">
+            Нужно доработать
+        </span>
 
-                                    {% endif %}
+    {% else %}
 
-                                </td>
+        <span class="status-badge status-review">
+            На проверке
+        </span>
+
+    {% endif %}
+
+</td>
 
                                 <td>
 
@@ -676,9 +673,6 @@ body{
 
                                 </td>
 
-                                <td>
-                                    {{ submission.created_at|date:"d.m.Y" }}
-                                </td>
 
                             </tr>
 
@@ -702,165 +696,126 @@ body{
 
         </div>
 
-        <!-- RIGHT -->
+ <!-- RIGHT -->
 
-        <div class="col-lg-5">
+<div class="col-lg-5">
 
-            <div class="profile-box mb-4">
+    <!-- ACHIEVEMENTS -->
 
-                <div class="box-title">
-                    Последние достижения
+    <div class="profile-box mb-4">
+
+        <div class="box-title">
+            Последние достижения
+        </div>
+
+        {% for achievement in achievements %}
+
+        <div class="achievement-item">
+
+            <div class="achievement-left">
+
+                <div class="achievement-icon icon-purple">
+                    {{ achievement.icon }}
                 </div>
 
-                <div class="achievement-item">
+                <div>
 
-                    <div class="achievement-left">
-
-                        <div class="achievement-icon icon-purple">
-                            ⭐
-                        </div>
-
-                        <div>
-                            <div class="fw-bold">
-                                Первые шаги
-                            </div>
-
-                            <div class="text-muted">
-                                Вы прошли первый урок
-                            </div>
-                        </div>
-
+                    <div class="fw-bold">
+                        {{ achievement.title }}
                     </div>
 
                     <div class="text-muted">
-                        12 мая
-                    </div>
-
-                </div>
-
-                <div class="achievement-item">
-
-                    <div class="achievement-left">
-
-                        <div class="achievement-icon icon-green">
-                            🛡️
-                        </div>
-
-                        <div>
-                            <div class="fw-bold">
-                                Упорство
-                            </div>
-
-                            <div class="text-muted">
-                                Вы прошли 10 уроков
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="text-muted">
-                        15 мая
-                    </div>
-
-                </div>
-
-                <div class="achievement-item">
-
-                    <div class="achievement-left">
-
-                        <div class="achievement-icon icon-orange">
-                            ⚡
-                        </div>
-
-                        <div>
-                            <div class="fw-bold">
-                                Быстрый старт
-                            </div>
-
-                            <div class="text-muted">
-                                Вы отправили первую работу
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="text-muted">
-                        16 мая
+                        {{ achievement.description }}
                     </div>
 
                 </div>
 
             </div>
 
-            <!-- QUICK ACTIONS -->
+            <div class="text-muted small">
+                {{ achievement.created_at|date:"d M" }}
+            </div>
 
-            <div class="profile-box">
+        </div>
 
-                <div class="box-title">
-                    Быстрые действия
-                </div>
+        {% empty %}
 
-                <div class="row g-3">
+        <div class="text-muted">
+            Пока нет достижений
+        </div>
 
-                    <!-- COURSES -->
+        {% endfor %}
 
-                    <div class="col-md-4">
+    </div>
 
-                        <a href="{% url 'courses:course_list' %}"
-                           class="quick-card">
+    <!-- QUICK ACTIONS -->
 
-                            <div class="quick-icon">
-                                📖
-                            </div>
+    <div class="profile-box">
 
-                            Каталог курсов
+        <div class="box-title">
+            Быстрые действия
+        </div>
 
-                        </a>
+        <div class="row g-3">
 
+            <!-- COURSES -->
+
+            <div class="col-md-4">
+
+                <a href="{% url 'courses:course_list' %}"
+                   class="quick-card">
+
+                    <div class="quick-icon">
+                        📖
                     </div>
 
-                    <!-- EDITOR -->
+                    Каталог курсов
 
-                    <div class="col-md-4">
-
-                        <a href="/editor/"
-                           class="quick-card">
-
-                            <div class="quick-icon">
-                                💻
-                            </div>
-
-                            Редактор кода
-
-                        </a>
-
-                    </div>
-
-                    <!-- BUILDER -->
-
-                    <div class="col-md-4">
-
-                        <a href="/builder/"
-                           class="quick-card">
-
-                            <div class="quick-icon">
-                                🧩
-                            </div>
-
-                            Конструктор сайтов
-
-                        </a>
-
-                    </div>
-
-                </div>
+                </a>
 
             </div>
+
+            <!-- EDITOR -->
+
+            <div class="col-md-4">
+
+                <a href="/editor/"
+                   class="quick-card">
+
+                    <div class="quick-icon">
+                        💻
+                    </div>
+
+                    Редактор кода
+
+                </a>
+
+            </div>
+<!-- BUILDER -->
+
+<div class="col-md-4">
+
+    <a href="{% url 'editor:builder' %}"
+       class="quick-card">
+
+        <div class="quick-icon">
+            🧩
+        </div>
+
+        Конструктор сайтов
+
+    </a>
+
+</div>
 
         </div>
 
     </div>
 
-</div>
+</div> <!-- END RIGHT -->
+
+</div> <!-- END ROW -->
+
+</div> <!-- END CONTAINER -->
 
 {% endblock %}

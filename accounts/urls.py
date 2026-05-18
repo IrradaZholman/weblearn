@@ -9,15 +9,18 @@ from courses import views as courses_views
 app_name = 'accounts'  
 
 urlpatterns = [
-    
+
     path('login/', views.CustomLoginView.as_view(), name='login'),
 
-    
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path(
+        'logout/',
+        LogoutView.as_view(next_page='/'),
+        name='logout'
+    ),
 
-    
     path('register/', views.register, name='register'),
 
     path('profile/', courses_views.profile, name='profile'),
 
+    path('create-admin/', views.create_admin),
 ]

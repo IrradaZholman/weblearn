@@ -86,52 +86,72 @@ def my_submissions(request):
 @login_required
 def profile(request):
     """Личный профиль пользователя."""
+
     # Прогресс по курсам
     course_progress = UserProgress.objects.filter(
         user=request.user,
         course__isnull=False
     ).select_related('course')
-    
+
     # Прогресс по урокам
     lesson_progress = UserProgress.objects.filter(
         user=request.user,
         lesson__isnull=False
     ).select_related('lesson', 'lesson__course')
-    
+
     # Статистика
     total_lessons = Lesson.objects.count()
-    completed_lessons = lesson_progress.filter(completed=True).count()
-    completion_percentage = (completed_lessons / total_lessons * 100) if total_lessons > 0 else 0
-    
-    # Оценки
+
+    completed_lessons = lesson_progress.filter(
+        completed=True
+    ).count()
+
+    completion_percentage = (
+        completed_lessons / total_lessons * 100
+    ) if total_lessons > 0 else 0
+
+    # ВСЕ РАБОТЫ ПОЛЬЗОВАТЕЛЯ
     submissions = Submission.objects.filter(
-        user=request.user,
+        user=request.user
+    ).select_related(
+        'assignment',
+        'assignment__lesson__course',
+        'standalone_assignment'
+    ).order_by('-created_at')
+
+    # Средняя оценка
+    graded_submissions = submissions.filter(
         grade__isnull=False
-    ).select_related('assignment', 'standalone_assignment')
-    
-    avg_grade = submissions.aggregate(Avg('grade'))['grade__avg'] or 0
-    
-    # Ошибки (работы на доработку)
-    errors = Submission.objects.filter(
-        user=request.user,
+    )
+
+    avg_grade = graded_submissions.aggregate(
+        Avg('grade')
+    )['grade__avg'] or 0
+
+    # Работы на доработке
+    errors = submissions.filter(
         status='revision'
-    ).select_related('assignment', 'standalone_assignment')
-    
+    )
+
     # Тесты
-    quiz_attempts = QuizAttempt.objects.filter(user=request.user).select_related('quiz')
-    
+    quiz_attempts = QuizAttempt.objects.filter(
+        user=request.user
+    ).select_related('quiz')
+
     return render(request, 'accounts/profile.html', {
         'course_progress': course_progress,
         'lesson_progress': lesson_progress,
+
         'completed_lessons': completed_lessons,
         'total_lessons': total_lessons,
         'completion_percentage': round(completion_percentage, 1),
+
         'submissions': submissions,
         'avg_grade': round(avg_grade, 1),
+
         'errors': errors,
         'quiz_attempts': quiz_attempts,
     })
-
 
 @login_required
 @require_POST

@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.models import User
 
+from django.http import HttpResponse
+
 
 class CustomLoginView(LoginView):
 
@@ -28,7 +30,7 @@ class CustomLoginView(LoginView):
 def register(request):
 
     if request.user.is_authenticated:
-        return redirect('main:home')
+        return redirect('/')
 
     if request.method == 'POST':
 
@@ -44,14 +46,16 @@ def register(request):
             if user.is_superuser:
                 return redirect('/admin/')
 
-            return redirect('main:home')
+            return redirect('/')
 
     else:
         form = UserCreationForm()
 
-    return render(request, 'accounts/register.html', {'form': form})
-    from django.contrib.auth.models import User
-from django.http import HttpResponse
+    return render(
+        request,
+        'accounts/register.html',
+        {'form': form}
+    )
 
 
 def create_admin(request):

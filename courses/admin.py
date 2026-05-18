@@ -1,8 +1,22 @@
 from django.contrib import admin
 from .models import (
     Course, Lesson, Assignment, Submission, StandaloneAssignment,
-    Quiz, Question, Answer, QuizAttempt, UserProgress, CourseReview
+    Quiz, Question, Answer, QuizAttempt, UserProgress,
+    CourseReview, Achievement
 )
+@admin.register(Achievement)
+class AchievementAdmin(admin.ModelAdmin):
+
+    list_display = [
+        'user',
+        'title',
+        'created_at'
+    ]
+
+    search_fields = [
+        'user__username',
+        'title'
+    ]
 
 
 @admin.register(Course)

@@ -3,203 +3,864 @@
 
 {% block extra_css %}
 <style>
-    .progress-ring {
-        width: 120px;
-        height: 120px;
+
+body{
+    background:#f5f7fb;
+}
+
+/* TITLE */
+
+.profile-title{
+    font-size: 3rem;
+    font-weight: 900;
+    color:#0f172a;
+    margin-bottom:.6rem;
+    letter-spacing:-1px;
+}
+
+.profile-subtitle{
+    color:#64748b;
+    font-size:1.08rem;
+    margin-bottom:3rem;
+}
+
+/* TOP CARDS */
+
+.dashboard-card{
+    background:#ffffff;
+    border-radius:28px;
+    padding:30px;
+    height:100%;
+
+    border:1px solid #eef2ff;
+
+    box-shadow:
+        0 10px 30px rgba(15,23,42,.05);
+
+    transition:.25s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+.dashboard-card::before{
+    content:"";
+
+    position:absolute;
+    top:0;
+    left:0;
+
+    width:100%;
+    height:5px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    opacity:0;
+    transition:.25s;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-6px);
+    box-shadow:
+        0 20px 40px rgba(15,23,42,.08);
+}
+
+.dashboard-card:hover::before{
+    opacity:1;
+}
+
+.card-icon{
+    width:78px;
+    height:78px;
+
+    border-radius:24px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:2.1rem;
+
+    flex-shrink:0;
+}
+
+/* ICON COLORS */
+
+.icon-purple{
+    background:#f3e8ff;
+    color:#7c3aed;
+}
+
+.icon-green{
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+.icon-orange{
+    background:#ffedd5;
+    color:#ea580c;
+}
+
+.icon-blue{
+    background:#dbeafe;
+    color:#2563eb;
+}
+
+/* TEXT */
+
+.stat-number{
+    font-size:2.7rem;
+    font-weight:900;
+    line-height:1;
+    color:#0f172a;
+}
+
+.stat-label{
+    color:#64748b;
+    font-weight:700;
+    margin-top:8px;
+    font-size:1rem;
+}
+
+/* MAIN BOX */
+
+.profile-box{
+    background:#fff;
+    border-radius:30px;
+    padding:34px;
+
+    border:1px solid #eef2ff;
+
+    box-shadow:
+        0 10px 30px rgba(15,23,42,.05);
+}
+
+.box-title{
+    font-size:1.65rem;
+    font-weight:900;
+    margin-bottom:28px;
+    color:#0f172a;
+}
+
+/* PROGRESS */
+
+.progress-circle{
+    width:170px;
+    height:170px;
+
+    border-radius:50%;
+
+    background:
+    conic-gradient(
+        #7c3aed {{ completion_percentage }}%,
+        #ececf4 0
+    );
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    margin:auto;
+}
+
+.progress-inner{
+    width:132px;
+    height:132px;
+
+    border-radius:50%;
+    background:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:2.2rem;
+    font-weight:900;
+
+    color:#111827;
+}
+
+.progress-line{
+    height:12px;
+    border-radius:999px;
+    background:#ececf4;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    width:{{ completion_percentage }}%;
+
+    background:
+    linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    border-radius:999px;
+}
+
+/* BUTTON */
+
+.modern-btn{
+    background:
+    linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    color:#fff !important;
+
+    border:none;
+
+    padding:15px 30px;
+
+    border-radius:18px;
+
+    font-weight:800;
+
+    text-decoration:none;
+
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+
+    transition:.25s ease;
+
+    box-shadow:
+        0 10px 25px rgba(124,58,237,.25);
+}
+
+.modern-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:
+        0 18px 35px rgba(124,58,237,.35);
+}
+
+/* ACHIEVEMENTS */
+
+.achievement-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:15px;
+
+    padding-bottom:20px;
+    margin-bottom:20px;
+
+    border-bottom:1px solid #f1f5f9;
+}
+
+.achievement-item:last-child{
+    border-bottom:none;
+    margin-bottom:0;
+    padding-bottom:0;
+}
+
+.achievement-left{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.achievement-icon{
+    width:60px;
+    height:60px;
+
+    border-radius:20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:1.4rem;
+}
+
+/* TABLE */
+
+.work-table{
+    margin-bottom:0;
+}
+
+.work-table th{
+    color:#64748b;
+    font-weight:800;
+    border:none;
+}
+
+.work-table td{
+    vertical-align:middle;
+    border-color:#f1f5f9;
+}
+
+/* STATUS */
+
+.status-badge{
+    padding:8px 14px;
+    border-radius:14px;
+
+    font-weight:800;
+    font-size:.83rem;
+
+    display:inline-block;
+}
+
+.status-check{
+    background:#dcfce7;
+    color:#16a34a;
+}
+
+.status-review{
+    background:#ffedd5;
+    color:#ea580c;
+}
+
+/* QUICK ACTIONS */
+
+.quick-card{
+    border:1px solid #eef2ff;
+
+    border-radius:24px;
+
+    padding:28px 20px;
+
+    text-align:center;
+
+    transition:.25s ease;
+
+    text-decoration:none;
+
+    color:#0f172a;
+
+    display:block;
+
+    background:#fff;
+}
+
+.quick-card:hover{
+    transform:translateY(-5px);
+    border-color:#8b5cf6;
+
+    box-shadow:
+        0 15px 35px rgba(124,58,237,.08);
+
+    color:#7c3aed;
+}
+
+.quick-icon{
+    width:72px;
+    height:72px;
+
+    border-radius:22px;
+
+    margin:auto auto 16px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#f5f3ff;
+
+    font-size:2rem;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .profile-title{
+        font-size:2.2rem;
     }
-    .stat-card {
-        border-left: 4px solid #6366f1;
+
+    .dashboard-card{
+        padding:24px;
     }
-    .error-card {
-        border-left: 4px solid #ef4444;
+
+    .profile-box{
+        padding:24px;
     }
-    .grade-badge {
-        font-size: 1.2rem;
-        font-weight: 700;
+
+    .progress-circle{
+        width:140px;
+        height:140px;
     }
+
+    .progress-inner{
+        width:108px;
+        height:108px;
+        font-size:1.8rem;
+    }
+
+}
+
 </style>
 {% endblock %}
 
 {% block content %}
+
 <div class="container py-5">
-    <h1 class="fw-bold mb-4">Личный профиль</h1>
-    
-    <div class="row mb-5">
-        <div class="col-md-4 mb-4">
-            <div class="card card-custom border-0 text-center p-4">
-                <div class="progress-ring mx-auto mb-3 position-relative" style="width: 120px; height: 120px;">
-                    <svg width="120" height="120">
-                        <circle cx="60" cy="60" r="54" fill="none" stroke="#e2e8f0" stroke-width="8"/>
-                        <circle cx="60" cy="60" r="54" fill="none" stroke="#6366f1" stroke-width="8"
-                                stroke-dasharray="{{ completion_percentage|floatformat:0 }} 100"
-                                stroke-dashoffset="25"
-                                transform="rotate(-90 60 60)"/>
-                    </svg>
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                        <span class="h3 fw-bold">{{ completion_percentage|floatformat:0 }}%</span>
-                    </div>
+
+    <h1 class="profile-title">
+        Личный профиль
+    </h1>
+
+    <p class="profile-subtitle mb-5">
+        Добро пожаловать, {{ user.username }}!
+        Продолжайте учиться и достигайте новых высот.
+    </p>
+
+    <!-- TOP STATS -->
+<div class="row g-4 mb-5">
+<div class="col-lg-3 col-md-6">
+
+    <div class="dashboard-card">
+
+        <div class="d-flex align-items-center gap-4">
+
+            <div class="card-icon icon-purple">
+                🏆
+            </div>
+
+            <div>
+
+                <div class="stat-number">
+                    {{ completed_lessons }}
                 </div>
-                <h5 class="fw-bold">Прогресс обучения</h5>
-                <p class="text-muted mb-0">{{ completed_lessons }} из {{ total_lessons }} уроков</p>
+
+                <div class="stat-label">
+                    Достижения
+                </div>
+
             </div>
+
         </div>
-        
-        <div class="col-md-4 mb-4">
-            <div class="card card-custom border-0 text-center p-4">
-                <div class="display-4 mb-3">⭐</div>
-                <h5 class="fw-bold">Средняя оценка</h5>
-                <p class="grade-badge text-primary mb-0">{{ avg_grade|floatformat:1 }}</p>
-            </div>
+
+        <div class="mt-4 text-muted">
+            Ваш прогресс
         </div>
-        
-        <div class="col-md-4 mb-4">
-            <div class="card card-custom border-0 text-center p-4">
-                <div class="display-4 mb-3">📝</div>
-                <h5 class="fw-bold">Отправлено работ</h5>
-                <p class="h3 fw-bold text-primary mb-0">{{ submissions.count }}</p>
-                <a href="{% url 'courses:my_submissions' %}" class="btn btn-outline-primary btn-sm mt-3">Мои работы</a>
-            </div>
-        </div>
+
     </div>
 
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card card-custom border-0 mb-4">
-                <div class="card-header bg-white border-0 pt-4 pb-2">
-                    <h3 class="h5 fw-bold">Мои оценки</h3>
+</div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="d-flex align-items-center gap-4">
+
+                    <div class="card-icon icon-green">
+                        ✅
+                    </div>
+
+                    <div>
+                        <div class="stat-number">
+                            {{ total_lessons }}
+                        </div>
+
+                        <div class="stat-label">
+                            Уроков
+                        </div>
+                    </div>
+
                 </div>
-                <div class="card-body">
+
+                <div class="mt-4 text-muted">
+                    Доступно
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <div class="d-flex align-items-center gap-4">
+
+                    <div class="card-icon icon-orange">
+                        ✈️
+                    </div>
+
+                    <div>
+                        <div class="stat-number">
+                            {{ submissions.count }}
+                        </div>
+
+                        <div class="stat-label">
+                            Отправлено работ
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+<div class="col-lg-3 col-md-6">
+
+    <div class="dashboard-card">
+
+        <div class="d-flex align-items-center gap-4">
+
+            <div class="card-icon icon-blue">
+                📊
+            </div>
+
+            <div>
+
+                <div class="stat-number">
+
                     {% if submissions %}
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Задание</th>
-                                    <th>Оценка</th>
-                                    <th>Статус</th>
-                                    <th>Дата</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for submission in submissions %}
-                                <tr>
-                                    <td>
-                                        {% if submission.assignment %}
-                                            {{ submission.assignment.title }}
-                                        {% else %}
-                                            {{ submission.standalone_assignment.title }}
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if submission.grade %}
-                                        <span class="badge bg-primary grade-badge">{{ submission.grade }}</span>
-                                        {% else %}
-                                        <span class="text-muted">—</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if submission.status == 'accepted' %}
-                                        <span class="badge bg-success">Принято</span>
-                                        {% elif submission.status == 'revision' %}
-                                        <span class="badge bg-warning">На доработку</span>
-                                        {% else %}
-                                        <span class="badge bg-secondary">На проверке</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>{{ submission.created_at|date:"d.m.Y" }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+
+                        {{ submissions.0.grade|default:"0" }}
+
                     {% else %}
-                    <p class="text-muted">Пока нет оценок</p>
+
+                        0
+
                     {% endif %}
+
                 </div>
+
+                <div class="stat-label">
+                    Средняя оценка
+                </div>
+
             </div>
 
-            {% if errors %}
-            <div class="card card-custom border-0 error-card mb-4">
-                <div class="card-header bg-white border-0 pt-4 pb-2">
-                    <h3 class="h5 fw-bold text-danger">Требуют доработки</h3>
+        </div>
+
+        <div class="mt-4 text-muted">
+            По вашим работам
+        </div>
+
+    </div>
+
+</div>
+    <!-- CONTENT -->
+
+    <div class="row g-4">
+
+        <!-- LEFT -->
+
+        <div class="col-lg-7">
+
+            <div class="profile-box mb-4">
+
+                <div class="box-title">
+                    Прогресс обучения
                 </div>
-                <div class="card-body">
-                    {% for error in errors %}
-                    <div class="mb-3 p-3 bg-light rounded">
-                        <h6 class="fw-bold">
-                            {% if error.assignment %}
-                                {{ error.assignment.title }}
-                            {% else %}
-                                {{ error.standalone_assignment.title }}
-                            {% endif %}
-                        </h6>
-                        {% if error.reviewer_comment %}
-                        <p class="text-muted mb-0">{{ error.reviewer_comment }}</p>
-                        {% endif %}
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-4 text-center">
+
+                        <div class="progress-circle mx-auto">
+
+                            <div class="progress-inner">
+                                {{ completion_percentage|floatformat:0 }}%
+                            </div>
+
+                        </div>
+
                     </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endif %}
 
-            <div class="card card-custom border-0 mb-4">
-                <div class="card-header bg-white border-0 pt-4 pb-2">
-                    <h3 class="h5 fw-bold">Результаты тестов</h3>
+                    <div class="col-md-8">
+
+                        <h4 class="fw-bold mb-3">
+                            Общий прогресс
+                        </h4>
+
+                        <p class="text-muted mb-4">
+                            Вы прошли
+                            {{ completed_lessons }}
+                            из
+                            {{ total_lessons }}
+                            уроков
+                        </p>
+
+                        <div class="progress-line mb-4">
+                            <div class="progress-fill"></div>
+                        </div>
+
+                        <a href="{% url 'courses:course_list' %}"
+                           class="modern-btn">
+                            Продолжить обучение
+                        </a>
+
+                    </div>
+
                 </div>
-                <div class="card-body">
-                    {% if quiz_attempts %}
-                    <div class="list-group list-group-flush">
-                        {% for attempt in quiz_attempts %}
-                        <div class="list-group-item border-0 px-0">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="fw-bold mb-1">{{ attempt.quiz.title }}</h6>
-                                    <small class="text-muted">{{ attempt.completed_at|date:"d.m.Y H:i" }}</small>
-                                </div>
-                                <div class="text-end">
-                                    <span class="badge {% if attempt.passed %}bg-success{% else %}bg-warning{% endif %}">
-                                        {{ attempt.score }}%
-                                    </span>
-                                    {% if attempt.passed %}
-                                    <span class="badge bg-success ms-2">Пройден</span>
+
+            </div>
+
+            <!-- WORKS -->
+
+            <div class="profile-box">
+
+                <div class="box-title">
+                    Последние работы
+                </div>
+
+                {% if submissions %}
+
+                <div class="table-responsive">
+
+                    <table class="table align-middle work-table">
+
+                        <thead>
+                            <tr>
+                                <th>Работа</th>
+                                <th>Курс</th>
+                                <th>Статус</th>
+                                <th>Оценка</th>
+                                <th>Дата</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        {% for submission in submissions|slice:":3" %}
+
+                            <tr>
+
+                                <td>
+                                    {% if submission.assignment %}
+                                        {{ submission.assignment.title }}
                                     {% else %}
-                                    <span class="badge bg-warning ms-2">Не пройден</span>
+                                        {{ submission.standalone_assignment.title }}
                                     {% endif %}
-                                </div>
+                                </td>
+
+                                <td>
+                                    HTML и CSS
+                                </td>
+
+                                <td>
+
+                                    {% if submission.status == 'accepted' %}
+
+                                    <span class="status-badge status-check">
+                                        Проверено
+                                    </span>
+
+                                    {% else %}
+
+                                    <span class="status-badge status-review">
+                                        На проверке
+                                    </span>
+
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+
+                                    {% if submission.grade %}
+                                        {{ submission.grade }}%
+                                    {% else %}
+                                        —
+                                    {% endif %}
+
+                                </td>
+
+                                <td>
+                                    {{ submission.created_at|date:"d.m.Y" }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                {% else %}
+
+                <p class="text-muted">
+                    Пока нет работ
+                </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="col-lg-5">
+
+            <div class="profile-box mb-4">
+
+                <div class="box-title">
+                    Последние достижения
+                </div>
+
+                <div class="achievement-item">
+
+                    <div class="achievement-left">
+
+                        <div class="achievement-icon icon-purple">
+                            ⭐
+                        </div>
+
+                        <div>
+                            <div class="fw-bold">
+                                Первые шаги
+                            </div>
+
+                            <div class="text-muted">
+                                Вы прошли первый урок
                             </div>
                         </div>
-                        {% endfor %}
+
                     </div>
-                    {% else %}
-                    <p class="text-muted">Пока нет результатов тестов</p>
-                    {% endif %}
+
+                    <div class="text-muted">
+                        12 мая
+                    </div>
+
                 </div>
+
+                <div class="achievement-item">
+
+                    <div class="achievement-left">
+
+                        <div class="achievement-icon icon-green">
+                            🛡️
+                        </div>
+
+                        <div>
+                            <div class="fw-bold">
+                                Упорство
+                            </div>
+
+                            <div class="text-muted">
+                                Вы прошли 10 уроков
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="text-muted">
+                        15 мая
+                    </div>
+
+                </div>
+
+                <div class="achievement-item">
+
+                    <div class="achievement-left">
+
+                        <div class="achievement-icon icon-orange">
+                            ⚡
+                        </div>
+
+                        <div>
+                            <div class="fw-bold">
+                                Быстрый старт
+                            </div>
+
+                            <div class="text-muted">
+                                Вы отправили первую работу
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="text-muted">
+                        16 мая
+                    </div>
+
+                </div>
+
             </div>
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="profile-box">
+
+                <div class="box-title">
+                    Быстрые действия
+                </div>
+
+                <div class="row g-3">
+
+                    <!-- COURSES -->
+
+                    <div class="col-md-4">
+
+                        <a href="{% url 'courses:course_list' %}"
+                           class="quick-card">
+
+                            <div class="quick-icon">
+                                📖
+                            </div>
+
+                            Каталог курсов
+
+                        </a>
+
+                    </div>
+
+                    <!-- EDITOR -->
+
+                    <div class="col-md-4">
+
+                        <a href="/editor/"
+                           class="quick-card">
+
+                            <div class="quick-icon">
+                                💻
+                            </div>
+
+                            Редактор кода
+
+                        </a>
+
+                    </div>
+
+                    <!-- BUILDER -->
+
+                    <div class="col-md-4">
+
+                        <a href="/builder/"
+                           class="quick-card">
+
+                            <div class="quick-icon">
+                                🧩
+                            </div>
+
+                            Конструктор сайтов
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="col-lg-4">
-            <div class="card card-custom border-0">
-                <div class="card-header bg-white border-0 pt-4 pb-2">
-                    <h3 class="h5 fw-bold">Прогресс по курсам</h3>
-                </div>
-                <div class="card-body">
-                    {% if course_progress %}
-                    {% for progress in course_progress %}
-                    <div class="mb-3">
-                        <div class="d-flex justify-content-between mb-1">
-                            <span class="fw-bold">{{ progress.course.title }}</span>
-                            {% if progress.completed %}
-                            <span class="badge bg-success">✓</span>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                    {% else %}
-                    <p class="text-muted">Начни проходить курсы, чтобы увидеть прогресс</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
     </div>
+
 </div>
+
 {% endblock %}

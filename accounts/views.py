@@ -50,3 +50,20 @@ def register(request):
         form = UserCreationForm()
 
     return render(request, 'accounts/register.html', {'form': form})
+    from django.contrib.auth.models import User
+from django.http import HttpResponse
+
+
+def create_admin(request):
+
+    if not User.objects.filter(username='admin').exists():
+
+        User.objects.create_superuser(
+            username='admin',
+            email='admin@gmail.com',
+            password='admin12345'
+        )
+
+        return HttpResponse("Админ создан")
+
+    return HttpResponse("Админ уже существует")

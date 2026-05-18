@@ -9,118 +9,369 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --accent: #22c55e;
-            --bg-light: #f8fafc;
-            --card-shadow: 0 4px 6px -1px rgba(0,0,0,.07), 0 2px 4px -2px rgba(0,0,0,.06);
-            --card-hover: 0 20px 25px -5px rgba(0,0,0,.1), 0 8px 10px -6px rgba(0,0,0,.1);
-        }
-        * {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg-light);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            line-height: 1.6;
-        }
-        .navbar {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
-            box-shadow: 0 4px 14px rgba(99, 102, 241, .3);
-            backdrop-filter: blur(10px);
-        }
-        .navbar-brand {
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: #fff !important;
-            letter-spacing: -0.5px;
-        }
-        .nav-link {
-            color: rgba(255,255,255,.9) !important;
-            font-weight: 600;
-            padding: .5rem 1rem !important;
-            border-radius: 8px;
-            transition: all .2s ease;
-            position: relative;
-        }
-        .nav-link:hover {
-            background: rgba(255,255,255,.15);
-            color: #fff !important;
-            transform: translateY(-1px);
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border: none;
-            font-weight: 700;
-            padding: .6rem 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 14px rgba(99, 102, 241, .35);
-            transition: all .3s ease;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, .45);
-        }
-        .btn-success {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            border: none;
-            font-weight: 700;
-            border-radius: 12px;
-            transition: all .3s ease;
-        }
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(34, 197, 94, .35);
-        }
-        main {
-            flex: 1;
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
-        }
-        .card-custom {
-            border: none;
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-            transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-        }
-        .card-custom:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--card-hover);
-        }
-        .code-font {
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
-        }
-        footer {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: rgba(255,255,255,.8);
-            margin-top: auto;
-            padding: 2rem 0;
-        }
-        .breadcrumb {
-            background: transparent;
-            padding: 0;
-        }
-        .breadcrumb-item a {
-            color: #6366f1;
-            text-decoration: none;
-        }
-        .breadcrumb-item.active {
-            color: #64748b;
-        }
-        table {
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        .alert {
-            border-radius: 12px;
-            border: none;
-        }
+ :root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --accent: #22c55e;
+    --bg-light: #f8fafc;
+    --card-shadow: 0 4px 6px -1px rgba(0,0,0,.07),
+                   0 2px 4px -2px rgba(0,0,0,.06);
+
+    --card-hover: 0 20px 25px -5px rgba(0,0,0,.1),
+                  0 8px 10px -6px rgba(0,0,0,.1);
+}
+
+/* GLOBAL */
+
+* {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Nunito', -apple-system,
+                 BlinkMacSystemFont,
+                 'Segoe UI', sans-serif;
+
+    background: var(--bg-light);
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    line-height: 1.6;
+}
+
+/* NAVBAR */
+
+.navbar {
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1 0%,
+            #8b5cf6 100%
+        ) !important;
+
+    box-shadow:
+        0 4px 14px rgba(99,102,241,.3);
+
+    backdrop-filter: blur(10px);
+
+    position: sticky;
+    top: 0;
+
+    z-index: 9999;
+}
+
+.navbar-brand {
+
+    font-weight: 800;
+
+    font-size: 1.5rem;
+
+    color: #fff !important;
+
+    letter-spacing: -0.5px;
+}
+
+.nav-link {
+
+    color: rgba(255,255,255,.92) !important;
+
+    font-weight: 700;
+
+    padding: .55rem 1rem !important;
+
+    border-radius: 10px;
+
+    transition: all .2s ease;
+
+    position: relative;
+}
+
+.nav-link:hover {
+
+    background: rgba(255,255,255,.14);
+
+    color: #fff !important;
+
+    transform: translateY(-1px);
+}
+
+/* BUTTONS */
+
+.btn-primary {
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #8b5cf6
+        );
+
+    border: none;
+
+    font-weight: 700;
+
+    padding: .65rem 1.5rem;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 14px rgba(99,102,241,.35);
+
+    transition: all .3s ease;
+}
+
+.btn-primary:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(99,102,241,.45);
+}
+
+.btn-success {
+
+    background:
+        linear-gradient(
+            135deg,
+            #22c55e,
+            #16a34a
+        );
+
+    border: none;
+
+    font-weight: 700;
+
+    border-radius: 12px;
+
+    transition: all .3s ease;
+}
+
+.btn-success:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(34,197,94,.35);
+}
+
+/* MAIN */
+
+main {
+    flex: 1;
+}
+
+/* HERO */
+
+.hero-gradient {
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1 0%,
+            #8b5cf6 50%,
+            #a855f7 100%
+        );
+}
+
+/* CARDS */
+
+.card-custom {
+
+    border: none;
+
+    border-radius: 20px;
+
+    box-shadow: var(--card-shadow);
+
+    transition:
+        all .3s cubic-bezier(
+            0.4,
+            0,
+            0.2,
+            1
+        );
+
+    overflow: hidden;
+}
+
+.card-custom:hover {
+
+    transform: translateY(-6px);
+
+    box-shadow: var(--card-hover);
+}
+
+/* CODE FONT */
+
+.code-font {
+
+    font-family:
+        'JetBrains Mono',
+        'Courier New',
+        monospace;
+}
+
+/* FOOTER */
+
+footer {
+
+    background:
+        linear-gradient(
+            135deg,
+            #1e293b 0%,
+            #0f172a 100%
+        );
+
+    color: rgba(255,255,255,.82);
+
+    margin-top: auto;
+
+    padding: 2rem 0;
+}
+
+/* BREADCRUMB */
+
+.breadcrumb {
+
+    background: transparent;
+
+    padding: 0;
+}
+
+.breadcrumb-item a {
+
+    color: #6366f1;
+
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: #64748b;
+}
+
+/* TABLE */
+
+table {
+
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+/* ALERT */
+
+.alert {
+
+    border-radius: 12px;
+
+    border: none;
+}
+
+/* USER MENU */
+
+.user-dropdown .nav-link {
+
+    background: rgba(255,255,255,.12);
+
+    padding: .55rem 1rem !important;
+
+    border-radius: 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: .5rem;
+
+    font-weight: 700;
+}
+
+.user-dropdown .nav-link:hover {
+
+    background: rgba(255,255,255,.18);
+}
+
+.user-dropdown .dropdown-menu {
+
+    position: absolute !important;
+
+    top: 58px !important;
+
+    right: 0 !important;
+
+    left: auto !important;
+
+    border: none;
+
+    border-radius: 18px;
+
+    background: #ffffff !important;
+
+    padding: .6rem;
+
+    min-width: 240px;
+
+    z-index: 99999 !important;
+
+    box-shadow:
+        0 20px 40px rgba(15,23,42,.22);
+
+    animation: dropdownShow .18s ease;
+}
+
+.user-dropdown .dropdown-item {
+
+    border-radius: 12px;
+
+    padding: .85rem 1rem;
+
+    font-weight: 700;
+
+    color: #334155 !important;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: .7rem;
+
+    transition: .18s;
+}
+
+.user-dropdown .dropdown-item:hover {
+
+    background: #f5f3ff;
+
+    color: #7c3aed !important;
+}
+
+.user-dropdown .dropdown-divider {
+
+    margin: .45rem 0;
+}
+
+/* ANIMATION */
+
+@keyframes dropdownShow {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(-8px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+}
     </style>
     {% block extra_css %}{% endblock %}
 </head>
@@ -140,10 +391,46 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'courses:standalone_assignments' %}">Доп. задания</a></li>
                 </ul>
                 <ul class="navbar-nav">
-                    {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:profile' %}">{{ user.username }}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:logout' %}">Выйти</a></li>
-                    {% else %}
+{% if user.is_authenticated %}
+
+<li class="nav-item dropdown user-dropdown">
+
+    <a class="nav-link dropdown-toggle"
+       href="#"
+       role="button"
+       data-bs-toggle="dropdown">
+
+        👤 {{ user.username }}
+
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-end">
+
+        <li>
+            <a class="dropdown-item"
+               href="{% url 'accounts:profile' %}">
+                👤 Профиль
+            </a>
+        </li>
+
+        {% if user.is_superuser %}
+        <li>
+            <a class="dropdown-item"
+               href="/admin/">
+                ⚙️ Админ-панель
+            </a>
+        </li>
+        {% endif %}
+        <li>
+            <a class="dropdown-item text-danger"
+               href="{% url 'accounts:logout' %}">
+                🚪 Выйти
+            </a>
+        </li>
+    </ul>
+</li>
+
+{% else %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Войти</a></li>
                     <li class="nav-item"><a class="btn btn-light btn-sm ms-2" href="{% url 'accounts:register' %}">Регистрация</a></li>
                     {% endif %}

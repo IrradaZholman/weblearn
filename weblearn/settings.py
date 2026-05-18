@@ -39,13 +39,16 @@ SECRET_KEY = os.environ.get(
     'django-insecure-change-me-in-production-xyz123'
 )
 
-DEBUG = True
+DEBUG = False
 
 # Render үшін
-ALLOWED_HOSTS = ['*']
-
+ALLOWED_HOSTS = [
+    'weblearn-l6ug.onrender.com',
+    '127.0.0.1',
+    'localhost',
+]
 CSRF_TRUSTED_ORIGINS = [
-    "https://4fc3-45-130-7-175.ngrok-free.app",
+    "https://weblearn-l6ug.onrender.com",
 ]
 
 INSTALLED_APPS = [
@@ -73,6 +76,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'weblearn.urls'

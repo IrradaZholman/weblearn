@@ -222,3 +222,42 @@ class CourseReview(models.Model):
 
     def __str__(self):
         return f'{self.user.username} — {self.course.title} ({self.rating}★)'
+from django.contrib.auth.models import User
+
+
+class Achievement(models.Model):
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='achievements'
+    )
+
+    title = models.CharField(
+        'Название достижения',
+        max_length=100
+    )
+
+    description = models.CharField(
+        'Описание',
+        max_length=255
+    )
+
+    icon = models.CharField(
+        'Иконка',
+        max_length=10,
+        default='⭐'
+    )
+
+    created_at = models.DateTimeField(
+        'Дата получения',
+        auto_now_add=True
+    )
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Достижение'
+        verbose_name_plural = 'Достижения'
+
+    def __str__(self):
+        return f'{self.user.username} — {self.title}'

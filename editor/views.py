@@ -10,9 +10,15 @@ from .chatbot import get_chat_response
 
 
 def editor(request, assignment_id=None):
-    assignment = get_object_or_404(Assignment, pk=assignment_id) if assignment_id else None
-    return render(request, 'editor/editor.html', {'assignment': assignment})
+    assignment = get_object_or_404(
+        Assignment,
+        pk=assignment_id
+    ) if assignment_id else None
 
+    return render(request, 'editor/editor.html', {
+        'assignment': assignment,
+        'standalone_assignment': None,
+    })
 
 def editor_standalone(request, standalone_assignment_id=None):
     """Редактор без привязки к заданию — для экспериментов или дополнительных заданий."""

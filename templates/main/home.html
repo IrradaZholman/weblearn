@@ -108,30 +108,72 @@
 {% endblock %}
 
 {% block content %}
+
 <!-- Hero Section -->
 <section class="hero-gradient text-white py-5">
+
     <div class="container py-5 hero-content">
+
         <div class="row align-items-center">
+
             <div class="col-lg-7">
-                <h1 class="display-4 fw-bold mb-4">Учись создавать сайты с нуля</h1>
-                <p class="lead mb-4">Визуальная среда для школьников. Пиши код, смотри результат сразу и получай обратную связь от преподавателя. Изучи HTML, CSS и JavaScript через практику.</p>
+
+                <h1 class="display-4 fw-bold mb-4">
+                    Визуальная учебная среда для веб-разработки
+                </h1>
+
+                <p class="lead mb-4">
+                    Изучай HTML, CSS и JavaScript в интерактивном формате.
+                    Пиши код, сразу смотри результат и развивай навыки через практические задания.
+                </p>
+
                 <div class="d-flex gap-3 flex-wrap mb-4">
-                    <a href="{% url 'courses:course_list' %}" class="btn btn-light btn-lg px-4">
-                        <span>🚀</span> Начать обучение
+
+                    <a href="{% url 'courses:course_list' %}"
+                       class="btn btn-light btn-lg px-4">
+
+                        <span>🚀</span>
+                        Начать обучение
+
                     </a>
-                    <a href="{% url 'editor:standalone' %}" class="btn btn-outline-light btn-lg px-4">
-                        <span>💻</span> Попробовать редактор
+
+                    <a href="{% url 'editor:standalone' %}"
+                       class="btn btn-outline-light btn-lg px-4">
+
+                        <span>💻</span>
+                        Попробовать редактор
+
                     </a>
+
                 </div>
-                <div class="d-flex gap-4 text-white-50 small">
-                    <div><span class="fw-bold text-white">25+</span> уроков</div>
-                    <div><span class="fw-bold text-white">4</span> курса</div>
-                    <div><span class="fw-bold text-white">100%</span> бесплатно</div>
+
+                <div class="d-flex gap-4 text-white-50 small flex-wrap">
+
+                    <div>
+                        <span class="fw-bold text-white">25+</span>
+                        уроков
+                    </div>
+
+                    <div>
+                        <span class="fw-bold text-white">4</span>
+                        курса
+                    </div>
+
+                    <div>
+                        <span class="fw-bold text-white">100%</span>
+                        бесплатно
+                    </div>
+
                 </div>
+
             </div>
+
             <div class="col-lg-5 text-center d-none d-lg-block">
+
                 <div class="bg-white bg-opacity-25 rounded-4 p-4 d-inline-block backdrop-blur">
-                    <pre class="code-font text-start text-white mb-0" style="font-size: 0.9rem;"><code>&lt;!DOCTYPE html&gt;
+
+<pre class="code-font text-start text-white mb-0"
+style="font-size: 0.9rem;"><code>&lt;!DOCTYPE html&gt;
 &lt;html lang="ru"&gt;
 &lt;head&gt;
   &lt;title&gt;Мой сайт&lt;/title&gt;
@@ -141,12 +183,16 @@
   &lt;p&gt;Мой первый сайт&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 <!-- Statistics Section -->
 <section class="py-5 bg-white">
     <div class="container">

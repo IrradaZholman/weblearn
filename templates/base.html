@@ -376,6 +376,14 @@ table {
 
 #splash-screen {
 
+    display: flex;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition: opacity .6s ease;
+
     position: fixed;
 
     inset: 0;
@@ -388,8 +396,6 @@ table {
 
     overflow: hidden;
 
-    display: flex;
-
     align-items: center;
 
     justify-content: center;
@@ -401,30 +407,12 @@ table {
             #8b5cf6 50%,
             #a855f7 100%
         );
-
-    animation:
-        splashFadeOut 1.2s ease forwards;
-
-    animation-delay: 2.8s;
 }
-/* ЗАДНИЙ ФОН */
+#splash-screen.show {
 
-.splash-bg {
+    opacity: 1;
 
-    position: absolute;
-
-    inset: 0;
-
-    overflow: hidden;
-
-    background:
-        linear-gradient(
-            135deg,
-            #1f1fa8 0%,
-            #3b1fb8 35%,
-            #6d28d9 70%,
-            #7c3aed 100%
-        );
+    visibility: visible;
 }
 
 /* СВЕТ */
@@ -1357,36 +1345,40 @@ table {
     {% block extra_js %}{% endblock %}
 <script>
 
-window.addEventListener("load", () => {
+const splash = document.getElementById("splash-screen");
 
-    const splash = document.getElementById("splash-screen");
+// ПЕРВЫЙ ВХОД
+if(!sessionStorage.getItem("splashShown")){
 
-    // ЕСЛИ УЖЕ БЫЛ ПОКАЗАН
-    if(sessionStorage.getItem("splashShown")){
-
-        splash.style.display = "none";
-
-        document.body.style.overflow = "auto";
-
-        return;
-    }
-
-    // ПЕРВЫЙ ЗАПУСК
-    sessionStorage.setItem("splashShown", "true");
+    splash.classList.add("show");
 
     document.body.style.overflow = "hidden";
 
-    setTimeout(() => {
+    sessionStorage.setItem("splashShown", "true");
 
-        splash.style.opacity = "0";
+    window.addEventListener("load", () => {
 
-        splash.style.visibility = "hidden";
+        setTimeout(() => {
 
-        document.body.style.overflow = "auto";
+            splash.style.opacity = "0";
 
-    }, 3000);
+            setTimeout(() => {
 
-});
+                splash.style.visibility = "hidden";
+
+                document.body.style.overflow = "auto";
+
+            }, 600);
+
+        }, 2500);
+
+    });
+
+}else{
+
+    splash.remove();
+
+}
 
 </script>
 </body>

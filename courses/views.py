@@ -83,8 +83,6 @@ def my_submissions(request):
     return render(request, 'courses/my_submissions.html', {'submissions': submissions})
 
 
-from django.core.paginator import Paginator
-
 @login_required
 def profile(request):
     """Личный профиль пользователя."""
@@ -113,7 +111,7 @@ def profile(request):
     ) if total_lessons > 0 else 0
 
     # ВСЕ РАБОТЫ ПОЛЬЗОВАТЕЛЯ
-    submissions_list = Submission.objects.filter(
+    submissions = Submission.objects.filter(
         user=request.user
     ).select_related(
         'assignment',
@@ -121,15 +119,8 @@ def profile(request):
         'standalone_assignment'
     ).order_by('-created_at')
 
-    # PAGINATION
-    paginator = Paginator(submissions_list, 5)
-
-    page = request.GET.get('page')
-
-    submissions = paginator.get_page(page)
-
     # Средняя оценка
-    graded_submissions = submissions_list.filter(
+    graded_submissions = submissions.filter(
         grade__isnull=False
     )
 
@@ -138,7 +129,7 @@ def profile(request):
     )['grade__avg'] or 0
 
     # Работы на доработке
-    errors = submissions_list.filter(
+    errors = submissions.filter(
         status='revision'
     )
 
@@ -161,6 +152,91 @@ def profile(request):
         'errors': errors,
         'quiz_attempts': quiz_attempts,
     })
+
+@login_required
+@require_POST
+def mark_lesson_complete(request, course_slug, lesson_slug):
+    """Отметить урок как выполненный."""
+    course = get_object_or_404(Course, slug=course_slug)
+    lesson = get_object_or_404(Lesson, course=course, slug=lesson_slug)
+    
+    progress, created = UserProgress.objects.get_or_create(
+        user=request.user,
+        lesson=lesson
+    )
+    progress.completed = True
+    progress.completed_at = timezone.now()
+    progress.save()
+    
+    messages.success(request, f'Урок "{lesson.title}" отмечен как выполненный!')
+    return redirect('courses:lesson_detail', course_slug=course_slug, lesson_slug=lesson_slug)
+
+
+def standalone_assignments(request):
+    """Список дополнительных заданий."""
+    assignments = StandaloneAssignment.objects.all()
+    return render(request, 'courses/standalone_assignments.html', {'assignments': assignments})
+
+
+def quiz_detail(request, quiz_id):
+    """Страница теста."""
+    quiz = get_object_or_404(Quiz.objects.prefetch_related('questions__answers'), pk=quiz_id)
+    
+    # Проверяем, проходил ли пользователь тест
+    last_attempt = None
+    if request.user.is_authenticated:
+        last_attempt = QuizAttempt.objects.filter(
+            user=request.user,
+            quiz=quiz
+        ).order_by('-completed_at').first()
+    
+    return render(request, 'courses/quiz_detail.html', {
+        'quiz': quiz,
+        'last_attempt': last_attempt,
+    })
+
+
+@login_required
+@require_POST
+def submit_quiz(request, quiz_id):
+    """Отправить ответы на тест."""
+    quiz = get_object_or_404(Quiz.objects.prefetch_related('questions__answers'), pk=quiz_id)
+    
+    # Получаем ответы пользователя
+    user_answers = {}
+    total_questions = quiz.questions.count()
+    correct_answers = 0
+    
+    for question in quiz.questions.all():
+        answer_id = request.POST.get(f'question_{question.id}')
+        if answer_id:
+            try:
+                answer = Answer.objects.get(pk=answer_id, question=question)
+                user_answers[question.id] = int(answer_id)
+                if answer.is_correct:
+                    correct_answers += 1
+            except Answer.DoesNotExist:
+                pass
+    
+    # Вычисляем процент
+    score = int((correct_answers / total_questions * 100)) if total_questions > 0 else 0
+    passed = score >= quiz.passing_score
+    
+    # Сохраняем попытку
+    attempt = QuizAttempt.objects.create(
+        user=request.user,
+        quiz=quiz,
+        score=score,
+        passed=passed,
+        answers=user_answers
+    )
+    
+    messages.success(
+        request,
+        f'Тест завершен! Вы набрали {score}% баллов. {"Поздравляем, тест пройден!" if passed else f"Нужно набрать минимум {quiz.passing_score}%."}'
+    )
+    
+    return redirect('courses:quiz_result', attempt_id=attempt.id)
 
 
 def quiz_result(request, attempt_id):

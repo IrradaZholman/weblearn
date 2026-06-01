@@ -1,6 +1,67 @@
 {% extends 'base.html' %}
 {% block title %}Результат теста — WebLearn{% endblock %}
+<style>
+    .container{
+    max-width:1000px;
+}
 
+.result-card{
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.result-success{
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:white;
+}
+
+.result-fail{
+    background:linear-gradient(135deg,#f59e0b,#ea580c);
+    color:white;
+}
+
+.result-icon{
+    font-size:5rem;
+    margin-bottom:15px;
+}
+
+.result-score{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background:#fff;
+    margin:25px auto;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.result-score-number{
+    font-size:3rem;
+    font-weight:700;
+    color:#6366f1;
+    line-height:1;
+}
+
+.result-score-label{
+    color:#64748b;
+    font-size:.9rem;
+}
+
+.result-actions{
+    margin-top:30px;
+}
+
+.result-actions .btn{
+    min-width:220px;
+    height:50px;
+    border-radius:12px;
+    font-weight:600;
+}
+</style>
 {% block content %}
 <div class="container py-5">
     <div class="row">

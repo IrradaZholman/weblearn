@@ -2,205 +2,563 @@
 {% block title %}Профиль — WebLearn{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
 
 body{
+
+    font-family:'Nunito',sans-serif;
+
     background:#f5f7fb;
+
+    background-image:
+    radial-gradient(
+        rgba(124,58,237,.04) 1px,
+        transparent 1px
+    );
+
+    background-size:24px 24px;
+
+    color:#0f172a;
+}
+
+/* CONTAINER */
+
+.container{
+
+    max-width:1350px;
 }
 
 /* TITLE */
 
 .profile-title{
-    font-size: 3rem;
-    font-weight: 900;
+
+    font-size:3.6rem;
+
+    font-weight:900;
+
     color:#0f172a;
+
     margin-bottom:.6rem;
-    letter-spacing:-1px;
+
+    letter-spacing:-1.5px;
 }
 
 .profile-subtitle{
-    color:#64748b;
-    font-size:1.08rem;
+
+    color:#94a3b8;
+
+    font-size:1.05rem;
+
     margin-bottom:3rem;
 }
 
 /* TOP CARDS */
 
 .dashboard-card{
+
     background:#ffffff;
-    border-radius:28px;
-    padding:30px;
-    height:100%;
 
-    border:1px solid #eef2ff;
+    border-radius:34px;
 
-    box-shadow:
-        0 10px 30px rgba(15,23,42,.05);
+    padding:28px;
+
+    border:none;
+
+    box-shadow:none;
 
     transition:.25s ease;
+
     position:relative;
+
     overflow:hidden;
-}
 
-.dashboard-card::before{
-    content:"";
+    min-height:185px;
 
-    position:absolute;
-    top:0;
-    left:0;
+    display:flex;
 
-    width:100%;
-    height:5px;
+    flex-direction:column;
 
-    background:
-    linear-gradient(
-        135deg,
-        #6366f1,
-        #8b5cf6
-    );
-
-    opacity:0;
-    transition:.25s;
+    justify-content:space-between;
 }
 
 .dashboard-card:hover{
-    transform:translateY(-6px);
-    box-shadow:
-        0 20px 40px rgba(15,23,42,.08);
+
+    transform:translateY(-5px);
+
+    box-shadow:none;
 }
 
-.dashboard-card:hover::before{
-    opacity:1;
-}
+/* ICON */
 
 .card-icon{
-    width:78px;
-    height:78px;
 
-    border-radius:24px;
+    width:76px;
+
+    height:76px;
+
+    border-radius:26px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
-    font-size:2.1rem;
-
     flex-shrink:0;
+
+    font-size:2rem;
+}
+
+.card-top{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:22px;
+}
+
+.card-bottom{
+
+    margin-top:26px;
+
+    color:#64748b;
+
+    font-size:1rem;
+
+    font-weight:700;
 }
 
 /* ICON COLORS */
 
 .icon-purple{
-    background:#f3e8ff;
-    color:#7c3aed;
+    background:#f6edff;
 }
 
 .icon-green{
-    background:#dcfce7;
-    color:#16a34a;
+    background:#e8fff0;
 }
 
 .icon-orange{
-    background:#ffedd5;
-    color:#ea580c;
+    background:#eef6ff;
 }
 
 .icon-blue{
-    background:#dbeafe;
-    color:#2563eb;
+    background:#f8efff;
 }
 
 /* TEXT */
 
 .stat-number{
-    font-size:2.7rem;
-    font-weight:900;
+
+    font-size:3rem;
+
+    font-weight:700;
+
     line-height:1;
+
     color:#0f172a;
 }
 
 .stat-label{
+
     color:#64748b;
+
     font-weight:700;
+
     margin-top:8px;
-    font-size:1rem;
+
+    font-size:.95rem;
 }
 
 /* MAIN BOX */
 
 .profile-box{
-    background:#fff;
-    border-radius:30px;
+
+    background:#ffffff;
+
+    border-radius:34px;
+
     padding:34px;
 
-    border:1px solid #eef2ff;
+    border:none;
 
-    box-shadow:
-        0 10px 30px rgba(15,23,42,.05);
+    box-shadow:none;
+
+    position:relative;
+
+    overflow:hidden;
 }
 
 .box-title{
-    font-size:1.65rem;
+
+    font-size:1.7rem;
+
     font-weight:900;
+
     margin-bottom:28px;
+
     color:#0f172a;
+
+    position:relative;
+
+    z-index:2;
 }
 
-/* PROGRESS */
+/* ACHIEVEMENTS */
+
+.achievements-box{
+
+    min-height:240px;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.achievements-box::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:-40px;
+
+    top:-40px;
+
+    width:220px;
+
+    height:220px;
+
+    background:
+    radial-gradient(
+        rgba(124,58,237,.05),
+        transparent 70%
+    );
+
+    z-index:1;
+}
+
+.achievements-content{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:28px;
+
+    position:relative;
+
+    z-index:2;
+
+    margin-top:10px;
+}
+
+.achievement-big-icon{
+
+    width:140px;
+
+    height:140px;
+
+    border-radius:38px;
+
+    background:#f7f2ff;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-shrink:0;
+}
+
+.achievement-big-icon img{
+
+    width:78px;
+
+    opacity:.30;
+
+    filter:hue-rotate(230deg);
+}
+
+.achievements-empty{
+
+    font-size:1.18rem;
+
+    font-weight:800;
+
+    color:#64748b;
+
+    margin-bottom:10px;
+}
+
+.achievements-desc{
+
+    color:#94a3b8;
+
+    font-size:.96rem;
+
+    line-height:1.8;
+
+    max-width:280px;
+}
+
+/* PROGRESS CARD */
+
+.purple-progress{
+
+    background:
+    linear-gradient(
+        135deg,
+        #6f5cff 0%,
+        #7c52ff 40%,
+        #5f6dff 100%
+    );
+
+    color:white;
+
+    position:relative;
+
+    overflow:hidden;
+
+    min-height:355px;
+
+    border-radius:38px;
+}
+
+/* LIGHT EFFECT */
+
+.purple-progress::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:-120px;
+
+    top:-120px;
+
+    width:360px;
+
+    height:360px;
+
+    background:
+    radial-gradient(
+        rgba(255,255,255,.16),
+        transparent 72%
+    );
+
+    z-index:1;
+}
+
+/* ROCKET */
+
+.purple-progress::after{
+
+    content:"";
+
+    position:absolute;
+
+    right:55px;
+
+    top:58px;
+
+    width:140px;
+
+    height:140px;
+
+    background:
+    url('https://cdn-icons-png.flaticon.com/512/1067/1067357.png')
+    center/contain no-repeat;
+
+    background-size:contain;
+
+    opacity:.12;
+
+    filter:
+        brightness(0)
+        invert(1);
+
+    z-index:1;
+}
+
+/* STARS */
+
+.progress-stars{
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:1;
+
+    pointer-events:none;
+}
+
+.progress-stars span{
+
+    position:absolute;
+
+    color:rgba(255,255,255,.30);
+
+    font-size:1.5rem;
+
+    animation:floatStar 4s ease-in-out infinite;
+}
+
+.progress-stars span:nth-child(1){
+
+    top:28px;
+    right:120px;
+}
+
+.progress-stars span:nth-child(2){
+
+    bottom:48px;
+    right:140px;
+}
+
+.progress-stars span:nth-child(3){
+
+    top:145px;
+    right:52px;
+}
+
+.progress-stars span:nth-child(4){
+
+    bottom:90px;
+    left:55%;
+}
+
+@keyframes floatStar{
+
+    0%{
+        transform:translateY(0px);
+    }
+
+    50%{
+        transform:translateY(-7px);
+    }
+
+    100%{
+        transform:translateY(0px);
+    }
+}
+
+/* CONTENT */
+
+.purple-progress .row,
+.purple-progress .box-title{
+
+    position:relative;
+
+    z-index:2;
+}
+
+.purple-progress .box-title{
+
+    color:white !important;
+
+    font-size:2rem;
+
+    margin-bottom:35px;
+}
+
+.purple-progress h4{
+
+    color:white;
+
+    font-size:2rem;
+
+    font-weight:900;
+
+    margin-bottom:18px;
+}
+
+.purple-progress p{
+
+    color:rgba(255,255,255,.92) !important;
+
+    font-size:1.08rem;
+
+    margin-bottom:25px;
+}
+
+/* PROGRESS CIRCLE */
 
 .progress-circle{
+
     width:170px;
+
     height:170px;
 
     border-radius:50%;
 
     background:
     conic-gradient(
-        #7c3aed {{ completion_percentage }}%,
-        #ececf4 0
+        #ffffff {{ completion_percentage }}%,
+        rgba(255,255,255,.18) 0
     );
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     margin:auto;
 }
 
 .progress-inner{
-    width:132px;
-    height:132px;
+
+    width:128px;
+
+    height:128px;
 
     border-radius:50%;
-    background:#fff;
+
+    background:rgba(255,255,255,.10);
+
+    backdrop-filter:blur(12px);
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
-    font-size:2.2rem;
+    font-size:2.8rem;
+
     font-weight:900;
 
-    color:#111827;
+    color:white;
 }
 
+/* LINE */
+
 .progress-line{
+
     height:12px;
+
     border-radius:999px;
-    background:#ececf4;
+
+    background:rgba(255,255,255,.20);
+
     overflow:hidden;
+
+    margin-top:20px;
 }
 
 .progress-fill{
+
     height:100%;
+
     width:{{ completion_percentage }}%;
 
-    background:
-    linear-gradient(
-        135deg,
-        #6366f1,
-        #8b5cf6
-    );
+    background:white;
 
     border-radius:999px;
 }
@@ -208,128 +566,117 @@ body{
 /* BUTTON */
 
 .modern-btn{
-    background:
-    linear-gradient(
-        135deg,
-        #6366f1,
-        #8b5cf6
-    );
 
-    color:#fff !important;
+    background:white;
+
+    color:#6d5cff !important;
 
     border:none;
 
-    padding:15px 30px;
+    padding:16px 32px;
 
-    border-radius:18px;
+    border-radius:22px;
 
-    font-weight:800;
+    font-weight:900;
+
+    font-size:1rem;
 
     text-decoration:none;
 
     display:inline-flex;
+
     align-items:center;
+
     gap:10px;
 
     transition:.25s ease;
 
-    box-shadow:
-        0 10px 25px rgba(124,58,237,.25);
+    box-shadow:none;
+
+    margin-top:24px;
 }
 
 .modern-btn:hover{
-    transform:translateY(-3px);
-    box-shadow:
-        0 18px 35px rgba(124,58,237,.35);
-}
 
-/* ACHIEVEMENTS */
+    transform:translateY(-4px);
 
-.achievement-item{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    gap:15px;
-
-    padding-bottom:20px;
-    margin-bottom:20px;
-
-    border-bottom:1px solid #f1f5f9;
-}
-
-.achievement-item:last-child{
-    border-bottom:none;
-    margin-bottom:0;
-    padding-bottom:0;
-}
-
-.achievement-left{
-    display:flex;
-    align-items:center;
-    gap:18px;
-}
-
-.achievement-icon{
-    width:60px;
-    height:60px;
-
-    border-radius:20px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:1.4rem;
+    background:#f8f8ff;
 }
 
 /* TABLE */
 
 .work-table{
+
     margin-bottom:0;
 }
 
 .work-table th{
-    color:#64748b;
+
+    color:#94a3b8;
+
     font-weight:800;
+
     border:none;
+
+    font-size:.92rem;
 }
 
 .work-table td{
+
     vertical-align:middle;
+
     border-color:#f1f5f9;
+
+    font-size:.93rem;
 }
 
 /* STATUS */
 
 .status-badge{
+
     padding:8px 14px;
-    border-radius:14px;
+
+    border-radius:16px;
 
     font-weight:800;
-    font-size:.83rem;
+
+    font-size:.76rem;
 
     display:inline-block;
 }
 
 .status-check{
+
     background:#dcfce7;
+
     color:#16a34a;
 }
 
 .status-review{
+
     background:#ffedd5;
+
     color:#ea580c;
+}
+
+.status-revision{
+
+    background:#fee2e2;
+
+    color:#dc2626;
 }
 
 /* QUICK ACTIONS */
 
 .quick-card{
-    border:1px solid #eef2ff;
 
-    border-radius:24px;
+    background:#fafafe;
 
-    padding:28px 20px;
+    border:none;
+
+    border-radius:26px;
+
+    padding:24px 14px;
 
     text-align:center;
 
@@ -341,21 +688,24 @@ body{
 
     display:block;
 
-    background:#fff;
+    min-height:160px;
 }
 
 .quick-card:hover{
-    transform:translateY(-5px);
-    border-color:#8b5cf6;
 
-    box-shadow:
-        0 15px 35px rgba(124,58,237,.08);
+    transform:translateY(-5px);
+
+    background:#f5f3ff;
+
+    box-shadow:none;
 
     color:#7c3aed;
 }
 
 .quick-icon{
+
     width:72px;
+
     height:72px;
 
     border-radius:22px;
@@ -363,15 +713,77 @@ body{
     margin:auto auto 16px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     background:#f5f3ff;
+}
+
+/* NAVBAR */
+
+.navbar,
+.navbar *{
+
+    font-family:'Nunito',sans-serif !important;
+}
+
+.navbar-brand{
 
     font-size:2rem;
+
+    font-weight:900;
+
+    letter-spacing:-1px;
+
+    color:white !important;
+}
+
+.nav-link {
+
+    color: rgba(255,255,255,.92) !important;
+
+    font-weight: 800;
+
+    font-size: 1rem;
+
+    padding: .65rem 1rem !important;
+
+    border-radius: 14px;
+
+    transition: all .2s ease;
+
+    position: relative;
+
+    letter-spacing:-0.2px;
+}
+
+.nav-link:hover {
+
+    background: rgba(255,255,255,.14);
+
+    color: #fff !important;
+
+    transform: translateY(-1px);
 }
 
 /* MOBILE */
+
+@media(max-width:992px){
+
+    .profile-title{
+        font-size:2.7rem;
+    }
+
+    .profile-box{
+        padding:26px;
+    }
+
+    .dashboard-card{
+        padding:24px;
+    }
+}
 
 @media(max-width:768px){
 
@@ -379,29 +791,615 @@ body{
         font-size:2.2rem;
     }
 
-    .dashboard-card{
-        padding:24px;
+    .profile-subtitle{
+        font-size:.95rem;
     }
 
-    .profile-box{
-        padding:24px;
+    .dashboard-card{
+        min-height:auto;
     }
 
     .progress-circle{
-        width:140px;
-        height:140px;
+        width:130px;
+        height:130px;
+        margin-bottom:24px;
     }
 
     .progress-inner{
-        width:108px;
-        height:108px;
-        font-size:1.8rem;
+        width:96px;
+        height:96px;
+        font-size:2rem;
     }
 
+    .quick-card{
+        min-height:140px;
+    }
+
+    .box-title{
+        font-size:1.4rem;
+    }
+
+    .purple-progress h4{
+        font-size:1.6rem;
+    }
 }
-.status-revision{
+.card-icon i{
+
+    font-size:2rem;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+.icon-purple i{
+    color:#8b5cf6;
+}
+
+.icon-green i{
+    color:#22c55e;
+}
+
+.icon-orange i{
+    color:#3b82f6;
+}
+
+.icon-blue i{
+    color:#c026d3;
+}
+.custom-pagination{
+
+    display:flex;
+
+    align-items:center;
+
+    margin-top:35px;
+
+    gap:0;
+}
+
+.custom-pagination a,
+.custom-pagination span{
+
+    width:48px;
+
+    height:48px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-decoration:none;
+
+    border:1px solid #dbe3ef;
+
+    background:#ffffff;
+
+    color:#4b5563;
+
+    font-weight:600;
+
+    transition:.2s ease;
+}
+
+.custom-pagination a:first-child,
+.custom-pagination span:first-child{
+
+    border-top-left-radius:8px;
+
+    border-bottom-left-radius:8px;
+}
+
+.custom-pagination a:last-child,
+.custom-pagination span:last-child{
+
+    border-top-right-radius:8px;
+
+    border-bottom-right-radius:8px;
+}
+
+.custom-pagination .active{
+
+    background:#2d9cdb;
+
+    color:white;
+
+    border-color:#2d9cdb;
+}
+
+.custom-pagination a:hover{
+
+    background:#f3f7fc;
+
+    color:#2d9cdb;
+}
+.quick-card{
+
+    justify-content:center;
+
+    display:flex;
+
+    flex-direction:column;
+}
+/* MOTIVATION */
+
+.motivation-box{
+
+    background:
+    linear-gradient(
+        135deg,
+        #7c5cff 0%,
+        #6c4dff 45%,
+        #8a5cff 100%
+    );
+
+    color:white;
+
+    overflow:hidden;
+
+    position:relative;
+}
+
+.motivation-box::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:250px;
+    height:250px;
+
+    background:
+    radial-gradient(
+        rgba(255,255,255,.18),
+        transparent 70%
+    );
+
+    right:-100px;
+    top:-100px;
+}
+
+.motivation-content{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    position:relative;
+
+    z-index:2;
+}
+
+.motivation-left{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:18px;
+}
+
+.quote-icon{
+
+    font-size:2rem;
+
+    opacity:.9;
+}
+
+.motivation-title{
+
+    font-size:1.2rem;
+
+    font-weight:900;
+
+    margin-bottom:8px;
+}
+
+.motivation-text{
+
+    color:rgba(255,255,255,.92);
+
+    font-size:.96rem;
+}
+
+.motivation-target{
+
+    font-size:4rem;
+
+    opacity:.9;
+}
+
+/* ACTIVITY CALENDAR */
+
+.activity-calendar{
+
+    margin-top:10px;
+}
+
+.calendar-days{
+
+    display:grid;
+
+    grid-template-columns:70px repeat(7,1fr);
+
+    margin-bottom:18px;
+
+    color:#64748b;
+
+    font-size:.85rem;
+
+    font-weight:700;
+
+    text-align:center;
+}
+
+.calendar-row{
+
+    display:grid;
+
+    grid-template-columns:70px repeat(7,1fr);
+
+    align-items:center;
+
+    margin-bottom:14px;
+}
+
+.week-label{
+
+    color:#64748b;
+
+    font-size:.85rem;
+
+    font-weight:700;
+}
+
+.calendar-dot{
+
+    width:16px;
+
+    height:16px;
+
+    border-radius:50%;
+
+    margin:auto;
+}
+
+/* LEVELS */
+
+.level-0{
+    background:#f1eaff;
+}
+
+.level-1{
+    background:#e3d4ff;
+}
+
+.level-2{
+    background:#c7a8ff;
+}
+
+.level-3{
+    background:#9b6cff;
+}
+
+.level-4{
+    background:#6d28d9;
+}
+
+/* LEGEND */
+
+.calendar-legend{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    margin-top:25px;
+
+    color:#64748b;
+
+    font-size:.82rem;
+
+    font-weight:700;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .motivation-content{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+    }
+
+    .motivation-target{
+
+        font-size:3rem;
+    }
+
+    .calendar-days,
+    .calendar-row{
+
+        grid-template-columns:55px repeat(7,1fr);
+    }
+
+    .calendar-dot{
+
+        width:13px;
+        height:13px;
+    }
+}
+.achievement-item{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #f1f5f9;
+}
+
+.achievement-left{
+
+    display:flex;
+    gap:14px;
+    align-items:center;
+}
+
+.achievement-icon{
+    width:52px;
+    height:52px;
+
+    border-radius:14px;
+
+    background:#f5f3ff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#7c3aed;
+    font-size:1.2rem;
+
+    flex-shrink:0;
+}
+
+.possible-achievements-link{
+
+    margin-top:18px;
+
+    font-size:.85rem;
+
+    color:#7c3aed;
+
+    cursor:pointer;
+
+    text-align:center;
+
+    font-weight:800;
+}
+
+.possible-achievements-link:hover{
+
+    text-decoration:underline;
+}
+/* ACHIEVEMENTS MODAL */
+
+.achievement-header{
+    background:linear-gradient(135deg,#7c5cff,#5b4dff);
+    color:white;
+    padding:20px;
+    border-radius:20px;
+    margin-bottom:20px;
+    text-align:center;
+}
+
+.achievement-header h2{
+    margin:0;
+    font-size:2rem;
+    font-weight:900;
+}
+
+.achievement-header p{
+    margin:5px 0 0;
+    opacity:.9;
+}
+
+.achievement-card{
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+    padding:14px;
+    margin-bottom:12px;
+
+    border-radius:18px;
+
+    background:#fafaff;
+    border:1px solid #ecebff;
+
+    transition:.3s;
+}
+
+.achievement-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(124,92,255,.12);
+}
+
+.achievement-gif{
+    width:55px;
+    height:55px;
+    object-fit:contain;
+}
+
+.achievement-info h6{
+    margin:0;
+    font-weight:800;
+}
+
+.achievement-info p{
+    margin:2px 0 0;
+    color:#64748b;
+    font-size:.9rem;
+}
+
+.rarity{
+    margin-left:auto;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    font-size:.78rem;
+    font-weight:800;
+
     background:#fee2e2;
     color:#dc2626;
+
+    white-space:nowrap;
+}
+
+.rarity.success{
+    background:#dcfce7;
+    color:#15803d;
+}
+.modal{
+    z-index:99999 !important;
+}
+
+.modal-backdrop{
+    z-index:99998 !important;
+}
+#achievementsModal .modal-dialog{
+    max-width:1100px;
+}
+.achievements-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+@media(max-width:768px){
+    .achievements-grid{
+        grid-template-columns:1fr;
+    }
+}
+.modal-body{
+    max-height:70vh;
+    overflow-y:auto;
+}
+/* ===== ACHIEVEMENTS ===== */
+
+.achievement-card{
+    display:flex;
+    align-items:center;
+    gap:16px;
+
+    padding:18px;
+
+    background:#ffffff;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+
+    transition:.25s ease;
+}
+
+.achievement-card:hover{
+    border-color:#7c3aed;
+    box-shadow:0 4px 16px rgba(124,92,255,.08);
+}
+
+.achievement-icon-modern{
+    width:56px;
+    height:56px;
+
+    border-radius:14px;
+
+    background:#f5f3ff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#7c3aed;
+    font-size:1.5rem;
+
+    flex-shrink:0;
+}
+
+.achievement-info h6{
+    margin:0;
+    font-size:1rem;
+    font-weight:800;
+    color:#111827;
+}
+
+.achievement-info p{
+    margin:3px 0 0;
+    color:#6b7280;
+    font-size:.88rem;
+}
+
+.rarity{
+    margin-left:auto;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    background:#f3f4f6;
+    color:#374151;
+
+    font-size:.75rem;
+    font-weight:700;
+}
+
+.level-basic{
+    background:#eef2ff;
+    color:#4f46e5;
+}
+
+.level-medium{
+    background:#ecfeff;
+    color:#0891b2;
+}
+
+.level-advanced{
+    background:#f3e8ff;
+    color:#7c3aed;
+}
+
+.level-expert{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.level-elite{
+    background:#fef3c7;
+    color:#b45309;
+}
+.profile-title,
+.box-title,
+.stat-label,
+.achievement-info h6,
+.motivation-title,
+.navbar-brand{
+    font-weight:600 !important;
 }
 </style>
 {% endblock %}
@@ -420,127 +1418,145 @@ body{
     </p>
 
     <!-- TOP STATS -->
+
 <div class="row g-4 mb-5">
-<div class="col-lg-3 col-md-6">
 
-    <div class="dashboard-card">
+    <!-- CARD 1 -->
 
-        <div class="d-flex align-items-center gap-4">
+    <div class="col-lg-3 col-md-6">
 
-            <div class="card-icon icon-purple">
-                🏆
-            </div>
+        <div class="dashboard-card">
 
-            <div>
+            <div class="card-top">
 
-                <div class="stat-number">
-                    {{ completed_lessons }}
+                <div class="card-icon icon-purple">
+                    <i class="bi bi-trophy-fill"></i>
                 </div>
 
-                <div class="stat-label">
-                    Достижения
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="mt-4 text-muted">
-            Ваш прогресс
-        </div>
-
-    </div>
-
-</div>
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="dashboard-card">
-
-                <div class="d-flex align-items-center gap-4">
-
-                    <div class="card-icon icon-green">
-                        ✅
-                    </div>
-
-                    <div>
-                        <div class="stat-number">
-                            {{ total_lessons }}
-                        </div>
-
-                        <div class="stat-label">
-                            Уроков
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="mt-4 text-muted">
-                    Доступно
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-
-            <div class="dashboard-card">
-
-                <div class="d-flex align-items-center gap-4">
-
-                    <div class="card-icon icon-orange">
-                        ✈️
-                    </div>
-
-                    <div>
-                        <div class="stat-number">
-                            {{ submissions.count }}
-                        </div>
-
-                        <div class="stat-label">
-                            Отправлено работ
-                        </div>
-                    </div>
-
-                </div>
-
-
-
-            </div>
-
-        </div>
-
-<div class="col-lg-3 col-md-6">
-
-    <div class="dashboard-card">
-
-        <div class="d-flex align-items-center gap-4">
-
-            <div class="card-icon icon-blue">
-                📊
-            </div>
-
-            <div>
+                <div>
 
 <div class="stat-number">
-    {{ avg_grade|floatformat:1 }}
+    {{ achievements_count }}
 </div>
 
-                <div class="stat-label">
-                    Средняя оценка
+                    <div class="stat-label">
+                        Достижения
+                    </div>
+
                 </div>
 
             </div>
 
-        </div>
+            <div class="card-bottom">
+                Ваш прогресс
+            </div>
 
-        <div class="mt-4 text-muted">
-            По вашим работам
         </div>
 
     </div>
-</div>
+
+    <!-- CARD 2 -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="dashboard-card">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-green">
+                    <i class="bi bi-check2-square"></i>
+                </div>
+
+                <div>
+
+                    <div class="stat-number">
+                        {{ total_lessons }}
+                    </div>
+
+                    <div class="stat-label">
+                        Уроков
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card-bottom">
+                Доступно
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CARD 3 -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="dashboard-card">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-orange">
+                    <i class="bi bi-send-fill"></i>
+                </div>
+
+                <div>
+
+                    <div class="stat-number">
+                        {{ submissions.count }}
+                    </div>
+
+                    <div class="stat-label">
+                        Отправлено работ
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card-bottom">
+                По заданиям
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CARD 4 -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="dashboard-card">
+
+            <div class="card-top">
+
+                <div class="card-icon icon-blue">
+                    <i class="bi bi-bar-chart-fill"></i>
+                </div>
+
+                <div>
+
+                    <div class="stat-number">
+                        {{ avg_grade|floatformat:1 }}
+                    </div>
+
+                    <div class="stat-label">
+                        Средняя оценка
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="card-bottom">
+                По вашим работам
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
     <!-- CONTENT -->
 
@@ -550,9 +1566,15 @@ body{
 
         <div class="col-lg-7">
 
-            <div class="profile-box mb-4">
+<div class="profile-box purple-progress mb-4">
+    <div class="progress-stars">
 
-                <div class="box-title">
+    <span>✦</span>
+    <span>✦</span>
+    <span>✦</span>
+
+</div>
+                        <div class="box-title">
                     Прогресс обучения
                 </div>
 
@@ -599,100 +1621,146 @@ body{
 
             </div>
 
-            <!-- WORKS -->
+ <!-- WORKS -->
 
-            <div class="profile-box">
+<div class="profile-box">
 
-                <div class="box-title">
-                    Последние работы
-                </div>
+    <div class="box-title">
+        Последние работы
+    </div>
 
-                {% if submissions %}
+    {% if submissions %}
 
-                <div class="table-responsive">
+    <div class="table-responsive">
 
-                    <table class="table align-middle work-table">
+        <table class="table align-middle work-table">
 
-                        <thead>
-                            <tr>
-                                <th>Работа</th>
-                                <th>Курс</th>
-                                <th>Статус</th>
-                                <th>Оценка</th>
-                            </tr>
-                        </thead>
+            <thead>
+                <tr>
+                    <th>Работа</th>
+                    <th>Курс</th>
+                    <th>Статус</th>
+                    <th>Оценка</th>
+                </tr>
+            </thead>
 
-                        <tbody>
+            <tbody>
 
-{% for submission in submissions %}
-                            <tr>
+            {% for submission in submissions %}
 
-                                <td>
-                                    {% if submission.assignment %}
-                                        {{ submission.assignment.title }}
-                                    {% else %}
-                                        {{ submission.standalone_assignment.title }}
-                                    {% endif %}
-                                </td>
+                <tr>
 
-                                <td>
-                                    HTML и CSS
-                                </td>
+                    <td>
+                        {% if submission.assignment %}
+                            {{ submission.assignment.title }}
+                        {% else %}
+                            {{ submission.standalone_assignment.title }}
+                        {% endif %}
+                    </td>
 
-<td>
+                    <td>
+                        HTML и CSS
+                    </td>
 
-    {% if submission.status == 'accepted' %}
+                    <td>
 
-        <span class="status-badge status-check">
-            Проверено
-        </span>
+                        {% if submission.status == 'accepted' %}
 
-    {% elif submission.status == 'revision' %}
+                            <span class="status-badge status-check">
+                                Проверено
+                            </span>
 
-        <span class="status-badge status-revision">
-            Нужно доработать
-        </span>
+                        {% elif submission.status == 'revision' %}
+
+                            <span class="status-badge status-revision">
+                                Нужно доработать
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-badge status-review">
+                                На проверке
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if submission.grade %}
+                            {{ submission.grade }}/5
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- PAGINATION -->
+
+    <div class="custom-pagination">
+
+        {% if submissions.has_previous %}
+
+            <a href="?page=1">1</a>
+
+            <a href="?page={{ submissions.previous_page_number }}">
+                <
+            </a>
+
+        {% endif %}
+
+        {% for num in submissions.paginator.page_range %}
+
+            {% if submissions.number == num %}
+
+                <span class="active">
+                    {{ num }}
+                </span>
+
+            {% else %}
+
+                <a href="?page={{ num }}">
+                    {{ num }}
+                </a>
+
+            {% endif %}
+
+        {% endfor %}
+
+        {% if submissions.has_next %}
+
+            <a href="?page={{ submissions.next_page_number }}">
+                >
+            </a>
+
+            <a href="?page={{ submissions.paginator.num_pages }}">
+                >|
+            </a>
+
+        {% endif %}
+
+    </div>
 
     {% else %}
 
-        <span class="status-badge status-review">
-            На проверке
-        </span>
+    <p class="text-muted">
+        Пока нет работ
+    </p>
 
     {% endif %}
 
-</td>
-
-                                <td>
-
-                                    {% if submission.grade %}
-                                        {{ submission.grade }}%
-                                    {% else %}
-                                        —
-                                    {% endif %}
-
-                                </td>
-
-
-                            </tr>
-
-                        {% endfor %}
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-                {% else %}
-
-                <p class="text-muted">
-                    Пока нет работ
-                </p>
-
-                {% endif %}
-
-            </div>
+</div>
 
         </div>
 
@@ -700,53 +1768,135 @@ body{
 
 <div class="col-lg-5">
 
-    <!-- ACHIEVEMENTS -->
+<!-- ACHIEVEMENTS -->
 
-    <div class="profile-box mb-4">
+<div class="profile-box achievements-box mb-4">
 
-        <div class="box-title">
-            Последние достижения
-        </div>
-
-        {% for achievement in achievements %}
-
-        <div class="achievement-item">
-
-            <div class="achievement-left">
-
-                <div class="achievement-icon icon-purple">
-                    {{ achievement.icon }}
-                </div>
-
-                <div>
-
-                    <div class="fw-bold">
-                        {{ achievement.title }}
-                    </div>
-
-                    <div class="text-muted">
-                        {{ achievement.description }}
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="text-muted small">
-                {{ achievement.created_at|date:"d M" }}
-            </div>
-
-        </div>
-
-        {% empty %}
-
-        <div class="text-muted">
-            Пока нет достижений
-        </div>
-
-        {% endfor %}
-
+    <div class="box-title">
+        Последние достижения
     </div>
+<div class="achievement-list">
+
+ {% if completed_lessons >= 1 %}
+<div class="achievement-item">
+    <div class="achievement-left">
+        <div class="achievement-icon">
+            <i class="bi bi-rocket-takeoff-fill"></i>
+        </div>
+        <div>
+            <div class="fw-bold">Старт обучения</div>
+            <div class="text-muted">
+                Завершён первый урок
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if completed_lessons >= 5 %}
+<div class="achievement-item">
+    <div class="achievement-left">
+        <div class="achievement-icon">
+            <i class="bi bi-book-half"></i>
+        </div>
+        <div>
+            <div class="fw-bold">Базовая подготовка</div>
+            <div class="text-muted">
+                Завершено 5 уроков
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if completed_lessons >= 10 %}
+<div class="achievement-item">
+    <div class="achievement-left">
+        <div class="achievement-icon">
+            <i class="bi bi-mortarboard-fill"></i>
+        </div>
+        <div>
+            <div class="fw-bold">Завершён модуль</div>
+            <div class="text-muted">
+                Завершено 10 уроков
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if avg_grade >= 4.5 %}
+<div class="achievement-item">
+    <div class="achievement-left">
+        <div class="achievement-icon">
+            <i class="bi bi-graph-up-arrow"></i>
+        </div>
+        <div>
+            <div class="fw-bold">Высокая успеваемость</div>
+            <div class="text-muted">
+                Средний балл выше 4.5
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if submissions.count >= 10 %}
+<div class="achievement-item">
+    <div class="achievement-left">
+        <div class="achievement-icon">
+            <i class="bi bi-lightning-charge-fill"></i>
+        </div>
+        <div>
+            <div class="fw-bold">Активный участник</div>
+            <div class="text-muted">
+                Отправлено 10 работ
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% if avg_grade >= 4.5 %}
+    <div class="achievement-item">
+        <div class="achievement-left">
+            <div class="achievement-icon">🎯</div>
+            <div>
+                <div class="fw-bold">Меткий ответ</div>
+                <div class="text-muted">
+                    Средний балл выше 4,5
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if submissions.count >= 10 %}
+    <div class="achievement-item">
+        <div class="achievement-left">
+            <div class="achievement-icon">💻</div>
+            <div>
+                <div class="fw-bold">Активный ученик</div>
+                <div class="text-muted">
+                    Отправлено 10 работ
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if completed_lessons == 0 and submissions.count == 0 %}
+    <div class="achievements-empty">
+        Пока нет достижений
+    </div>
+    {% endif %}
+
+</div>
+
+<div class="possible-achievements-link"
+     data-bs-toggle="modal"
+     data-bs-target="#achievementsModal">
+     Посмотреть возможные достижения
+</div>
 
     <!-- QUICK ACTIONS -->
 
@@ -766,7 +1916,7 @@ body{
                    class="quick-card">
 
                     <div class="quick-icon">
-                        📖
+                       <i class="bi bi-book"></i> 
                     </div>
 
                     Каталог курсов
@@ -775,22 +1925,23 @@ body{
 
             </div>
 
-            <!-- EDITOR -->
+ <!-- EDITOR -->
 
-            <div class="col-md-4">
+<div class="col-md-4">
 
-                <a href="/editor/"
-                   class="quick-card">
+    <a href="/editor/"
+       class="quick-card">
 
-                    <div class="quick-icon">
-                        💻
-                    </div>
+        <div class="quick-icon">
+            <i class="bi bi-code-slash"></i>
+        </div>
 
-                    Редактор кода
+        Редактор кода
 
-                </a>
+    </a>
 
-            </div>
+</div>
+
 <!-- BUILDER -->
 
 <div class="col-md-4">
@@ -799,7 +1950,7 @@ body{
        class="quick-card">
 
         <div class="quick-icon">
-            🧩
+            <i class="bi bi-grid-1x2-fill"></i>
         </div>
 
         Конструктор сайтов
@@ -808,13 +1959,551 @@ body{
 
 </div>
 
+</div>
+
+</div>
+
+<!-- MOTIVATION -->
+
+<div class="profile-box motivation-box mb-4">
+
+    <div class="motivation-content">
+
+        <div class="motivation-left">
+
+            <div class="quote-icon">
+                <i class="bi bi-quote"></i>
+            </div>
+
+            <div>
+
+                <div class="motivation-title">
+                    Каждый эксперт когда-то был новичком
+                </div>
+
+                <div class="motivation-text">
+                    Продолжайте в том же духе!
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="motivation-target">
+            <i class="bi bi-bullseye"></i>
         </div>
 
     </div>
 
+</div>
+
 </div> <!-- END RIGHT -->
 
 </div> <!-- END ROW -->
+
+<!-- MODAL ACHIEVEMENTS -->
+
+<div class="modal fade"
+     id="achievementsModal"
+     tabindex="-1">
+
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    🏆 Система достижений
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="achievement-header">
+                    <h2>{{ achievements_count }} / 26</h2>
+                    <p>Открыто достижений</p>
+                </div>
+
+                <div class="achievements-grid">
+
+ <!-- 1 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-rocket-takeoff-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Старт обучения</h6>
+        <p>Завершить первый урок</p>
+    </div>
+
+    {% if completed_lessons >= 1 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 2 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-book-half"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Базовая подготовка</h6>
+        <p>Завершить 5 уроков</p>
+    </div>
+
+    {% if completed_lessons >= 5 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 3 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-mortarboard-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Завершён модуль</h6>
+        <p>Завершить 10 уроков</p>
+    </div>
+
+    {% if completed_lessons >= 10 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 4 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-fire"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Продвинутый уровень</h6>
+        <p>Завершить 20 уроков</p>
+    </div>
+
+    {% if completed_lessons >= 20 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 5 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-trophy-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Лидер платформы</h6>
+        <p>Завершить все уроки</p>
+    </div>
+
+    {% if completed_lessons >= total_lessons and total_lessons > 0 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+<!-- 6 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-1-circle-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Три урока</h6>
+        <p>Завершить 3 урока</p>
+    </div>
+
+    {% if completed_lessons >= 3 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 7 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-2-circle-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Шесть уроков</h6>
+        <p>Завершить 6 уроков</p>
+    </div>
+
+    {% if completed_lessons >= 6 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 8 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-3-circle-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Девять уроков</h6>
+        <p>Завершить 9 уроков</p>
+    </div>
+
+    {% if completed_lessons >= 9 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 9 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-4-circle-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Двенадцать уроков</h6>
+        <p>Завершить 12 уроков</p>
+    </div>
+
+    {% if completed_lessons >= 12 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 10 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-send-check-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Первая работа</h6>
+        <p>Отправить первую работу</p>
+    </div>
+
+    {% if submissions.count >= 1 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+<!-- 11 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-lightning-charge-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Активный участник</h6>
+        <p>Отправить 10 работ</p>
+    </div>
+
+    {% if submissions.count >= 10 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 12 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-briefcase-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Практический опыт</h6>
+        <p>Отправить 25 работ</p>
+    </div>
+
+    {% if submissions.count >= 25 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 13 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-kanban-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Project Specialist</h6>
+        <p>Отправить 50 работ</p>
+    </div>
+
+    {% if submissions.count >= 50 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 14 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-graph-up-arrow"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Высокая успеваемость</h6>
+        <p>Средний балл выше 4.5</p>
+    </div>
+
+    {% if avg_grade >= 4.5 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 15 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-award-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Академическое превосходство</h6>
+        <p>Средний балл 5.0</p>
+    </div>
+
+    {% if avg_grade >= 5 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+ <!-- 16 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-shield-check"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Quality Expert</h6>
+        <p>10 работ на отлично</p>
+    </div>
+
+    {% if five_count >= 10 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 17 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-gem"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Excellence Award</h6>
+        <p>20 работ на отлично</p>
+    </div>
+
+    {% if five_count >= 20 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 18 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-calendar-check"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Первые шаги</h6>
+        <p>Зарегистрироваться на платформе</p>
+    </div>
+
+    {% if user.date_joined %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 19 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-clock-history"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Постоянный ученик</h6>
+        <p>3 дня на платформе</p>
+    </div>
+
+    {% if days_registered >= 3 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 20 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-calendar-week"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Неделя обучения</h6>
+        <p>7 дней на платформе</p>
+    </div>
+
+    {% if days_registered >= 7 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+ <!-- 21 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-calendar-month"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Месяц обучения</h6>
+        <p>30 дней на платформе</p>
+    </div>
+
+    {% if days_registered >= 30 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 22 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-hourglass-split"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Верный платформе</h6>
+        <p>100 дней на платформе</p>
+    </div>
+
+    {% if days_registered >= 100 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 23 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-stars"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Звезда обучения</h6>
+        <p>15 уроков и средний балл 4.8+</p>
+    </div>
+
+    {% if completed_lessons >= 15 and avg_grade >= 4.8 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 24 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-patch-check-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Первый тест</h6>
+        <p>Пройти первый тест</p>
+    </div>
+
+    {% if quiz_attempts.count >= 1 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 25 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+        <i class="bi bi-ui-checks-grid"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Опытный тестировщик</h6>
+        <p>Пройти 10 тестов</p>
+    </div>
+
+    {% if quiz_attempts.count >= 10 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+<!-- 26 -->
+<div class="achievement-card">
+    <div class="achievement-icon-modern">
+<i class="bi bi-trophy-fill"></i>
+    </div>
+
+    <div class="achievement-info">
+        <h6>Легенда платформы</h6>
+        <p>Все уроки + 50 работ + средний балл 5.0</p>
+    </div>
+
+    {% if completed_lessons >= total_lessons and submissions.count >= 50 and avg_grade >= 5 %}
+        <span class="rarity success">✅ Получено</span>
+    {% else %}
+        <span class="rarity">🔒 Не получено</span>
+    {% endif %}
+</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 </div> <!-- END CONTAINER -->
 

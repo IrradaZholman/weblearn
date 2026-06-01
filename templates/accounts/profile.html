@@ -721,52 +721,6 @@ body{
     background:#f5f3ff;
 }
 
-/* NAVBAR */
-
-.navbar,
-.navbar *{
-
-    font-family:'Nunito',sans-serif !important;
-}
-
-.navbar-brand{
-
-    font-size:2rem;
-
-    font-weight:900;
-
-    letter-spacing:-1px;
-
-    color:white !important;
-}
-
-.nav-link {
-
-    color: rgba(255,255,255,.92) !important;
-
-    font-weight: 800;
-
-    font-size: 1rem;
-
-    padding: .65rem 1rem !important;
-
-    border-radius: 14px;
-
-    transition: all .2s ease;
-
-    position: relative;
-
-    letter-spacing:-0.2px;
-}
-
-.nav-link:hover {
-
-    background: rgba(255,255,255,.14);
-
-    color: #fff !important;
-
-    transform: translateY(-1px);
-}
 
 /* MOBILE */
 
@@ -1400,6 +1354,82 @@ body{
 .motivation-title,
 .navbar-brand{
     font-weight:600 !important;
+}
+.container{
+    max-width:1200px;
+}
+
+.profile-title{
+    font-size:2.8rem;
+}
+
+.stat-number{
+    font-size:2.3rem;
+}
+
+.dashboard-card{
+    min-height:150px;
+    padding:22px;
+}
+
+.card-icon{
+    width:64px;
+    height:64px;
+    font-size:1.6rem;
+}
+
+.profile-box{
+    padding:28px;
+}
+
+.box-title{
+    font-size:1.45rem;
+}
+
+.quick-card{
+    min-height:130px;
+}
+
+.progress-circle{
+    width:150px;
+    height:150px;
+}
+
+.progress-inner{
+    width:112px;
+    height:112px;
+    font-size:2.3rem;
+}
+@media (min-width:1400px){
+
+    .container{
+        max-width:1280px;
+    }
+
+    .profile-title{
+        font-size:3rem;
+    }
+
+    .dashboard-card{
+        min-height:160px;
+    }
+
+    .achievement-card{
+        padding:14px;
+    }
+
+    .profile-box{
+        padding:30px;
+    }
+}
+.achievement-list{
+    max-height:340px;
+    overflow-y:auto;
+    padding-right:6px;
+}
+.navbar-brand{
+    font-weight:900 !important;
+    font-family:'Nunito',sans-serif !important;
 }
 </style>
 {% endblock %}

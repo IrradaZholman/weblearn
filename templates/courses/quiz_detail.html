@@ -1,6 +1,82 @@
 {% extends 'base.html' %}
 {% block title %}{{ quiz.title }} — WebLearn{% endblock %}
+<style>
+    .container{
+    max-width:1100px;
+}
 
+.quiz-card{
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.quiz-header{
+    background:linear-gradient(135deg,#6366f1,#8b5cf6);
+    color:white;
+    padding:30px;
+}
+
+.quiz-header h1{
+    margin:0;
+    font-size:2rem;
+    font-weight:700;
+}
+
+.quiz-header p{
+    margin-top:10px;
+    opacity:.9;
+}
+
+.question-card{
+    border:none;
+    border-radius:18px;
+    background:#f8fafc;
+    margin-bottom:20px;
+    transition:.25s;
+}
+
+.question-card:hover{
+    background:#f1f5f9;
+}
+
+.question-number{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#6366f1;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    flex-shrink:0;
+}
+
+.answer-option{
+    background:white;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:12px 15px;
+    margin-bottom:10px;
+    transition:.2s;
+}
+
+.answer-option:hover{
+    border-color:#6366f1;
+    background:#fafaff;
+}
+
+.form-check-input{
+    transform:scale(1.15);
+}
+
+.submit-btn{
+    height:55px;
+    font-size:1rem;
+    font-weight:600;
+    border-radius:14px;
+}
+</style>
 {% block content %}
 <div class="container py-5">
     <nav aria-label="breadcrumb">
@@ -69,4 +145,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

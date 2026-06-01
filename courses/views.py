@@ -99,7 +99,6 @@ def profile(request):
         lesson__isnull=False
     ).select_related('lesson', 'lesson__course')
 
-    # Статистика
     total_lessons = Lesson.objects.count()
 
     completed_lessons = lesson_progress.filter(
@@ -110,7 +109,6 @@ def profile(request):
         completed_lessons / total_lessons * 100
     ) if total_lessons > 0 else 0
 
-    # ВСЕ РАБОТЫ ПОЛЬЗОВАТЕЛЯ
     submissions = Submission.objects.filter(
         user=request.user
     ).select_related(
@@ -119,38 +117,135 @@ def profile(request):
         'standalone_assignment'
     ).order_by('-created_at')
 
-    # Средняя оценка
-    graded_submissions = submissions.filter(
+    avg_grade = submissions.filter(
         grade__isnull=False
-    )
-
-    avg_grade = graded_submissions.aggregate(
+    ).aggregate(
         Avg('grade')
     )['grade__avg'] or 0
 
-    # Работы на доработке
-    errors = submissions.filter(
-        status='revision'
-    )
+    errors = submissions.filter(status='revision')
 
-    # Тесты
     quiz_attempts = QuizAttempt.objects.filter(
         user=request.user
     ).select_related('quiz')
 
+
+    # ==========================
+    # ДОСТИЖЕНИЯ
+    # ==========================
+
+    achievements_count = 0
+
+    if completed_lessons >= 1:
+        achievements_count += 1
+
+    if completed_lessons >= 5:
+        achievements_count += 1
+
+    if completed_lessons >= 10:
+        achievements_count += 1
+
+    if completed_lessons >= 20:
+        achievements_count += 1
+
+    if completed_lessons >= total_lessons and total_lessons > 0:
+        achievements_count += 1
+
+    if completed_lessons >= 3:
+        achievements_count += 1
+
+    if completed_lessons >= 6:
+        achievements_count += 1
+
+    if completed_lessons >= 9:
+        achievements_count += 1
+
+    if completed_lessons >= 12:
+        achievements_count += 1
+
+    if submissions.count() >= 1:
+        achievements_count += 1
+
+    if submissions.count() >= 10:
+        achievements_count += 1
+
+    if submissions.count() >= 25:
+        achievements_count += 1
+
+    if submissions.count() >= 50:
+        achievements_count += 1
+
+    if avg_grade >= 4.5:
+        achievements_count += 1
+
+    if avg_grade >= 5:
+        achievements_count += 1
+
+    five_count = submissions.filter(grade=5).count()
+
+    if five_count >= 10:
+        achievements_count += 1
+
+    if five_count >= 20:
+        achievements_count += 1
+
+    if request.user.date_joined:
+        achievements_count += 1
+
+    days_registered = (
+        timezone.now().date()
+        - request.user.date_joined.date()
+    ).days
+
+    if days_registered >= 3:
+        achievements_count += 1
+
+    if days_registered >= 7:
+        achievements_count += 1
+
+    if days_registered >= 30:
+        achievements_count += 1
+
+    if days_registered >= 100:
+        achievements_count += 1
+
+    if completed_lessons >= 15 and avg_grade >= 4.8:
+        achievements_count += 1
+
+    if (
+        completed_lessons >= total_lessons
+        and submissions.count() >= 50
+        and avg_grade >= 5
+    ):
+        achievements_count += 1
+
+    if quiz_attempts.count() >= 1:
+        achievements_count += 1
+
+    if quiz_attempts.count() >= 10:
+        achievements_count += 1
+
+    print("completed_lessons =", completed_lessons)
+    print("submissions =", submissions.count())
+    print("avg_grade =", avg_grade)
+    print("five_count =", five_count)
+    print("days_registered =", days_registered)
+    print("quiz_attempts =", quiz_attempts.count())
+    print("achievements_count =", achievements_count)
+
     return render(request, 'accounts/profile.html', {
         'course_progress': course_progress,
         'lesson_progress': lesson_progress,
-
         'completed_lessons': completed_lessons,
         'total_lessons': total_lessons,
         'completion_percentage': round(completion_percentage, 1),
-
         'submissions': submissions,
         'avg_grade': round(avg_grade, 1),
-
         'errors': errors,
         'quiz_attempts': quiz_attempts,
+        'achievements_count': achievements_count,
+        'days_registered': days_registered,
+        'five_count': five_count,
     })
 
 @login_required

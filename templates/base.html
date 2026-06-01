@@ -1302,12 +1302,15 @@ table {
             </a>
         </li>
         {% endif %}
-        <li>
-            <a class="dropdown-item text-danger"
-               href="{% url 'accounts:logout' %}">
-                🚪 Выйти
-            </a>
-        </li>
+<li>
+    <form action="{% url 'accounts:logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit"
+                class="dropdown-item text-danger">
+            🚪 Выйти
+        </button>
+    </form>
+</li>
     </ul>
 </li>
 

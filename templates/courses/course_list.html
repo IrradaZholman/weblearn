@@ -24,6 +24,87 @@
         font-size: 3rem;
         margin-bottom: 1rem;
     }
+    .container{
+    max-width:1250px;
+}
+
+.course-section{
+    margin-bottom:2.5rem;
+}
+
+.section-header{
+    padding:1.4rem 1.8rem;
+    border-radius:14px;
+    margin-bottom:1.2rem;
+}
+
+.section-header h2{
+    font-size:1.6rem;
+    margin-bottom:.4rem !important;
+}
+
+.section-header p{
+    font-size:.95rem;
+    opacity:.95;
+}
+
+.course-card{
+    transition:.25s ease;
+}
+
+.course-card:hover{
+    transform:translateY(-4px);
+}
+
+.course-card .card-body{
+    padding:1.25rem !important;
+}
+
+.course-card h5{
+    font-size:1rem;
+    line-height:1.4;
+}
+
+.course-card p{
+    font-size:.85rem;
+    min-height:42px;
+}
+
+.course-icon{
+    font-size:2rem;
+    margin-bottom:.7rem;
+}
+
+.badge{
+    font-size:.75rem;
+}
+
+.display-5{
+    font-size:2.5rem !important;
+}
+
+.lead{
+    font-size:1.05rem;
+}
+@media(min-width:1400px){
+
+    .container{
+        max-width:1300px;
+    }
+
+    .row.g-4{
+        --bs-gutter-x:1.2rem;
+        --bs-gutter-y:1.2rem;
+    }
+
+    .course-card{
+        min-height:250px;
+    }
+}
+.course-icon{
+    color:#6366f1;
+    font-size:2.2rem;
+}
 </style>
 {% endblock %}
 
@@ -48,7 +129,7 @@
                     <a href="{% url 'courses:course_detail' course.slug %}" class="text-decoration-none">
                         <div class="card card-custom course-card h-100 border-0 overflow-hidden">
                             <div class="card-body p-4">
-                                <div class="text-center course-icon">📄</div>
+                                <div class="text-center course-icon"><i class="bi bi-file-earmark-code"></i></div>
                                 <h5 class="card-title fw-bold text-dark mb-2">{{ course.title }}</h5>
                                 <p class="card-text text-muted small mb-3">{{ course.description|truncatewords:15 }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -77,7 +158,7 @@
                     <a href="{% url 'courses:course_detail' course.slug %}" class="text-decoration-none">
                         <div class="card card-custom course-card h-100 border-0 overflow-hidden">
                             <div class="card-body p-4">
-                                <div class="text-center course-icon">⚡</div>
+                                <div class="text-center course-icon"><i class="bi bi-lightning-charge-fill"></i></div>
                                 <h5 class="card-title fw-bold text-dark mb-2">{{ course.title }}</h5>
                                 <p class="card-text text-muted small mb-3">{{ course.description|truncatewords:15 }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -106,7 +187,7 @@
                     <a href="{% url 'courses:course_detail' course.slug %}" class="text-decoration-none">
                         <div class="card card-custom course-card h-100 border-0 overflow-hidden">
                             <div class="card-body p-4">
-                                <div class="text-center course-icon">💅</div>
+                                <div class="text-center course-icon"><i class="bi bi-palette-fill"></i></div>
                                 <h5 class="card-title fw-bold text-dark mb-2">{{ course.title }}</h5>
                                 <p class="card-text text-muted small mb-3">{{ course.description|truncatewords:15 }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -135,7 +216,7 @@
                     <a href="{% url 'courses:course_detail' course.slug %}" class="text-decoration-none">
                         <div class="card card-custom course-card h-100 border-0 overflow-hidden">
                             <div class="card-body p-4">
-                                <div class="text-center course-icon">🔧</div>
+                                <div class="text-center course-icon"><i class="bi bi-braces"></i></div>
                                 <h5 class="card-title fw-bold text-dark mb-2">{{ course.title }}</h5>
                                 <p class="card-text text-muted small mb-3">{{ course.description|truncatewords:15 }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -165,7 +246,7 @@
                     <a href="{% url 'courses:course_detail' course.slug %}" class="text-decoration-none">
                         <div class="card card-custom course-card h-100 border-0 overflow-hidden">
                             <div class="card-body p-4">
-                                <div class="text-center course-icon">📖</div>
+                                <div class="text-center course-icon"><i class="bi bi-book-fill"></i></div>
                                 <h5 class="card-title fw-bold text-dark mb-2">{{ course.title }}</h5>
                                 <p class="card-text text-muted small mb-3">{{ course.description|truncatewords:15 }}</p>
                                 <div class="d-flex justify-content-between align-items-center">

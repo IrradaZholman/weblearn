@@ -98,33 +98,29 @@
         font-size:.9rem;
     }
 }
-
+.page-title{
+    font-size: 1.8rem;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+.container{
+    max-width:1280px;
+    padding-left:28px;
+    padding-right:28px;
+}
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container py-3">
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{% url 'courses:course_list' %}">
-                    Курсы
-                </a>
-            </li>
-
-            <li class="breadcrumb-item active">
-                Дополнительные задания
-            </li>
-        </ol>
-    </nav>
 
     <div class="mb-4">
-        <h1 class="fw-bold mb-2">
-            Дополнительные задания
-        </h1>
+<h1 class="page-title fw-bold mb-2">
+    Дополнительные задания
+</h1>
 
-        <p class="lead text-muted">
+<p class="page-description text-muted">
             Выполняй задания отдельно, даже без прохождения всей темы.
             Отправляй работы на проверку и получай обратную связь.
         </p>

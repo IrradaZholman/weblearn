@@ -1,1742 +1,2544 @@
 {% extends 'base.html' %}
-{% block title %}Редактор кода — WebLearn{% endblock %}
+
+{% block title %}Визуальный конструктор — WebLearn{% endblock %}
 
 {% block extra_css %}
 <style>
-    body.editor-page footer {
-        display: none;
-    }
-.editor-wrapper {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-height: auto;
-    padding: 0.5rem 0.75rem 1rem;
-    background: #f8fafc;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-.editor-wrapper > .row.editor-container {
-    display:flex;
-    flex-direction:row;
-    flex-wrap:nowrap;
-    align-items:stretch;
-    min-height:700px;
-}
-.row.editor-container > [class*="col-"] {
-    display:flex;
-    flex-direction:column;
-}
-.row.editor-container > [class*="col-"] > .card {
-    flex: 1 1 auto;
-
-    display: flex;
-
-    flex-direction: column;
-
-    min-height: 0;
-
-    border-radius: 12px;
-
-    box-shadow:
-        0 4px 6px -1px rgba(0,0,0,.1);
-
-height: 700px;
-min-height: 700px;
-    overflow: visible;
-}
-    .editor-panel { 
-        flex: 1;
-        display: flex; 
-        flex-direction: column; 
-        min-height: 0;
-        position: relative;
-        height: 100%;
-    }
-.code-editor-wrapper {
-    position: relative;
-
-    flex: 1;
-
-    display: flex;
-
-    flex-direction: column;
-
-    min-height: 0;
-
-    height: 100%;
-
-    overflow: hidden;
-}
-.code-editor-main {
-    flex: 1;
-
-    display: flex;
-
-    flex-direction: row;
-
-    align-items: stretch;
-
-    min-height: 0;
-
-    height: 100%;
-
-    overflow: auto;
-}
-.line-numbers {
-    flex-shrink: 0;
-
-    width: 58px;
-
-    min-width: 58px;
-
-    background: #0f172a;
-
-    color: #64748b;
-
-    text-align: right;
-
-    padding: 16px 8px 16px 6px;
-
-    font-family: 'JetBrains Mono', monospace;
-
-    font-size: 15px;
-
-    line-height: 1.7;
-
-    white-space: pre;
-
-    overflow: hidden;
-
-    user-select: none;
-
-    border-right: 1px solid #334155;
-
-    box-sizing: border-box;
-}
-    .line-numbers::-webkit-scrollbar {
-        display: none;
-    }
-.code-editor-wrapper textarea {
-    flex: 1;
-
-    width: 100%;
-
-    height: 100%;
-
-    min-height: 0;
-
-    resize: none;
-
-    font-family: 'JetBrains Mono', monospace;
-
-    font-size: 15px;
-
-    line-height: 1.7;
-
-    background: #1e293b;
-
-    color: #e2e8f0;
-
-    border: none;
-
-    outline: none;
-
-    padding: 16px;
-
-    overflow-y: auto;
-
-    overflow-x: auto;
-
-    white-space: pre;
-
-    word-wrap: normal;
-
-    box-sizing: border-box;
-}
-    .editor-panel textarea::placeholder {
-        color: #64748b;
-    }
-    .editor-header {
-        background: #f8fafc;
-        padding: 0.75rem 1rem;
-        border-bottom: 1px solid #e2e8f0;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.875rem;
-        color: #64748b;
-    }
-    .editor-header .icon {
-        font-size: 1.1rem;
-    }
-    
-    /* Улучшенные вкладки */
-    .nav-editor { 
-        background: #f1f5f9;
-        border-bottom: 2px solid #e2e8f0;
-        padding: 0;
-        display: flex;
-        gap: 0;
-    }
-    .nav-editor .nav-item {
-        flex: 1;
-    }
-    .nav-editor .nav-link { 
-        color: #475569 !important; 
-        font-weight: 700;
-        padding: 1rem 1.5rem;
-        border: none;
-        border-bottom: 3px solid transparent;
-        transition: all 0.2s;
-        background: transparent;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        text-transform: uppercase;
-        font-size: 0.875rem;
-        letter-spacing: 0.5px;
-    }
-    .nav-editor .nav-link .icon,
-    .nav-editor .nav-link span { 
-        color: inherit !important; 
-    }
-    .nav-editor .nav-link:hover {
-        background: rgba(255,255,255,0.5);
-    }
-    .nav-editor .nav-link.active { 
-        background: white;
-        border-bottom-color: currentColor;
-    }
-    .nav-editor .nav-link[data-bs-target="#tab-html"] {
-        color: #475569 !important;
-    }
-    .nav-editor .nav-link[data-bs-target="#tab-html"].active {
-        color: #ffffff !important;
-        background: #000 !important;
-        border-bottom-color: #000 !important;
-    }
-    .nav-editor .nav-link[data-bs-target="#tab-css"] {
-        color: #475569 !important;
-    }
-    .nav-editor .nav-link[data-bs-target="#tab-css"].active {
-        color: #ffffff !important;
-        background: #1572b6 !important;
-        border-bottom-color: #1572b6 !important;
-    }
-    .nav-editor .nav-link[data-bs-target="#tab-js"] {
-        color: #475569 !important;
-    }
-    .nav-editor .nav-link[data-bs-target="#tab-js"].active {
-        color: #1e293b !important;
-        background: #f7df1e !important;
-        border-bottom-color: #f7df1e !important;
-    }
-    
-    .preview-frame { 
-        width: 100%; 
-        height: 100%; 
-        border: none; 
-        background: #fff; 
-        border-radius: 0 0 12px 12px;
-    }
-    .preview-container { 
-        flex: 1;
-        min-height: 0;
-        background: #ffffff; 
-        border-radius: 0 0 12px 12px;
-        overflow: hidden; 
-        display: flex;
-        flex-direction: column;
-        border: 1px solid #e2e8f0;
-    }
-    .preview-header {
-        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-        color: white;
-        padding: 0.75rem 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-weight: 600;
-        font-size: 0.875rem;
-    }
-    .preview-header::before {
-        content: "👁️";
-        font-size: 1.1rem;
-    }
-.tab-content {
-    flex: 1;
-
-    display: flex;
-
-    flex-direction: column;
-
-    min-height: 0;
-
-    background: #1e293b;
-
-    overflow: visible;
-
-    height: 100%;
-
-    position: relative;
-}
-.tab-content .tab-pane {
-    flex: 1;
-
-    display: none;
-
-    flex-direction: column;
-
-    min-height: 0;
-
-    height: 100%;
-
-    overflow: visible;
-
-    width: 100%;
-}
-    .tab-content .tab-pane.active {
-        display: flex !important;
-    }
-    .tab-content .tab-pane.show {
-        display: flex !important;
-    }
-    
-
-    
-    .editor-top-bar {
-        background: white;
-        padding: 0.5rem 0.75rem;
-        border-radius: 8px;
-        margin-bottom: 0.5rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,.05);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-shrink: 0;
-    }
-    .editor-top-bar h1 {
-        margin: 0;
-        font-size: 1.1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    .editor-top-bar h1::before {
-        content: "💻";
-        font-size: 1.3rem;
-    }
-.submit-form{
-    background:#ffffff;
-    border-radius:12px;
-    padding:10px 12px;
-
-    margin-top:15px;
-
-    border:1px solid #e2e8f0;
-    box-shadow:0 2px 10px rgba(0,0,0,.04);
-
-    position:relative;
-
-    flex-shrink:0;
-
-    z-index:1;
+:root{
+  --purple:#7c3aed;
+  --purple2:#8b5cf6;
+  --bg:#f8fafc;
+  --text:#111827;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --card:#ffffff;
 }
 
-.submit-form form {
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    width: 100%;
+body{
+  background:var(--bg);
+  color:var(--text);
 }
 
-.submit-input {
-    flex: 1;
-
-    height: 42px;
-
-    min-height: 42px;
-
-    max-height: 42px;
-
-    resize: none;
-
-    border-radius: 10px;
-
-    border: 1px solid #e5e7eb;
-
-    padding: 10px 14px;
-
-    font-size: 14px;
-
-    outline: none;
-
-    transition: .2s;
-
-    background: #f8fafc;
-
-    color: #0f172a;
-
-    box-sizing: border-box;
+.container.py-4{
+  max-width:100%;
+  padding:28px 36px!important;
 }
 
-.submit-input::placeholder {
-    color: #94a3b8;
+h1.h3{
+  font-size:28px;
+  font-weight:800;
+  color:#111827;
 }
 
-.submit-input:focus {
-    border-color: #22c55e;
-
-    background: white;
-
-    box-shadow:
-        0 0 0 3px rgba(34,197,94,.10);
+.text-muted{
+  color:var(--muted)!important;
 }
 
-.submit-btn {
-    height: 42px;
-
-    min-width: 210px;
-
-    padding: 0 18px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: linear-gradient(
-        135deg,
-        #22c55e,
-        #16a34a
-    );
-
-    color: white;
-
-    font-weight: 600;
-
-    font-size: 14px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 8px;
-
-    cursor: pointer;
-
-    transition: .2s;
-
-    white-space: nowrap;
+/* TOP BUTTONS */
+.d-flex.justify-content-end.mb-3{
+  position:absolute;
+  right:36px;
+  top:26px;
 }
 
-.submit-btn:hover {
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 6px 14px rgba(34,197,94,.18);
+#clear-canvas{
+  display:inline-block;
 }
 
-@media (max-width: 768px) {
-
-    .submit-form form {
-        flex-direction: column;
-    }
-
-    .submit-input,
-    .submit-btn {
-        width: 100%;
-
-        min-width: 100%;
-    }
-}
-    
-    .code-stats {
-        position: absolute;
-        bottom: 0.75rem;
-        right: 1rem;
-        background: rgba(30, 41, 59, 0.9);
-        color: #94a3b8;
-        padding: 0.35rem 0.65rem;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        font-family: 'JetBrains Mono', monospace;
-        z-index: 10;
-        pointer-events: none;
-    }
-    
-    .resize-handle {
-        width: 4px;
-        background: #e2e8f0;
-        cursor: col-resize;
-        transition: background 0.2s;
-        flex-shrink: 0;
-    }
-    .resize-handle:hover {
-        background: #6366f1;
-    }
-    
-    
-    /* Панель ошибок */
-    .errors-panel {
-        max-height: 160px;
-        overflow-y: auto;
-        background: #fef2f2;
-        border: 1px solid #fecaca;
-        border-radius: 8px;
-        flex-shrink: 0;
-        transition: max-height 0.3s;
-    }
-    .errors-panel.collapsed { max-height: 40px; }
-    .errors-panel .errors-header {
-        padding: 0.5rem 1rem;
-        background: #fee2e2;
-        border-radius: 8px 8px 0 0;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-weight: 600;
-        color: #991b1b;
-    }
-    .errors-panel .errors-list { padding: 0.75rem 1rem; }
-    .errors-panel .error-item {
-        padding: 0.5rem 0.75rem;
-        margin-bottom: 0.5rem;
-        background: white;
-        border-radius: 6px;
-        border-left: 4px solid #ef4444;
-        cursor: pointer;
-        font-size: 0.875rem;
-    }
-    .error-item:hover { background: #fef2f2; }
-    .error-item .error-message { color: #991b1b; font-weight: 500; }
-    .error-item .error-hint { color: #64748b; font-size: 0.8rem; margin-top: 0.25rem; }
-    .error-item .error-loc { color: #6366f1; font-size: 0.75rem; }
-.assignment-info {
-    background: linear-gradient(
-        135deg,
-        #22c55e 0%,
-        #16a34a 100%
-    );
-
-    color: white;
-
-    border-radius: 12px;
-
-    margin-bottom: 8px;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 2px 10px rgba(34,197,94,.14);
+#preview-page{
+  background:#fff;
+  color:#374151;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:11px 18px;
+  font-weight:600;
+  box-shadow:0 8px 22px rgba(15,23,42,.05);
 }
 
-.assignment-header {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding: 10px 14px;
-
-    cursor: pointer;
+#preview-page::before{
+  content:"👁 ";
 }
 
-.assignment-title-wrap {
-    display: flex;
 
-    align-items: center;
+/* MAIN LAYOUT */
 
-    gap: 12px;
+
+.card-custom{
+  border-radius:20px!important;
+  background:#fff;
+  box-shadow:0 18px 45px rgba(15,23,42,.07);
+  border:1px solid rgba(229,231,235,.8)!important;
 }
 
-.assignment-icon {
-    font-size: 18px;
+.builder-sidebar .card-body{
+  padding:20px;
 }
 
-.assignment-header h3 {
-    margin: 0;
-
-    font-size: 16px;
-
-    font-weight: 700;
-
-    color: white;
+/* TABS */
+.editor-tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:0;
+  border-bottom:1px solid var(--border);
+  margin:-5px -5px 18px;
 }
 
-.assignment-arrow {
-    border: none;
-
-    background: rgba(255,255,255,.15);
-
-    width: 38px;
-
-    height: 38px;
-
-    border-radius: 50%;
-
-    color: white;
-
-    font-size: 14px;
-
-    cursor: pointer;
-
-    transition: .25s;
+.tab-btn{
+  border:0;
+  background:transparent;
+  color:#6b7280;
+  padding:15px 5px;
+  border-radius:0;
+  font-weight:700;
+  font-size:14px;
 }
 
-.assignment-arrow.rotate {
-    transform: rotate(180deg);
+.tab-btn.active{
+  background:transparent;
+  color:var(--purple);
+  border-bottom:2px solid var(--purple);
+  box-shadow:none;
 }
 
-.assignment-content {
-    padding: 0 14px 12px 14px;
-
-    max-height: 500px;
-
-    overflow: visible;
-
-    transition:
-        max-height .3s ease,
-        padding .3s ease;
+/* SEARCH LIKE IMAGE */
+.builder-sidebar .text-muted.small{
+  position:relative;
+  font-size:0;
+  margin-bottom:20px;
 }
 
-.assignment-content.hidden {
-    max-height: 0;
-
-    overflow: hidden;
-
-    padding: 0 18px 0 18px;
+/* SIDEBAR LIST */
+.list-group{
+  gap:9px;
 }
 
-.assignment-content p {
-    color: rgba(255,255,255,.95);
-
-    margin: 0;
-
-    line-height: 1.5;
-
-    font-size: 14px;
-}
-    /* Чат-бот */
-    .chat-fab {
-        position: fixed;
-        bottom: 24px;
-        right: 24px;
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #6366f1, #8b5cf6);
-        color: white;
-        border: none;
-        box-shadow: 0 4px 14px rgba(99, 102, 241, .4);
-        cursor: pointer;
-        z-index: 1000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.5rem;
-        transition: transform 0.2s;
-    }
-.chat-panel {
-
-    position: fixed;
-
-    bottom: 95px;
-
-    right: 24px;
-
-    width: 420px;
-
-    min-height: 220px;
-
-    height: auto;
-
-    max-height: 80vh;
-
-    background: white;
-
-    border-radius: 18px;
-
-    overflow: hidden;
-
-    z-index: 999;
-
-    display: none;
-
-    flex-direction: column;
-
-    box-shadow:
-        0 20px 50px rgba(0,0,0,.18);
-
-    transition:
-        height .25s ease,
-        max-height .25s ease;
-}
-    .chat-panel.open { display: flex; }
-    .chat-panel .chat-header {
-        padding: 1rem;
-        background: linear-gradient(135deg, #6366f1, #8b5cf6);
-        color: white;
-        font-weight: 700;
-        display: flex;
-        justify-content: space-between;
-    }
-.chat-panel .chat-messages {
-
-    flex: 1;
-
-    overflow-y: auto;
-
-    padding: 1rem;
-
-    min-height: 120px;
-
-    height: auto;
-
-    max-height: 65vh;
-
-    transition:
-        max-height .25s ease,
-        height .25s ease;
+.list-group-item{
+  border:1px solid var(--border)!important;
+  border-radius:10px!important;
+  padding:13px 14px;
+  font-weight:600;
+  color:#374151;
+  background:#fff;
+  cursor:grab;
+  transition:.2s;
 }
 
-/* АВТО УВЕЛИЧЕНИЕ ОКНА ЧАТА */
-
-.chat-panel:has(.chat-messages .bubble) {
-
-    min-height: 320px;
+.list-group-item:hover{
+  border-color:#c4b5fd!important;
+  background:#faf5ff;
+  color:var(--purple);
+  transform:translateX(3px);
 }
 
-/* ЕСЛИ СООБЩЕНИЙ МНОГО */
-
-.chat-panel:has(.chat-messages .bubble:nth-child(4)) {
-
-    min-height: 500px;
+.tab-title{
+  text-align:center;
+  font-weight:800;
+  font-size:15px;
+  color:#111827;
+  margin:6px 0 14px;
+}
+/* RIGHT AREA */
+.builder-layout > .card .card-body{
+  padding:0;
+  overflow:hidden;
 }
 
-/* ЕСЛИ ОШИБОК И ТЕКСТА ОЧЕНЬ МНОГО */
-
-.chat-panel:has(.chat-messages .bubble:nth-child(7)) {
-
-    min-height: 650px;
-}
-    .chat-msg { margin-bottom: 0.75rem; }
-    .chat-msg.user { text-align: right; }
-    .chat-msg .bubble {
-        display: inline-block;
-        padding: 0.5rem 1rem;
-        border-radius: 12px;
-        max-width: 90%;
-        font-size: 0.9rem;
-        white-space: pre-wrap;
-    }
-    .chat-msg.user .bubble { background: #e0e7ff; color: #3730a3; }
-    .chat-msg.bot .bubble { background: #f1f5f9; color: #334155; }
-    .chat-panel .chat-input-wrap { padding: 0.75rem; border-top: 1px solid #e2e8f0; }
-    .chat-panel .chat-input { width: 100%; padding: 0.75rem; border-radius: 10px; border: 1px solid #e2e8f0; resize: none; }
-    #assignmentBox {
-    background: linear-gradient(
-        135deg,
-        #22c55e 0%,
-        #16a34a 100%
-    ) !important;
-
-    color: white !important;
-
-    border-radius: 16px;
-
-    margin-bottom: 14px;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 4px 14px rgba(34,197,94,.18);
-
-    display: block !important;
+.builder-canvas{
+  margin:28px!important;
+  min-height:520px;
+  max-height:620px;
+  overflow:auto;
+  resize:vertical;
+  border:1px solid #ddd6fe;
+  border-radius:18px;
+  background:#fff;
+  padding:20px;
 }
 
-#assignmentContent {
-    transition:
-        max-height .3s ease,
-        padding .3s ease;
+/* EMPTY DROP AREA */
+#canvas-empty{
+  border:1.5px dashed #c4b5fd;
+  border-radius:14px;
+  padding:18px;
+  text-align:center;
+  color:#8b5cf6!important;
+  background:#faf5ff;
 }
 
-#assignmentContent p {
-    color: white !important;
-
-    margin: 0;
-}
-/* =========================
-   CHAT BOT
-========================= */
-
-.chat-fab {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-
-    width: 58px;
-    height: 58px;
-
-    border-radius: 50%;
-    border: none;
-
-    background: linear-gradient(
-        135deg,
-        #6366f1,
-        #8b5cf6
-    );
-
-    color: white;
-    font-size: 24px;
-
-    cursor: pointer;
-    z-index: 1000;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    box-shadow:
-        0 10px 25px rgba(99,102,241,.28);
-
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease;
+#canvas-empty::before{
+  content:"+";
+  display:block;
+  font-size:24px;
+  font-weight:800;
+  color:var(--purple);
 }
 
-.chat-fab:hover {
-    transform: scale(1.06);
-
-    box-shadow:
-        0 14px 30px rgba(99,102,241,.35);
+/* CANVAS ITEMS */
+.canvas-item{
+  position:relative;
+  background:#fff;
+  border:1px solid #e9d5ff;
+  border-radius:16px;
+  padding:22px;
+  margin-bottom:18px;
+  box-shadow:0 8px 24px rgba(124,58,237,.06);
 }
 
-/* =========================
-   CHAT PANEL
-========================= */
-
-.chat-panel {
-
-    position: fixed;
-
-    bottom: 95px;
-    right: 24px;
-
-    width: 420px;
-
-    min-height: 220px;
-
-    height: auto;
-
-    max-height: 80vh;
-
-    background: white;
-
-    border-radius: 18px;
-
-    overflow: hidden;
-
-    z-index: 999;
-
-    display: none;
-
-    flex-direction: column;
-
-    box-shadow:
-        0 20px 50px rgba(0,0,0,.18);
-
-    transition:
-        all .25s ease;
+.canvas-item:hover{
+  outline:2px solid #ddd6fe;
 }
 
-.chat-panel.open {
-    display: flex;
+.canvas-item .fw-semibold{
+  color:#7c3aed;
+  font-size:13px;
+  margin-bottom:12px!important;
 }
 
-/* =========================
-   HEADER
-========================= */
-
-.chat-header {
-
-    padding: 14px 18px;
-
-    background: linear-gradient(
-        135deg,
-        #6366f1,
-        #8b5cf6
-    );
-
-    color: white;
-
-    font-weight: 700;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    font-size: 15px;
+.canvas-item .actions{
+  position:absolute;
+  right:14px;
+  top:14px;
 }
 
-.chat-header button {
-
-    border: none;
-
-    background: rgba(255,255,255,.18);
-
-    color: white;
-
-    width: 32px;
-
-    height: 32px;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    transition: .2s;
+.canvas-item .actions .btn{
+  font-size:0;
+  border:0;
+  background:#f3f4f6;
+  width:32px;
+  height:32px;
+  border-radius:9px;
 }
 
-.chat-header button:hover {
-    background: rgba(255,255,255,.28);
+.canvas-item .actions .btn::before{
+  content:"🗑";
+  font-size:14px;
 }
 
-/* =========================
-   MESSAGES
-========================= */
-
-.chat-messages {
-
-    flex: 1;
-
-    overflow-y: auto;
-
-    padding: 16px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 12px;
-
-    min-height: 120px;
-
-    height: auto;
-
-    max-height: 55vh;
-
-    background: #f8fafc;
+.form-control,
+.form-select{
+  border-radius:10px;
+  border:1px solid var(--border);
+  padding:10px 12px;
 }
 
-.chat-msg {
-    display: flex;
+.btn-primary,
+.btn-success,
+.btn-outline-primary{
+  border-radius:10px;
+  background:linear-gradient(135deg,#7c3aed,#9333ea)!important;
+  border:0!important;
+  color:white!important;
+  font-weight:700;
 }
 
-.chat-msg.user {
-    justify-content: flex-end;
+.btn-outline-secondary{
+  border-radius:10px;
 }
 
-.chat-msg.bot {
-    justify-content: flex-start;
+/* CODE BLOCK */
+h2.h5.fw-bold.mb-2{
+  margin:0 28px 12px!important;
+  font-size:18px;
 }
 
-.chat-msg .bubble {
-
-    max-width: 85%;
-
-    padding: 12px 14px;
-
-    border-radius: 16px;
-
-    font-size: 14px;
-
-    line-height: 1.5;
-
-    white-space: pre-wrap;
-
-    word-break: break-word;
+.code-output{
+  margin:0 28px 28px;
+  background:#0f172a;
+  color:#dbeafe;
+  border-radius:16px;
+  padding:18px;
+  min-height:230px;
+  font-family:"JetBrains Mono","Courier New",monospace;
+  white-space:pre-wrap;
+  overflow:auto;
 }
 
-.chat-msg.user .bubble {
-
-    background: #6366f1;
-
-    color: white;
-
-    border-bottom-right-radius: 4px;
+/* TABLE */
+.table-tools{
+  margin-bottom:10px;
 }
 
-.chat-msg.bot .bubble {
-
-    background: white;
-
-    color: #334155;
-
-    border: 1px solid #e2e8f0;
-
-    border-bottom-left-radius: 4px;
+.table-preview table{
+  width:100%;
+  border-collapse:collapse;
 }
 
-/* =========================
-   INPUT
-========================= */
-
-.chat-input-wrap {
-
-    padding: 14px;
-
-    border-top: 1px solid #e2e8f0;
-
-    background: white;
+.table-preview th,
+.table-preview td{
+  border:1px solid #cbd5e1;
+  padding:8px;
 }
 
-.chat-input {
-
-    width: 100%;
-
-    min-height: 54px;
-
-    max-height: 180px;
-
-    padding: 12px 14px;
-
-    border-radius: 12px;
-
-    border: 1px solid #dbe2ea;
-
-    resize: none;
-
-    overflow-y: auto;
-
-    outline: none;
-
-    font-size: 14px;
-
-    line-height: 1.5;
-
-    transition: .2s;
-
-    background: #f8fafc;
+.cell-remove-btn{
+  position:absolute;
+  right:5px;
+  top:5px;
+  width:18px;
+  height:18px;
+  border:1px solid #9ca3af;
+  border-radius:50%;
+  background:#fff;
+  color:#6b7280;
+  font-size:13px;
+  line-height:16px;
+  cursor:pointer;
+  padding:0;
 }
 
-.chat-input:focus {
-
-    border-color: #6366f1;
-
-    background: white;
-
-    box-shadow:
-        0 0 0 4px rgba(99,102,241,.10);
+.container-box{
+  border:1px solid #cbd5e1;
+  border-radius:14px;
+  padding:15px;
+  background:#f8fafc;
+}
+.right-tabs{
+  height:58px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:0 26px;
+  border-bottom:1px solid var(--border);
 }
 
-/* =========================
-   BUTTON
-========================= */
-
-#chat-send {
-
-    margin-top: 10px;
-
-    width: 100%;
-
-    height: 42px;
-
-    border: none;
-
-    border-radius: 12px;
-
-    background: linear-gradient(
-        135deg,
-        #6366f1,
-        #8b5cf6
-    );
-
-    color: white;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition: .2s;
+.right-tab{
+  border:0;
+  background:transparent;
+  padding:14px 18px;
+  font-weight:700;
+  color:#6b7280;
+  cursor:pointer;
+  border-bottom:2px solid transparent;
 }
 
-#chat-send:hover {
-
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 10px 20px rgba(99,102,241,.18);
+.right-tab.active{
+  color:var(--purple);
+  border-bottom-color:var(--purple);
 }
 
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 768px) {
-
-    .chat-panel {
-
-        width: calc(100vw - 24px);
-
-        right: 12px;
-
-        left: 12px;
-
-        bottom: 82px;
-
-        max-height: 75vh;
-    }
-
-    .chat-fab {
-
-        right: 16px;
-
-        bottom: 16px;
-    }
+.right-tab-content{
+  display:none;
 }
 
-.editor-container .card{
-    height:auto !important;
-    min-height:700px !important;
+.right-tab-content.active{
+  display:block;
+}
+
+.align-buttons{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+
+.align-buttons button{
+  border:1px solid #e5e7eb;
+  background:#fff;
+  border-radius:10px;
+  padding:10px;
+}
+
+.align-buttons button.active{
+  background:#ede9fe;
+  color:#7c3aed;
+}
+@media(max-width:992px){
+.builder-layout{
+  grid-template-columns: 320px 1fr;
+}
+
+  .d-flex.justify-content-end.mb-3{
+    position:static;
+  }
+}
+.tab-content{
+  display:none;
+}
+
+.tab-content.active{
+  display:block;
+}
+/* ===== FIX NORMAL DESIGN ===== */
+
+/* верхнюю фиолетовую панель НЕ трогаем */
+
+/* убираем absolute, чтобы кнопки не летали */
+.d-flex.justify-content-end.mb-3{
+  position: static !important;
+  justify-content: flex-end !important;
+  margin-top: -45px;
+  margin-bottom: 24px !important;
+}
+
+/* нормальная сетка */
+.builder-layout{
+  display: grid !important;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* левая панель */
+.builder-sidebar{
+  height: calc(100vh - 190px);
+  overflow: hidden;
+}
+
+.builder-sidebar .card-body{
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* правая рабочая область */
+.builder-layout > .card:not(.builder-sidebar){
+  min-width: 0;
+}
+
+.right-tabs{
+  height: 56px;
+  padding: 0 24px;
+}
+
+/* исправляем заголовок "Рабочая область" */
+.right-tab-content h2.h5{
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  margin: 18px 26px 12px !important;
+  color: #111827 !important;
+}
+
+/* убираем старое скрытие текста */
+.builder-layout > .card h2.h5:first-child{
+  font-size: 20px !important;
+  height: auto !important;
+  padding: 0 !important;
+  border-bottom: 0 !important;
+}
+
+/* рабочее поле */
+.builder-canvas{
+  margin: 0 26px 26px !important;
+  min-height: 800px;
+  max-height: 560px;
+  padding: 24px;
+  border: 1px solid #ddd6fe;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+/* пустой блок внутри */
+#canvas-empty{
+  margin: 0;
+  padding: 30px;
+  border-radius: 14px;
+}
+
+/* код */
+.code-output{
+  margin: 0 26px 26px !important;
+  max-height: 560px;
+  overflow: auto;
+}
+
+/* карточки внутри рабочей области */
+.canvas-item{
+  margin-bottom: 16px;
+}
+/* прокрутка внутри вкладок */
+.tab-content{
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* красивый скролл (по желанию) */
+.tab-content::-webkit-scrollbar{
+  width: 6px;
+}
+
+.tab-content::-webkit-scrollbar-thumb{
+  background: #c4b5fd;
+  border-radius: 10px;
+}
+
+.tab-content::-webkit-scrollbar-track{
+  background: transparent;
+}
+.tab-content{
+  display:none !important;
+  flex-direction:column;
+  height: calc(100vh - 200px);
+}
+
+.tab-content.active{
+  display:flex !important;
+}
+
+.tab-fixed{
+  flex-shrink:0;
+}
+
+.tab-scroll{
+  overflow-y:auto;
+  padding-right:6px;
+}
+.canvas-item.selected{
+  outline:2px solid #7c3aed !important;
+  box-shadow:0 12px 30px rgba(124,58,237,.18);
+}
+
+#setting-content{
+  resize:vertical;
+  min-height:80px;
+}
+
+.align-buttons button:disabled,
+.setting-input:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+.tab-fixed{
+  background:#f8fafc;
+  border:1px solid #ede9fe;
+  border-radius:14px;
+  padding:12px;
+  margin-bottom:14px;
+  box-shadow:0 8px 20px rgba(124,58,237,.06);
+}
+
+.btn-clear{
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  padding:10px 16px;
+  border-radius:12px;
+
+  font-weight:600;
+  font-size:14px;
+
+  border:1px solid rgba(239,68,68,.25);
+  cursor:pointer;
+
+  color:#ef4444;
+  background:rgba(239,68,68,.08);
+
+  box-shadow:none;
+  transition:transform .15s ease; /* только движение */
+}
+
+/* 🔥 только поднимается */
+.btn-clear:hover{
+  transform:translateY(-2px);
+}
+
+/* нажатие */
+.btn-clear:active{
+  transform:scale(.96);
+}
+
+.tab-fixed .form-control{
+  margin-bottom:0 !important;
+  background:#fff;
+  border:1px solid #ddd6fe;
+}
+
+.tab-scroll{
+  background:#ffffff;
+  border:1px solid #eef2ff;
+  border-radius:14px;
+  padding:12px;
+}
+
+.tab-scroll::before{
+  content:"Блоки";
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  color:#6b7280;
+  margin-bottom:10px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.list-group-item{
+  background:linear-gradient(180deg,#ffffff,#fafafa);
+  border:1px solid #e5e7eb !important;
+  box-shadow:0 4px 12px rgba(15,23,42,.04);
+}
+.builder-sidebar{
+  height: calc(100vh - 120px) !important;
+}
+
+.builder-sidebar .card-body{
+  padding: 12px !important;
+}
+
+.editor-tabs{
+  margin: -4px -4px 10px !important;
+}
+
+.tab-btn{
+  padding: 11px 4px !important;
+  font-size: 13px !important;
+}
+
+.tab-fixed{
+  padding: 8px !important;
+  margin-bottom: 8px !important;
+}
+
+.tab-fixed .form-control{
+  height: 38px !important;
+  padding: 8px 10px !important;
+  font-size: 14px !important;
 }
 
 .tab-content{
-    flex:1 !important;
-    overflow:hidden !important;
+  height: calc(100vh - 145px) !important;
 }
 
-.tab-pane{
-    height:100% !important;
+.tab-scroll{
+  padding: 8px !important;
+  max-height: calc(100vh - 230px) !important;
 }
 
-.editor-panel{
-    height:100% !important;
+.list-group{
+  gap: 6px !important;
 }
 
-.code-editor-wrapper{
-    display:flex !important;
-    flex-direction:column !important;
-    height:100% !important;
+.list-group-item{
+  padding: 10px 12px !important;
+  min-height: 44px !important;
+  font-size: 14px !important;
+}
+  .delete-block-btn{
+  width:32px;
+  height:32px;
+  border-radius:10px;
+  border:0;
+  background:#fee2e2 !important;
+  color:#dc2626 !important;
+  cursor:pointer;
 }
 
-.code-editor-main{
-    flex:1 !important;
-    overflow:auto !important;
+.canvas-item.dragging-block{
+  opacity:.5;
+  border:2px dashed #7c3aed;
+}
+.clear-btn{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  background:#fee2e2;
+  color:#dc2626;
+
+  border:none;
+  border-radius:14px;
+
+  padding:10px 14px;
+  font-weight:700;
+  font-size:14px;
+
+  cursor:pointer;
+  transition:.2s;
+
+  box-shadow:0 6px 18px rgba(220,38,38,.15);
 }
 
-.code-editor-wrapper textarea{
+/* иконка */
+.clear-btn .icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  width:32px;
+  height:32px;
+
+  background:#fecaca;
+  border-radius:10px;
+  font-size:16px;
+}
+
+/* текст */
+.clear-btn .text{
+  white-space:nowrap;
+}
+
+/* hover эффект */
+.clear-btn:hover{
+  background:#fecaca;
+  transform:translateY(-1px);
+  box-shadow:0 10px 25px rgba(220,38,38,.25);
+}
+
+/* нажатие */
+.clear-btn:active{
+  transform:scale(.97);
+}
+.canvas-item img{
+  max-width: 150px;
+  border-radius:12px;
+}
+/* чтобы на маленьком экране не ломалось */
+@media(max-width:1300px){
+  .builder-layout{
+    grid-template-columns:300px 1fr;
+  }
+
+  .settings-panel{
+    display:none;
+  }
+}
+/* ===== FULL HD FIX ===== */
+
+.container.py-4{
+    max-width:100% !important;
     width:100% !important;
-    height:100% !important;
-    overflow:auto !important;
-    resize:none !important;
+    padding:20px 24px !important;
 }
 
-.preview-container{
-    height:100% !important;
+/* весь экран */
+.builder-layout{
+    display:grid !important;
+    grid-template-columns:340px 1fr;
+    gap:20px;
+    width:100%;
+    align-items:start;
 }
 
-.preview-frame{
-    width:100% !important;
-    height:100% !important;
+/* левая панель */
+.builder-sidebar{
+    height:calc(100vh - 110px) !important;
 }
 
-.submit-form{
-    width:100% !important;
-    margin-top:20px !important;
-    display:block !important;
-    position:static !important;
+/* правая часть */
+.builder-layout > .card{
+    width:100%;
+    min-width:0;
 }
 
-@media(max-width:768px){
+/* верхняя панель */
+.right-tabs{
+    width:100%;
+    height:60px;
+    padding:0 30px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border-bottom:1px solid #e5e7eb;
+    background:#fff;
+}
 
-    .editor-container{
-        flex-wrap:wrap !important;
+/* рабочая область */
+.builder-canvas{
+    width:calc(100% - 40px);
+    margin:20px !important;
+
+    min-height:calc(100vh - 220px);
+    max-height:none !important;
+
+    overflow:auto;
+
+    padding:24px;
+    border-radius:18px;
+    background:#fff;
+}
+
+/* код */
+.code-output{
+    margin:20px !important;
+    width:calc(100% - 40px);
+    max-height:none !important;
+    min-height:calc(100vh - 220px);
+}
+
+/* карточки */
+.canvas-item{
+    width:100%;
+}
+
+/* 1920+ */
+@media(min-width:1600px){
+
+    .builder-layout{
+        grid-template-columns:380px 1fr;
     }
 
-    .editor-container .card{
-        height:600px !important;
-        min-height:600px !important;
+    .builder-canvas{
+        min-height:calc(100vh - 180px);
     }
+}
+
+/* ноутбуки */
+@media(max-width:1200px){
+
+    .builder-layout{
+        grid-template-columns:300px 1fr;
+    }
+}
+
+/* планшеты */
+@media(max-width:992px){
+
+    .builder-layout{
+        grid-template-columns:1fr;
+    }
+
+    .builder-sidebar{
+        height:auto !important;
+    }
+
+    .builder-canvas{
+        min-height:600px;
+    }
+}
+.builder-canvas{
+  min-height:calc(100vh - 220px);
+  max-height:none;
+}
+.container{
+    max-width:100% !important;
 }
 </style>
 {% endblock %}
 
 {% block content %}
-<script>
-document.body.classList.add('editor-page');
-</script>
-<div class="editor-wrapper">
-    <div class="editor-top-bar">
-        <h1 class="h5 fw-bold mb-0">Редактор кода</h1>
-        {% if assignment %}
-        <div class="d-flex align-items-center gap-2">
-            <span class="badge bg-primary px-3 py-2">📝 Задание: {{ assignment.title }}</span>
-            <a href="{% url 'courses:lesson_detail' assignment.lesson.course.slug assignment.lesson.slug %}" class="btn btn-outline-primary btn-sm">← Вернуться</a>
+<div class="container py-4">
+  <h1 class="h3 fw-bold mb-1">Визуальный конструктор страниц</h1>
+  <p class="text-muted mb-3">
+    Соберите страницу из блоков и посмотрите автоматически созданный HTML.
+  </p>
+
+  <div class="d-flex justify-content-end mb-3">
+    <div class="d-flex gap-2">
+<button id="clear-canvas" class="btn-clear">
+  Очистить всё
+</button>
+
+      <button class="btn btn-success btn-sm" id="preview-page">
+        Предпросмотр
+      </button>
+    </div>
+  </div>
+
+  <div class="builder-layout">
+    <div class="card card-custom border-0 builder-sidebar">
+      <div class="card-body">
+        <div class="editor-tabs">
+          <button type="button" class="tab-btn active" data-tab="html">HTML</button>
+          <button type="button" class="tab-btn" data-tab="css">CSS</button>
+          <button type="button" class="tab-btn" data-tab="js">JavaScript</button>
         </div>
-{% elif standalone_assignment %}
-<div class="d-flex align-items-center gap-2">
-    <span class="badge bg-success px-3 py-2">
-        Доп. задание:
-        {{ standalone_assignment.title }}
-    </span>
-<a href="{% url 'courses:standalone_assignments' %}"
-   class="btn btn-outline-success btn-sm">
-    ← Вернуться
-</a>        </div>
-        {% else %}
-        <div class="d-flex align-items-center gap-2">
-            <span class="text-muted small">Свободный редактор</span>
-            <a href="{% url 'courses:course_list' %}" class="btn btn-outline-primary btn-sm">📚 Курсы</a>
-        </div>
-        {% endif %}
+
+        <!-- HTML -->
+<!-- HTML -->
+<div class="tab-content active" id="tab-html">
+
+  <div class="tab-fixed">
+    <input class="form-control mb-3" placeholder="Поиск HTML...">
+  </div>
+
+  <div class="tab-scroll">
+    <ul class="list-group">
+      <li class="list-group-item" draggable="true" data-type="h1">Заголовок</li>
+      <li class="list-group-item" draggable="true" data-type="p">Текст</li>
+      <li class="list-group-item" draggable="true" data-type="img">Изображение</li>
+      <li class="list-group-item" draggable="true" data-type="button">Кнопка</li>
+      <li class="list-group-item" draggable="true" data-type="table">Таблица</li>
+      <li class="list-group-item" draggable="true" data-type="list">Список</li>
+      <li class="list-group-item" draggable="true" data-type="form">Форма</li>
+      <li class="list-group-item" draggable="true" data-type="media">Медиа</li>
+      <li class="list-group-item" draggable="true" data-type="link">Ссылка</li>
+      <li class="list-group-item" draggable="true" data-type="container">Контейнер</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- CSS -->
+<div class="tab-content" id="tab-css">
+
+  <div class="tab-fixed">
+    <input class="form-control mb-3" placeholder="Поиск CSS...">
+  </div>
+
+<div class="tab-scroll">
+  <ul class="list-group">
+    <li class="list-group-item" draggable="true" data-css="color">Цвет текста</li>
+    <li class="list-group-item" draggable="true" data-css="background">Фон</li>
+    <li class="list-group-item" draggable="true" data-css="height">Высота</li>
+    <li class="list-group-item" draggable="true" data-css="width">Ширина</li>
+    <li class="list-group-item" draggable="true" data-css="position">Позиционирование</li>
+    <li class="list-group-item" draggable="true" data-css="font-size">Размер шрифта</li>
+    <li class="list-group-item" draggable="true" data-css="gap">Отступ между элементами</li>
+    <li class="list-group-item" draggable="true" data-css="font-family">Шрифт</li>
+    <li class="list-group-item" draggable="true" data-css="text-align">Выравнивание текста</li>
+    <li class="list-group-item" draggable="true" data-css="margin">Внешний отступ</li>
+    <li class="list-group-item" draggable="true" data-css="padding">Внутренний отступ</li>
+    <li class="list-group-item" draggable="true" data-css="border">Граница</li>
+    <li class="list-group-item" draggable="true" data-css="border-color">Цвет границы</li>
+  </ul>
+</div>
+
+</div>
+
+<div class="tab-content" id="tab-js">
+
+  <div class="tab-fixed">
+    <input class="form-control mb-3" placeholder="Поиск JS...">
+  </div>
+
+<div class="tab-scroll">
+  <ul class="list-group">
+    <li class="list-group-item" draggable="true" data-js="alert()">Оповещение</li>
+    <li class="list-group-item" draggable="true" data-js="confirm()">Подтверждение</li>
+    <li class="list-group-item" draggable="true" data-js="prompt()">Ввод данных</li>
+    <li class="list-group-item" draggable="true" data-js="click">Событие: клик</li>
+    <li class="list-group-item" draggable="true" data-js="input">Событие: ввод</li>
+    <li class="list-group-item" draggable="true" data-js="submit">Событие: отправка формы</li>
+    <li class="list-group-item" draggable="true" data-js="createElement">Создать элемент</li>
+    <li class="list-group-item" draggable="true" data-js="remove">Удалить элемент</li>
+    <li class="list-group-item" draggable="true" data-js="if">Условие (if)</li>
+    <li class="list-group-item" draggable="true" data-js="else">Иначе (else)</li>
+    <li class="list-group-item" draggable="true" data-js="for">Цикл for</li>
+    <li class="list-group-item" draggable="true" data-js="while">Цикл while</li>
+    <li class="list-group-item" draggable="true" data-js="function">Функция</li>
+    <li class="list-group-item" draggable="true" data-js="=>">Стрелочная функция</li>
+    <li class="list-group-item" draggable="true" data-js="localStorage">Локальное хранилище</li>
+  </ul>
+</div>
+
+</div>
+      </div>
+    </div>
+<!-- RIGHT AREA -->
+<div class="card card-custom border-0">
+  <div class="card-body">
+
+    <div class="right-tabs">
+      <button type="button" class="right-tab active" data-right-tab="main">Основной</button>
+      <button type="button" class="right-tab" data-right-tab="code">Код</button>
     </div>
 
-{% if assignment or standalone_assignment %}
-<div class="assignment-info" id="assignmentBox">
+    <div class="right-tab-content active" id="right-main">
+      <h2 class="h5 fw-bold mb-3">Рабочая область</h2>
 
-    <div class="assignment-header" id="assignmentToggle">
-        <div class="assignment-title-wrap">
-
-            <div>
- <h3>
-
-{% if assignment %}
-    Задание:
-    {{ assignment.title }}
-
-{% elif standalone_assignment %}
-    Дополнительное задание:
-    {{ standalone_assignment.title }}
-
-{% endif %}
-
-</h3>
-            </div>
-        </div>
-
-        <button type="button" class="assignment-arrow">
-            ▼
-        </button>
-    </div>
-
-<div class="assignment-content" id="assignmentContent">            <p>
-            {{ assignment.description|linebreaks }}
+      <div id="canvas" class="builder-canvas mb-4">
+        <p class="text-muted mb-0" id="canvas-empty">
+          Перетащите элемент сюда или нажмите кнопку слева.
         </p>
-
-{% if standalone_assignment %}
-<span class="badge bg-light text-dark mt-2">
-    Сложность:
-    {{ standalone_assignment.get_difficulty_display }}
-</span>
-{% endif %}
+      </div>
     </div>
 
-</div>
-    {% endif %}
-
-<div class="row editor-container g-2">  
- <div class="col-12 col-md-6 d-flex flex-column min-h-0">
-            <div class="card border-0 shadow-sm h-100 flex-grow-1 d-flex flex-column min-h-0" style="min-height: 700px;">
-                <ul class="nav nav-tabs nav-editor" role="tablist" style="flex-shrink: 0;">
-                    <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#tab-html" title="HTML — разметка и структура страницы">
-                            <span class="icon">📄</span>
-                            <span>HTML</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#tab-css" title="CSS — стили и оформление">
-                            <span class="icon">🎨</span>
-                            <span>CSS</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#tab-js" title="JavaScript — интерактивность">
-                            <span class="icon">⚙️</span>
-                            <span>JavaScript</span>
-                        </a>
-                    </li>
-                </ul>
-                <div class="tab-content" style="flex: 1; display: flex; flex-direction: column; min-height: 0; position: relative;">
-                    <div class="tab-pane fade show active editor-panel" id="tab-html">
-                        <div class="code-editor-wrapper" style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
-                            <div class="editor-header" style="flex-shrink: 0;">
-                                <span class="icon">📄</span>
-                                <span>HTML код</span>
-                            </div>
-                            <div class="code-editor-main">
-                            <div class="line-numbers" id="html-line-numbers" aria-hidden="true">1</div>
-                            <textarea id="html-code" class="form-control border-0" style="flex: 1; min-height: 0; display: block !important; visibility: visible !important;" placeholder="<!DOCTYPE html>
-<html>
-<head>
-  <title>Мой сайт</title>
-</head>
-<body>
-  <h1>Привет, мир!</h1>
-</body>
-</html>">{% if assignment %}{% else %}<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Мой сайт</title>
-</head>
-<body>
-  <h1>Привет, мир!</h1>
-  <p>Напиши здесь свой код</p>
-</body>
-</html>{% endif %}</textarea>
-                            </div>
-                            <div class="code-stats" id="html-stats">0 строк</div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade editor-panel" id="tab-css">
-                        <div class="code-editor-wrapper" style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
-                            <div class="editor-header" style="flex-shrink: 0;">
-                                <span class="icon">🎨</span>
-                                <span>CSS стили</span>
-                            </div>
-                            <div class="code-editor-main">
-                            <div class="line-numbers" id="css-line-numbers" aria-hidden="true">1</div>
-                            <textarea id="css-code" class="form-control border-0" style="flex: 1; min-height: 0; display: block !important; visibility: visible !important;" placeholder="/* Добавь стили */
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
-}
-
-h1 {
-  color: #6366f1;
-}">{% if assignment %}{% else %}body {
-  font-family: Arial, sans-serif;
-  padding: 20px;
-}
-
-h1 {
-  color: #6366f1;
-}{% endif %}</textarea>
-                            </div>
-                            <div class="code-stats" id="css-stats">0 строк</div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade editor-panel" id="tab-js">
-                        <div class="code-editor-wrapper" style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
-                            <div class="editor-header" style="flex-shrink: 0;">
-                                <span class="icon">⚙️</span>
-                                <span>JavaScript код</span>
-                            </div>
-                            <div class="code-editor-main">
-                            <div class="line-numbers" id="js-line-numbers" aria-hidden="true">1</div>
-                            <textarea id="js-code" class="form-control border-0" style="flex: 1; min-height: 0; display: block !important; visibility: visible !important;" placeholder="// Добавь интерактивность
-console.log('Привет, мир!');
-
-document.addEventListener('DOMContentLoaded', function() {
-  // Твой код здесь
-});">{% if assignment %}{% else %}// Добавь интерактивность
-console.log('Привет!');{% endif %}</textarea>
-                            </div>
-                            <div class="code-stats" id="js-stats">0 строк</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="errors-panel collapsed" id="errors-panel">
-                    <div class="errors-header" id="errors-toggle">
-                        <span>⚠️ Ошибки в коде (<span id="errors-count">0</span>)</span>
-                        <span id="errors-chevron">▼</span>
-                    </div>
-                    <div class="errors-list" id="errors-list"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-6 d-flex flex-column min-h-0">
-            <div class="card border-0 shadow-sm h-100 flex-grow-1 d-flex flex-column min-h-0">
-                <div class="preview-header">
-                    Превью результата
-                </div>
-                <div class="preview-container">
-                    <iframe id="preview" class="preview-frame" title="Превью"></iframe>
-                </div>
-            </div>
-        </div>
+    <div class="right-tab-content" id="right-code">
+      <h2 class="h5 fw-bold mb-2">Сгенерированный HTML / CSS / JavaScript</h2>
+      <pre class="code-output" id="generated-code"></pre>
     </div>
 
-{% if assignment or standalone_assignment %}<div class="submit-form">
-    <form method="post" action="{% url 'editor:submit' %}">
-        {% csrf_token %}
-
-{% if assignment %}
-<input type="hidden"
-       name="assignment_id"
-       value="{{ assignment.id }}">
-{% else %}
-<input type="hidden"
-       name="standalone_assignment_id"
-       value="{{ standalone_assignment.id }}">
-{% endif %}
-
-        <input type="hidden" name="code" id="submit-code">
-
-        <textarea
-            name="comment"
-            class="submit-input"
-            placeholder="Комментарий к работе..."
-        ></textarea>
-
-        <button
-            type="submit"
-            class="submit-btn"
-            id="submit-btn"
-        >
-            📤 Отправить на проверку
-        </button>
-    </form>
-</div>
-    {% endif %}
+  </div>
 </div>
 
-<!-- Чат-помощник -->
-<button class="chat-fab" id="chat-fab" title="Помощник">💬</button>
-<div class="chat-panel" id="chat-panel">
-    <div class="chat-header">
-        <span>🤖 Помощник WebLearn</span>
-        <button type="button" class="btn btn-sm btn-light" id="chat-close">×</button>
-    </div>
-    <div class="chat-messages" id="chat-messages"></div>
-    <div class="chat-input-wrap">
-        <textarea class="chat-input" id="chat-input" rows="2" placeholder="Спросите о HTML, CSS, JS или об ошибке..."></textarea>
-        <button type="button" class="btn btn-primary btn-sm mt-2" id="chat-send">Отправить</button>
-    </div>
-</div>
 
 {% endblock %}
 
 {% block extra_js %}
 <script>
-(function() {
-'use strict';
+  (function () {
+    const canvas = document.getElementById("canvas");
+    const generatedCode = document.getElementById("generated-code");
+    const emptyState = document.getElementById("canvas-empty");
+    let dragData = null;
+let selectedItem = null;
+let itemCounter = 1;
+const STORAGE_KEY = "builder_saved_blocks_user";
 
-// Глобальные ссылки на редакторы (заполняются после инициализации)
-let htmlEditor, cssEditor, jsEditor;
-let useCodeMirror = true;
-let errorMarkers = { html: [], css: [], js: [] };
-let lastValidation = { html: [], css: [], js: [] };
-let validateTimeout = null;
-const VALIDATE_DEBOUNCE = 400;
+function saveBuilder() {
+  const items = [];
 
-function getCsrfToken() {
-    const m = document.cookie.match(/csrftoken=([^;]+)/);
-    return m ? m[1] : '';
-}
-
-function getFullCode() {
-    const html = htmlEditor ? htmlEditor.getValue() : (document.getElementById('html-code')?.value || '');
-    const css = cssEditor ? cssEditor.getValue() : (document.getElementById('css-code')?.value || '');
-    const js = jsEditor ? jsEditor.getValue() : (document.getElementById('js-code')?.value || '');
-    return JSON.stringify({ html, css, js });
-}
-
-function updatePreview() {
-    const html = htmlEditor ? htmlEditor.getValue() : (document.getElementById('html-code')?.value || '');
-    const css = cssEditor ? cssEditor.getValue() : (document.getElementById('css-code')?.value || '');
-    const js = jsEditor ? jsEditor.getValue() : (document.getElementById('js-code')?.value || '');
-    const doc = document.getElementById('preview').contentDocument;
-    doc.open();
-    doc.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>' + css + '</style></head><body>' + html + '<script>' + js + '<\/script></body></html>');
-    doc.close();
-}
-
-function updateStats(editor, statsId) {
-    const el = document.getElementById(statsId);
-    if (!el) return;
-    let val = '';
-    if (editor && typeof editor.getValue === 'function') val = editor.getValue();
-    else if (editor && editor.value !== undefined) val = editor.value;
-    else {
-        const ta = document.getElementById(statsId.replace('-stats','-code'));
-        if (ta) val = ta.value || '';
-    }
-    el.textContent = val.split('\n').length + ' строк, ' + val.length + ' символов';
-}
-
-// Валидация кода через API
-function runValidation() {
-    const html = htmlEditor ? htmlEditor.getValue() : (document.getElementById('html-code') && document.getElementById('html-code').value) || '';
-    const css = cssEditor ? cssEditor.getValue() : (document.getElementById('css-code') && document.getElementById('css-code').value) || '';
-    const js = jsEditor ? jsEditor.getValue() : (document.getElementById('js-code') && document.getElementById('js-code').value) || '';
-    fetch('{% url "editor:api_validate" %}', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
-        body: JSON.stringify({ html, css, js })
-    }).then(r => r.json()).then(data => {
-        lastValidation = data;
-        applyErrorMarkers(htmlEditor, data.html, 'html');
-        applyErrorMarkers(cssEditor, data.css, 'css');
-        applyErrorMarkers(jsEditor, data.js, 'js');
-        renderErrorsPanel(data);
-    }).catch(() => {});
-}
-
-function clearMarkers(editor, key) {
-    (errorMarkers[key] || []).forEach(m => m.clear());
-    errorMarkers[key] = [];
-}
-
-function applyErrorMarkers(editor, errors, key) {
-    if (!editor) return;
-    clearMarkers(editor, key);
-    (errors || []).forEach(function(err) {
-        const from = { line: (err.line || 1) - 1, ch: err.column || 0 };
-        const to = err.end_line != null
-            ? { line: err.end_line - 1, ch: (err.end_column || 0) + 1 }
-            : { line: from.line, ch: from.ch + 20 };
-        try {
-            const m = editor.markText(from, to, { className: 'cm-error-line' });
-            errorMarkers[key].push(m);
-        } catch(e) {}
+  canvas.querySelectorAll(".canvas-item").forEach(function (item) {
+    items.push({
+      type: item.dataset.type,
+      value: item.dataset.value || ""
     });
+  });
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 }
 
-function renderErrorsPanel(data) {
-    const all = (data.html || []).map(function(e){ e.type='html'; return e; })
-        .concat((data.css || []).map(function(e){ e.type='css'; return e; }))
-        .concat((data.js || []).map(function(e){ e.type='js'; return e; }));
-    const list = document.getElementById('errors-list');
-    const count = document.getElementById('errors-count');
-    const panel = document.getElementById('errors-panel');
-    count.textContent = all.length;
-    if (all.length === 0) {
-        list.innerHTML = '<div class="text-muted small p-2">Ошибок не найдено</div>';
-        panel.classList.add('collapsed');
-        return;
+function loadBuilder() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (!saved) return;
+
+  try {
+    const items = JSON.parse(saved);
+
+    items.forEach(function (block) {
+      createItem(block.type, "", block.value);
+    });
+
+    updateCode();
+  } catch (e) {
+    console.log("Ошибка загрузки сохранённых блоков", e);
+  }
+}
+function getBlockName(type) {
+  const names = {
+    h1: "Заголовок (h1)",
+    p: "Текст (p)",
+    img: "Изображение",
+    button: "Кнопка",
+    table: "Таблица",
+    list: "Список",
+    form: "Форма",
+    media: "Медиа",
+    link: "Ссылка",
+    container: "Контейнер",
+    css: "CSS",
+    js: "JavaScript",
+  };
+
+  return names[type] || "Элемент";
+}
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
     }
-    panel.classList.remove('collapsed');
-    list.innerHTML = all.map(function(e) {
-        const codeSuffix = e.code ? ' (' + e.code + ')' : '';
-        return '<div class="error-item" data-type="' + (e.type || 'html') + '" data-line="' + (e.line||0) + '">' +
-            '<div class="error-loc">' + (e.type.toUpperCase() + ': ') + (e.line ? 'Строка ' + e.line + codeSuffix : '') + '</div>' +
-            '<div class="error-message">' + (e.message || '') + '</div>' +
-            (e.hint ? '<div class="error-hint">' + e.hint + '</div>' : '') +
-            '</div>';
-    }).join('');
-    list.querySelectorAll('.error-item').forEach(function(el) {
-        el.addEventListener('click', function() {
-            const type = el.dataset.type;
-            const line = parseInt(el.dataset.line, 10) || 1;
-            var tabLink = document.querySelector('.nav-link[data-bs-target="#tab-' + type + '"]');
-            if (tabLink) tabLink.click();
-            var ed = htmlEditor || cssEditor || jsEditor;
-            var ta = document.getElementById(type + '-code');
-            if (ed) {
-                ed.focus();
-                ed.setCursor({ line: Math.max(0, line - 1), ch: 0 });
-                if (ed.refresh) ed.refresh();
-            } else if (ta) {
-                ta.focus();
-                var lines = ta.value.split('\n');
-                var pos = 0;
-                for (var i = 0; i < Math.min(line - 1, lines.length); i++) pos += lines[i].length + 1;
-                ta.setSelectionRange(pos, pos);
-            }
+
+    function indent(code, spaces) {
+      const pad = " ".repeat(spaces);
+      return String(code || "")
+        .split("\n")
+        .map((line) => (line.trim() ? pad + line : ""))
+        .join("\n");
+    }
+
+    function getCssTemplate(property) {
+      const templates = {
+        color: "color: red;",
+        background: "background: #f3f4f6;",
+        height: "height: 100px;",
+        width: "width: 100%;",
+        position: "position: relative;",
+        "font-size": "font-size: 16px;",
+        gap: "gap: 10px;",
+        "font-family": "font-family: Arial, sans-serif;",
+        "text-align": "text-align: center;",
+        margin: "margin: 10px;",
+        padding: "padding: 10px;",
+        border: "border: 1px solid #000;",
+        "border-color": "border-color: #000;",
+      };
+
+      return templates[property] || property + ": ;";
+    }
+
+    function getJsTemplate(type) {
+      const templates = {
+        "alert()": 'alert("Привет!");',
+        "confirm()": 'confirm("Вы уверены?");',
+        "prompt()": 'prompt("Введите ваше имя:");',
+click: `document.querySelector("button").addEventListener("click", function () {
+  alert("Клик!");
+});`,
+        input: `input.addEventListener("input", function () {\n  console.log(input.value);\n});`,
+        submit: `form.addEventListener("submit", function (event) {\n  event.preventDefault();\n});`,
+        createElement: `const element = document.createElement("div");`,
+        remove: `element.remove();`,
+        if: `if (condition) {\n  \n}`,
+        else: `if (condition) {\n  \n} else {\n  \n}`,
+        for: `for (let i = 0; i < 5; i++) {\n  console.log(i);\n}`,
+        while: `while (condition) {\n  \n}`,
+        function: `function myFunction() {\n  \n}`,
+        "=>": `const myFunction = () => {\n  \n};`,
+        localStorage: `localStorage.setItem("key", "value");\nconst value = localStorage.getItem("key");`,
+      };
+
+      return templates[type] || type;
+    }
+
+    function getCellText(cell) {
+      const clone = cell.cloneNode(true);
+      clone.querySelectorAll(".cell-remove-btn").forEach((btn) => btn.remove());
+      return clone.textContent.trim();
+    }
+
+    function getCleanTableHtml(tableElement) {
+      const rows = tableElement.querySelectorAll("tr");
+      let html = `<table border="1" style="width:100%; border-collapse: collapse;">\n`;
+      html += `  <tbody>\n`;
+
+      rows.forEach(function (row) {
+        html += `    <tr>\n`;
+
+        Array.from(row.children).forEach(function (cell) {
+          const tag = cell.tagName.toLowerCase();
+          html += `      <${tag}>${escapeHtml(getCellText(cell))}</${tag}>\n`;
         });
-    });
-}
 
-function scheduleValidation() {
-    if (validateTimeout) clearTimeout(validateTimeout);
-    validateTimeout = setTimeout(runValidation, VALIDATE_DEBOUNCE);
-}
+        html += `    </tr>\n`;
+      });
 
-function bindLineNumbers(ta, lineNumbersEl) {
-    if (!ta || !lineNumbersEl) return;
+      html += `  </tbody>\n`;
+      html += `</table>`;
 
-    function refresh() {
-        const lines = ta.value.split('\n').length;
-
-        let nums = '';
-
-        for (let i = 1; i <= lines; i++) {
-            nums += i + '\n';
-        }
-
-        lineNumbersEl.textContent = nums;
+      return html;
     }
 
-    ta.addEventListener('input', refresh);
+    function getListHtml(data) {
+      const listType = data.listType || "ul";
+      const items = data.items || [];
 
-    ta.addEventListener('scroll', function() {
-        lineNumbersEl.scrollTop = ta.scrollTop;
-    });
+      if (!items.length) return `<${listType}></${listType}>`;
 
-    refresh();
-}
-
-
-// Чат
-function appendChatMessage(text, isUser) {
-    const container = document.getElementById('chat-messages');
-    const div = document.createElement('div');
-    div.className = 'chat-msg ' + (isUser ? 'user' : 'bot');
-    div.innerHTML = '<div class="bubble">' + String(text).replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>') + '</div>';
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-    autoResizeChat();
-}
-
-function sendChatMessage() {
-    const input = document.getElementById('chat-input');
-    const msg = (input.value || '').trim();
-    if (!msg) return;
-    input.value = '';
-    appendChatMessage(msg, true);
-    const html = htmlEditor ? htmlEditor.getValue() : (document.getElementById('html-code') && document.getElementById('html-code').value) || '';
-    const css = cssEditor ? cssEditor.getValue() : (document.getElementById('css-code') && document.getElementById('css-code').value) || '';
-    const js = jsEditor ? jsEditor.getValue() : (document.getElementById('js-code') && document.getElementById('js-code').value) || '';
-    const errs = (lastValidation.html||[]).map(function(e){ e.type='html'; return e; })
-        .concat((lastValidation.css||[]).map(function(e){ e.type='css'; return e; }))
-        .concat((lastValidation.js||[]).map(function(e){ e.type='js'; return e; }));
-    const errors = errs.map(function(e){ return { line: e.line, message: e.message, hint: e.hint, type: e.type }; });
-    fetch('{% url "editor:api_chat" %}', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
-        body: JSON.stringify({ message: msg, html, css, js, errors })
-    }).then(r => r.json()).then(function(data) {
-        appendChatMessage(data.response || data.error || 'Нет ответа', false);
-    }).catch(function() {
-        appendChatMessage('Ошибка соединения. Попробуйте позже.', false);
-    });
-}
-
-function initWithTextareas() {
-    useCodeMirror = false;
-    const htmlTa = document.getElementById('html-code');
-    const cssTa = document.getElementById('css-code');
-    const jsTa = document.getElementById('js-code');
-    function onInput(ta, statsId) {
-        updatePreview();
-        updateStats(ta, statsId);
-        scheduleValidation();
+      return `<${listType}>
+${items.map((item) => `  <li>${escapeHtml(item)}</li>`).join("\n")}
+</${listType}>`;
     }
-    const lineEls = [
-        document.getElementById('html-line-numbers'),
-        document.getElementById('css-line-numbers'),
-        document.getElementById('js-line-numbers')
-    ];
-    [htmlTa, cssTa, jsTa].forEach(function(ta, i) {
-        if (!ta) return;
-        ta.style.display = 'block';
-        ta.style.visibility = 'visible';
-        ta.style.flex = '1 1 0';
-        ta.style.minHeight = '0';
-        var statsId = ['html-stats','css-stats','js-stats'][i];
-        ta.addEventListener('input', function() { onInput(ta, statsId); });
-        bindLineNumbers(ta, lineEls[i]);
-    });
-    updateStats(htmlTa, 'html-stats');
-    updateStats(cssTa, 'css-stats');
-    updateStats(jsTa, 'js-stats');
-    updatePreview();
-    runValidation();
-}
 
-// Инициализация — используем обычные textarea (надёжно работают везде)
-function initEditor() {
-    const htmlTa = document.getElementById('html-code');
-    const cssTa = document.getElementById('css-code');
-    const jsTa = document.getElementById('js-code');
-    if (!htmlTa || !cssTa || !jsTa) return;
-    initWithTextareas();
-}
+    function getFormHtml(data) {
+      const fields = data.fields || [];
+      if (!fields.length) return `<form></form>`;
 
-document.getElementById('errors-toggle').addEventListener('click', function() {
-    document.getElementById('errors-panel').classList.toggle('collapsed');
-});
-var submitBtn = document.getElementById('submit-btn');
-if (submitBtn) {
-    submitBtn.addEventListener('click', function(e) {
-        var form = submitBtn.closest('form');
-        if (form) {
-            var codeEl = form.querySelector('input[name="code"], #submit-code');
-            if (codeEl) codeEl.value = (function(){
-                var h = htmlEditor ? htmlEditor.getValue() : (document.getElementById('html-code')?.value || '');
-                var c = cssEditor ? cssEditor.getValue() : (document.getElementById('css-code')?.value || '');
-                var j = jsEditor ? jsEditor.getValue() : (document.getElementById('js-code')?.value || '');
-                return JSON.stringify({ html: h, css: c, js: j });
-            })();
+      let html = `<form>\n`;
+
+      fields.forEach(function (field) {
+        if (field.type === "button") {
+          html += `  <button type="submit">${escapeHtml(field.label)}</button>\n\n`;
+        } else if (field.type === "comment") {
+          html += `  <label>${escapeHtml(field.label)}:</label>\n`;
+          html += `  <textarea placeholder="${escapeHtml(field.placeholder)}"></textarea>\n\n`;
+        } else if (field.type === "gender") {
+          html += `  <label>${escapeHtml(field.label)}:</label>\n`;
+          html += `  <select>\n`;
+          html += `    <option>Мужской</option>\n`;
+          html += `    <option>Женский</option>\n`;
+          html += `  </select>\n\n`;
+        } else if (field.type === "country") {
+          html += `  <label>${escapeHtml(field.label)}:</label>\n`;
+          html += `  <select>\n`;
+          html += `    <option>Казахстан</option>\n`;
+          html += `    <option>Узбекистан</option>\n`;
+          html += `    <option>Кыргызстан</option>\n`;
+          html += `    <option>Россия</option>\n`;
+          html += `  </select>\n\n`;
+          } else if (field.type === "address") {
+  html += `  <label>Адрес:</label>\n`;
+  html += `  <select>\n`;
+  html += `    <option>Алматы</option>\n`;
+  html += `    <option>Астана</option>\n`;
+  html += `    <option>Шымкент</option>\n`;
+  html += `  </select>\n`;
+  html += `  <input type="text" placeholder="Район">\n`;
+  html += `  <input type="text" placeholder="Улица">\n`;
+  html += `  <input type="text" placeholder="Дом">\n`;
+  html += `  <input type="text" placeholder="Квартира">\n`;
+  html += `  <input type="text" placeholder="Этаж">\n\n`;
+        } else {
+          html += `  <label>${escapeHtml(field.label)}:</label>\n`;
+          html += `  <input type="${escapeHtml(field.inputType)}" placeholder="${escapeHtml(field.placeholder)}">\n\n`;
         }
+      });
+
+      html += `</form>`;
+      return html;
+    }
+
+    function getMediaHtml(data) {
+      const media = data.media || [];
+      if (!media.length) return `<!-- Медиа қосылмаған -->`;
+
+      return media
+        .map(function (item) {
+          const src = escapeHtml(item.src || "");
+
+          if (item.type === "image") {
+            return `<img src="${src}" alt="Фото" style="max-width:100%;height:auto;">`;
+          }
+
+          if (item.type === "video") {
+            return `<video controls style="max-width:100%;">
+  <source src="${src}" type="video/mp4">
+  Сіздің браузеріңіз video тегін қолдамайды.
+</video>`;
+          }
+
+          if (item.type === "audio") {
+            return `<audio controls>
+  <source src="${src}" type="audio/mpeg">
+  Сіздің браузеріңіз audio тегін қолдамайды.
+</audio>`;
+          }
+
+          return "";
+        })
+        .join("\n\n");
+    }
+
+    function getContainerHtml(data) {
+      const items = data.items || [];
+      if (!items.length) return `<div class="container-box"></div>`;
+
+      let html = `<div class="container-box">\n`;
+
+      items.forEach(function (item) {
+        if (item.type === "h1") {
+          html += `  <h1>${escapeHtml(item.text)}</h1>\n`;
+        } else if (item.type === "p") {
+          html += `  <p>${escapeHtml(item.text)}</p>\n`;
+        } else if (item.type === "img") {
+          html += `  <img src="${escapeHtml(item.text)}" alt="Изображение" style="max-width:100%;height:auto;">\n`;
+        } else if (item.type === "button") {
+          html += `  <button>${escapeHtml(item.text)}</button>\n`;
+        } else if (item.type === "link") {
+          html += `  <a href="${escapeHtml(item.text)}" target="_blank">Перейти на сайт</a>\n`;
+        } else if (item.type === "list") {
+          html += `  <ul>\n`;
+          html += `    <li>${escapeHtml(item.text)}</li>\n`;
+          html += `  </ul>\n`;
+        } else if (item.type === "media") {
+          html += `  <video controls style="max-width:100%;">\n`;
+          html += `    <source src="${escapeHtml(item.text)}" type="video/mp4">\n`;
+          html += `  </video>\n`;
+        } else if (item.type === "table") {
+          html += `  <table border="1" style="width:100%; border-collapse: collapse;">\n`;
+          html += `    <tr>\n`;
+          html += `      <th>Заголовок 1</th>\n`;
+          html += `      <th>Заголовок 2</th>\n`;
+          html += `    </tr>\n`;
+          html += `    <tr>\n`;
+          html += `      <td>Ячейка 1</td>\n`;
+          html += `      <td>Ячейка 2</td>\n`;
+          html += `    </tr>\n`;
+          html += `  </table>\n`;
+        }
+      });
+
+      html += `</div>`;
+      return html;
+    }
+
+function buildHtmlFor(type, content) {
+  if (type === "h1") return `<h1>${escapeHtml(content || "Ваш заголовок")}</h1>`;
+  if (type === "p") return `<p>${escapeHtml(content || "Ваш текст")}</p>`;
+
+if (type === "img") {
+  let data;
+
+  try {
+    data = JSON.parse(content || "{}");
+  } catch (e) {
+    data = { src: content };
+  }
+
+  const src = data.src || "https://placehold.co/600x300?text=Image";
+  const width = data.width ? ` width="${escapeHtml(data.width)}"` : "";
+  const height = data.height ? ` height="${escapeHtml(data.height)}"` : "";
+
+  return `<img src="${escapeHtml(src)}" alt="Изображение"${width}${height}>`;
+}
+  if (type === "button") {
+    return `<button>${escapeHtml(content || "Нажми меня")}</button>`;
+  }
+
+  if (type === "link") {
+    const href = content || "https://example.com";
+    return `<a href="${escapeHtml(href)}" target="_blank">Перейти</a>`;
+  }
+
+  return "";
+}
+
+
+function updateCode() {
+  const items = canvas.querySelectorAll(".canvas-item");
+  emptyState.style.display = items.length ? "none" : "block";
+
+  let htmlParts = [];
+  let cssParts = [];
+  let jsParts = [];
+
+  items.forEach(function (item) {
+    const type = item.dataset.type;
+
+    // CSS
+    if (type === "css") {
+      cssParts.push(item.dataset.value);
+      return;
+    }
+
+    // JS
+    if (type === "js") {
+      jsParts.push(item.dataset.value || "");
+      return;
+    }
+
+    // TABLE
+    if (type === "table") {
+      const table = item.querySelector("table");
+      if (table) htmlParts.push(getCleanTableHtml(table));
+      return;
+    }
+
+    // LIST
+    if (type === "list") {
+      htmlParts.push(
+        getListHtml(JSON.parse(item.dataset.value || '{"listType":"ul","items":[]}'))
+      );
+      return;
+    }
+
+    // FORM
+    if (type === "form") {
+      htmlParts.push(
+        getFormHtml(JSON.parse(item.dataset.value || '{"fields":[]}'))
+      );
+      return;
+    }
+
+    // MEDIA
+    if (type === "media") {
+      htmlParts.push(
+        getMediaHtml(JSON.parse(item.dataset.value || '{"media":[]}'))
+      );
+      return;
+    }
+
+    // CONTAINER
+    if (type === "container") {
+      htmlParts.push(
+        getContainerHtml(JSON.parse(item.dataset.value || '{"items":[]}'))
+      );
+      return;
+    }
+
+    // DEFAULT HTML
+    htmlParts.push(buildHtmlFor(type, item.dataset.value));
+  });
+
+  // CSS (применяется ко всем элементам)
+const cssCode = cssParts.length
+  ? indent(
+      `body {\n  ${cssParts.join("\n  ")}\n}`,
+      6
+    )
+  : "";
+  const htmlCode = htmlParts.length ? indent(htmlParts.join("\n\n"), 4) : "";
+
+  const jsCode = jsParts.length
+    ? indent(jsParts.join("\n\n"), 6)
+    : "";
+
+  const finalCode = `<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <title>Предпросмотр</title>
+
+    <style>
+${cssCode}
+    </style>
+  </head>
+
+  <body>
+
+${htmlCode}
+
+    <script>
+${jsCode}
+    <\/script>
+
+  </body>
+</html>`;
+
+  generatedCode.textContent = finalCode;
+}
+    function createRemoveButton() {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "cell-remove-btn";
+      btn.textContent = "−";
+      btn.setAttribute("contenteditable", "false");
+      return btn;
+    }
+
+    function makeCellEditable(cell) {
+      cell.setAttribute("contenteditable", "true");
+      cell.style.position = "relative";
+      cell.style.paddingRight = "28px";
+
+      if (!cell.querySelector(".cell-remove-btn")) {
+        cell.appendChild(createRemoveButton());
+      }
+    }
+
+    function refreshCellButtons(table) {
+      table.querySelectorAll("th, td").forEach(makeCellEditable);
+    }
+
+    function createTablePreview() {
+      return `
+<div class="table-tools mb-2 d-flex gap-2 flex-wrap">
+  <button type="button" class="btn btn-sm btn-outline-primary add-row">+ Строка</button>
+  <button type="button" class="btn btn-sm btn-outline-primary add-column">+ Колонка</button>
+</div>
+
+<table border="1" style="width:100%; border-collapse: collapse;">
+  <tbody>
+    <tr>
+      <th contenteditable="true">Заголовок 1</th>
+      <th contenteditable="true">Заголовок 2</th>
+    </tr>
+    <tr>
+      <td contenteditable="true">Ячейка 1</td>
+      <td contenteditable="true">Ячейка 2</td>
+    </tr>
+  </tbody>
+</table>`;
+    }
+
+    function addTableRow(table) {
+      const tbody = table.querySelector("tbody");
+      const columnCount = tbody.querySelector("tr")?.children.length || 2;
+      const newRow = document.createElement("tr");
+
+      for (let i = 0; i < columnCount; i++) {
+        const td = document.createElement("td");
+        td.textContent = `Ячейка ${i + 1}`;
+        makeCellEditable(td);
+        newRow.appendChild(td);
+      }
+
+      tbody.appendChild(newRow);
+      updateCode();
+    }
+
+    function addTableColumn(table) {
+      table.querySelectorAll("tr").forEach(function (row, index) {
+        const cell = document.createElement(index === 0 ? "th" : "td");
+        cell.textContent =
+          index === 0
+            ? `Заголовок ${row.children.length + 1}`
+            : `Ячейка ${row.children.length + 1}`;
+
+        makeCellEditable(cell);
+        row.appendChild(cell);
+      });
+
+      updateCode();
+    }
+
+    function deleteCell(cell, table) {
+      const row = cell.closest("tr");
+      if (!row) return;
+
+      if (row.children.length <= 1) {
+        if (table.querySelectorAll("tr").length <= 1) {
+          alert("Кестеде кемінде 1 ячейка қалуы керек.");
+          return;
+        }
+        row.remove();
+      } else {
+        cell.remove();
+      }
+
+      updateCode();
+    }
+
+function createDefaultPreview(type, value) {
+  const safeValue = escapeHtml(value);
+
+  if (type === "h1") return `<h1>${safeValue || "Ваш заголовок"}</h1>`;
+  if (type === "p") return `<p>${safeValue || "Ваш текст"}</p>`;
+  if (type === "button") return `<button>${safeValue || "Нажми меня"}</button>`;
+
+if (type === "img") {
+  let data;
+
+  try {
+    data = JSON.parse(value || "{}");
+  } catch (e) {
+    data = { src: value };
+  }
+
+  const src = data.src || "https://placehold.co/600x300?text=Image";
+  const width = data.width || 250;
+  const height = data.height || "";
+
+  return `
+    <div class="img-editor">
+      <img src="${escapeHtml(src)}" class="editable-img"
+           style="width:${width}px;${height ? `height:${height}px;` : "height:auto;"}display:block;margin-bottom:10px;border-radius:12px;">
+
+      <div style="display:flex;gap:10px;margin-bottom:10px;">
+        <input type="number" class="img-width form-control form-control-sm" value="${width}" placeholder="Ширина (px)">
+        <input type="number" class="img-height form-control form-control-sm" value="${height}" placeholder="Высота (px)">
+      </div>
+    </div>
+  `;
+}
+
+  if (type === "link") {
+    const href = safeValue || "#";
+    return `<a href="${href}" target="_blank">Перейти</a>`;
+  }
+
+  return "";
+}
+
+    function createListEditor(item, preview) {
+      item.dataset.value = JSON.stringify({ listType: "ul", items: [] });
+
+      const tools = document.createElement("div");
+      tools.className = "d-flex gap-2 align-items-center flex-wrap mb-2";
+
+      const selectLabel = document.createElement("span");
+      selectLabel.className = "small text-muted";
+      selectLabel.textContent = "Вид списка:";
+
+      const listTypeSelect = document.createElement("select");
+      listTypeSelect.className = "form-select form-select-sm";
+      listTypeSelect.style.maxWidth = "190px";
+      listTypeSelect.innerHTML = `
+        <option value="ul">Маркированный</option>
+        <option value="ol">Нумерованный</option>
+      `;
+
+      const addBtn = document.createElement("button");
+      addBtn.type = "button";
+      addBtn.className = "btn btn-sm btn-outline-primary";
+      addBtn.textContent = "+ Элемент";
+
+      tools.appendChild(selectLabel);
+      tools.appendChild(listTypeSelect);
+      tools.appendChild(addBtn);
+
+      const listBox = document.createElement("div");
+      preview.appendChild(tools);
+      preview.appendChild(listBox);
+
+      function getData() {
+        return JSON.parse(item.dataset.value || '{"listType":"ul","items":[]}');
+      }
+
+      function setData(data) {
+        item.dataset.value = JSON.stringify(data);
+      }
+
+      function renderList() {
+        const data = getData();
+        listBox.innerHTML = "";
+
+        const list = document.createElement(data.listType || "ul");
+        list.className = "editable-list-preview";
+
+        data.items.forEach(function (text, index) {
+          const li = document.createElement("li");
+          li.style.position = "relative";
+          li.style.paddingRight = "25px";
+
+          const span = document.createElement("span");
+          span.contentEditable = "true";
+          span.textContent = text;
+
+          span.addEventListener("input", function () {
+            const current = getData();
+            current.items[index] = span.textContent.trim();
+            setData(current);
+            updateCode();
+          });
+
+          const removeBtn = document.createElement("button");
+          removeBtn.type = "button";
+          removeBtn.textContent = "−";
+          removeBtn.className = "cell-remove-btn";
+          removeBtn.style.top = "2px";
+          removeBtn.style.right = "0";
+
+          removeBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const current = getData();
+            current.items.splice(index, 1);
+            setData(current);
+            renderList();
+            updateCode();
+          });
+
+          li.appendChild(span);
+          li.appendChild(removeBtn);
+          list.appendChild(li);
+        });
+
+        listBox.appendChild(list);
+        updateCode();
+      }
+
+      listTypeSelect.addEventListener("change", function () {
+        const data = getData();
+        data.listType = listTypeSelect.value;
+        setData(data);
+        renderList();
+      });
+
+      addBtn.addEventListener("click", function () {
+        const data = getData();
+        data.items.push("Новый элемент");
+        setData(data);
+        renderList();
+      });
+
+      renderList();
+    }
+
+    function createFormEditor(item, preview) {
+      const fieldTypes = {
+        fio: { label: "ФИО", inputType: "text", placeholder: "ФИО" },
+address: { label: "Адрес", type: "address", placeholder: "" },
+        email: { label: "Почта", inputType: "email", placeholder: "Email " },
+        phone: { label: "Номер телефона", inputType: "tel", placeholder: "+7 ___ ___ __ __" },
+        iin: { label: "ИИН", inputType: "text", placeholder: "ИИН " },
+        login: { label: "Логин", inputType: "text", placeholder: "Логин " },
+        password: { label: "Пароль", inputType: "password", placeholder: "Пароль " },
+        button: { label: "Отправить", type: "button", placeholder: "" },
+        gender: { label: "Пол", type: "gender", placeholder: "" },
+        country: { label: "Страна", type: "country", placeholder: "" },
+        comment: { label: "Комментарий", type: "comment", placeholder: "Комментарий" },
+      };
+
+      item.dataset.value = JSON.stringify({ fields: [] });
+
+      const tools = document.createElement("div");
+      tools.className = "d-flex gap-2 align-items-center flex-wrap mb-2";
+
+      const selectLabel = document.createElement("span");
+      selectLabel.className = "small text-muted";
+      selectLabel.textContent = "Поле:";
+
+      const fieldSelect = document.createElement("select");
+      fieldSelect.className = "form-select form-select-sm";
+      fieldSelect.style.maxWidth = "220px";
+      fieldSelect.innerHTML = `
+        <option value="fio">ФИО</option>
+        <option value="address">Адрес</option>
+        <option value="email">Почта</option>
+        <option value="phone">Номер телефона</option>
+        <option value="iin">ИИН</option>
+        <option value="login">Логин</option>
+        <option value="password">Пароль</option>
+        <option value="button">Кнопка</option>
+        <option value="gender">Пол</option>
+        <option value="country">Страна</option>
+        <option value="comment">Комментарий</option>
+      `;
+
+      const addBtn = document.createElement("button");
+      addBtn.type = "button";
+      addBtn.className = "btn btn-sm btn-outline-primary";
+      addBtn.textContent = "+ Добавить";
+
+      tools.appendChild(selectLabel);
+      tools.appendChild(fieldSelect);
+      tools.appendChild(addBtn);
+
+      const formBox = document.createElement("div");
+      preview.appendChild(tools);
+      preview.appendChild(formBox);
+
+      function getData() {
+        return JSON.parse(item.dataset.value || '{"fields":[]}');
+      }
+
+      function setData(data) {
+        item.dataset.value = JSON.stringify(data);
+      }
+
+      function renderForm() {
+        const data = getData();
+        formBox.innerHTML = "";
+
+        const form = document.createElement("form");
+
+        data.fields.forEach(function (field, index) {
+          const row = document.createElement("div");
+          row.className = "form-field-row mb-2";
+          row.style.position = "relative";
+          row.style.paddingRight = "28px";
+
+          if (field.type === "button") {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "btn btn-sm btn-primary";
+            btn.textContent = field.label;
+            row.appendChild(btn);
+          } else if (field.type === "comment") {
+            const textarea = document.createElement("textarea");
+            textarea.className = "form-control form-control-sm";
+            textarea.placeholder = field.placeholder;
+            row.appendChild(textarea);
+          } else if (field.type === "gender") {
+            const select = document.createElement("select");
+            select.className = "form-control form-control-sm";
+            select.innerHTML = `<option>Ер</option><option>Әйел</option>`;
+            row.appendChild(select);
+          } else if (field.type === "country") {
+            const select = document.createElement("select");
+            select.className = "form-control form-control-sm";
+            select.innerHTML = `<option>Қазақстан</option><option>Өзбекстан</option><option>Қырғызстан</option><option>Ресей</option>`;
+            row.appendChild(select);
+            } else if (field.type === "address") {
+  const box = document.createElement("div");
+  box.className = "row g-2";
+
+  box.innerHTML = `
+    <div class="col-12">
+      <select class="form-control form-control-sm">
+        <option value="">Выберите город</option>
+        <option>Алматы</option>
+        <option>Астана</option>
+        <option>Шымкент</option>
+        <option>Караганда</option>
+      </select>
+    </div>
+
+    <div class="col-6">
+      <input class="form-control form-control-sm" placeholder="Район / микрорайон">
+    </div>
+
+    <div class="col-6">
+      <input class="form-control form-control-sm" placeholder="Улица">
+    </div>
+
+    <div class="col-4">
+      <input class="form-control form-control-sm" placeholder="Дом">
+    </div>
+
+    <div class="col-4">
+      <input class="form-control form-control-sm" placeholder="Квартира">
+    </div>
+
+    <div class="col-4">
+      <input class="form-control form-control-sm" placeholder="Этаж">
+    </div>
+  `;
+
+  row.appendChild(box);
+          } else {
+            const input = document.createElement("input");
+            input.className = "form-control form-control-sm";
+            input.type = field.inputType;
+            input.placeholder = field.placeholder;
+            row.appendChild(input);
+          }
+
+          const removeBtn = document.createElement("button");
+          removeBtn.type = "button";
+          removeBtn.className = "cell-remove-btn";
+          removeBtn.textContent = "−";
+          removeBtn.style.top = "7px";
+          removeBtn.style.right = "0";
+
+          removeBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const current = getData();
+            current.fields.splice(index, 1);
+            setData(current);
+            renderForm();
+            updateCode();
+          });
+
+          row.appendChild(removeBtn);
+          form.appendChild(row);
+        });
+
+        formBox.appendChild(form);
+        updateCode();
+      }
+
+      addBtn.addEventListener("click", function () {
+        const data = getData();
+        const field = fieldTypes[fieldSelect.value];
+
+        data.fields.push({
+          label: field.label,
+          inputType: field.inputType || "text",
+          placeholder: field.placeholder || "",
+          type: field.type || "input",
+        });
+
+        setData(data);
+        renderForm();
+      });
+
+      renderForm();
+    }
+
+    function createMediaEditor(item, preview) {
+      item.dataset.value = JSON.stringify({ media: [] });
+
+      const tools = document.createElement("div");
+      tools.className = "d-flex gap-2 align-items-center flex-wrap mb-2";
+
+      const mediaTypeSelect = document.createElement("select");
+      mediaTypeSelect.className = "form-select form-select-sm";
+      mediaTypeSelect.style.maxWidth = "160px";
+      mediaTypeSelect.innerHTML = `
+        <option value="image">Фото</option>
+        <option value="video">Видео</option>
+        <option value="audio">Аудио</option>
+      `;
+
+      const sourceSelect = document.createElement("select");
+      sourceSelect.className = "form-select form-select-sm";
+      sourceSelect.style.maxWidth = "170px";
+      sourceSelect.innerHTML = `
+        <option value="url">Добавить ссылку</option>
+        <option value="upload">Загрузить</option>
+      `;
+
+      const urlInput = document.createElement("input");
+      urlInput.className = "form-control form-control-sm";
+      urlInput.placeholder = "Вставьте ссылку";
+      urlInput.style.maxWidth = "280px";
+
+      const fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.className = "form-control form-control-sm";
+      fileInput.style.maxWidth = "280px";
+      fileInput.style.display = "none";
+
+      const addBtn = document.createElement("button");
+      addBtn.type = "button";
+      addBtn.className = "btn btn-sm btn-outline-primary";
+      addBtn.textContent = "+ Добавить";
+
+      tools.appendChild(mediaTypeSelect);
+      tools.appendChild(sourceSelect);
+      tools.appendChild(urlInput);
+      tools.appendChild(fileInput);
+      tools.appendChild(addBtn);
+
+      const mediaBox = document.createElement("div");
+      preview.appendChild(tools);
+      preview.appendChild(mediaBox);
+
+      function updateFileAccept() {
+        if (mediaTypeSelect.value === "image") fileInput.accept = "image/*";
+        if (mediaTypeSelect.value === "video") fileInput.accept = "video/*";
+        if (mediaTypeSelect.value === "audio") fileInput.accept = "audio/*";
+      }
+
+      function updateSourceMode() {
+        const isUpload = sourceSelect.value === "upload";
+        urlInput.style.display = isUpload ? "none" : "block";
+        fileInput.style.display = isUpload ? "block" : "none";
+        updateFileAccept();
+      }
+
+      function getData() {
+        return JSON.parse(item.dataset.value || '{"media":[]}');
+      }
+
+      function setData(data) {
+        item.dataset.value = JSON.stringify(data);
+      }
+
+      function renderMedia() {
+        const data = getData();
+        mediaBox.innerHTML = "";
+
+        data.media.forEach(function (mediaItem, index) {
+          const row = document.createElement("div");
+          row.style.position = "relative";
+          row.style.paddingRight = "28px";
+          row.style.marginBottom = "10px";
+
+          let mediaEl;
+
+          if (mediaItem.type === "image") {
+            mediaEl = document.createElement("img");
+            mediaEl.src = mediaItem.src;
+            mediaEl.style.maxWidth = "260px";
+            mediaEl.style.borderRadius = "8px";
+          } else if (mediaItem.type === "video") {
+            mediaEl = document.createElement("video");
+            mediaEl.controls = true;
+            mediaEl.style.maxWidth = "320px";
+            const source = document.createElement("source");
+            source.src = mediaItem.src;
+            source.type = "video/mp4";
+            mediaEl.appendChild(source);
+          } else {
+            mediaEl = document.createElement("audio");
+            mediaEl.controls = true;
+            const source = document.createElement("source");
+            source.src = mediaItem.src;
+            source.type = "audio/mpeg";
+            mediaEl.appendChild(source);
+          }
+
+          const removeBtn = document.createElement("button");
+          removeBtn.type = "button";
+          removeBtn.className = "cell-remove-btn";
+          removeBtn.textContent = "−";
+          removeBtn.style.top = "4px";
+          removeBtn.style.right = "0";
+
+          removeBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const current = getData();
+            current.media.splice(index, 1);
+            setData(current);
+            renderMedia();
+            updateCode();
+          });
+
+          row.appendChild(mediaEl);
+          row.appendChild(removeBtn);
+          mediaBox.appendChild(row);
+        });
+
+        updateCode();
+      }
+
+      sourceSelect.addEventListener("change", updateSourceMode);
+      mediaTypeSelect.addEventListener("change", updateFileAccept);
+
+      addBtn.addEventListener("click", function () {
+        const data = getData();
+        const type = mediaTypeSelect.value;
+
+        if (sourceSelect.value === "url") {
+          const src = urlInput.value.trim();
+          if (!src) {
+            alert("Ссылка енгізіңіз.");
+            return;
+          }
+
+          data.media.push({ type, src });
+          setData(data);
+          urlInput.value = "";
+          renderMedia();
+          return;
+        }
+
+        const file = fileInput.files[0];
+        if (!file) {
+          alert("Выберите файл.");
+          return;
+        }
+
+        data.media.push({ type, src: URL.createObjectURL(file) });
+        setData(data);
+        fileInput.value = "";
+        renderMedia();
+      });
+
+      updateSourceMode();
+      renderMedia();
+    }
+
+    function createContainerEditor(item, preview) {
+      item.dataset.value = JSON.stringify({ items: [] });
+
+      const tools = document.createElement("div");
+      tools.className = "d-flex gap-2 align-items-center flex-wrap mb-2";
+
+      const typeSelect = document.createElement("select");
+      typeSelect.className = "form-select form-select-sm";
+      typeSelect.style.maxWidth = "220px";
+      typeSelect.innerHTML = `
+        <option value="h1">Заголовок</option>
+        <option value="p">Текст</option>
+        <option value="img">Изображение</option>
+        <option value="button">Кнопка</option>
+        <option value="table">Таблица</option>
+        <option value="list">Список</option>
+        <option value="media">Медиа</option>
+        <option value="link">Ссылка</option>
+      `;
+
+      const addBtn = document.createElement("button");
+      addBtn.type = "button";
+      addBtn.className = "btn btn-sm btn-outline-primary";
+      addBtn.textContent = "+ Добавить";
+
+      tools.appendChild(typeSelect);
+      tools.appendChild(addBtn);
+
+      const containerBox = document.createElement("div");
+      containerBox.className = "container-box";
+      containerBox.style.border = "1px solid #cbd5e1";
+      containerBox.style.borderRadius = "10px";
+      containerBox.style.padding = "15px";
+      containerBox.style.background = "#fff";
+      containerBox.style.minHeight = "90px";
+
+      preview.appendChild(tools);
+      preview.appendChild(containerBox);
+
+      function getData() {
+        return JSON.parse(item.dataset.value || '{"items":[]}');
+      }
+
+      function setData(data) {
+        item.dataset.value = JSON.stringify(data);
+      }
+
+      function renderContainer() {
+        const data = getData();
+        containerBox.innerHTML = "";
+
+        data.items.forEach(function (el, index) {
+          const row = document.createElement("div");
+          row.style.position = "relative";
+          row.style.paddingRight = "30px";
+          row.style.marginBottom = "12px";
+
+          let element;
+
+          if (el.type === "h1") {
+            element = document.createElement("h1");
+            element.contentEditable = "true";
+            element.textContent = el.text || "";
+          } else if (el.type === "p") {
+            element = document.createElement("p");
+            element.contentEditable = "true";
+            element.textContent = el.text || "";
+          } else if (el.type === "img" || el.type === "link" || el.type === "media") {
+            element = document.createElement("input");
+            element.className = "form-control form-control-sm";
+            element.placeholder =
+              el.type === "img"
+                ? "URL изображения"
+                : el.type === "link"
+                ? "URL ссылки"
+                : "URL видео";
+            element.value = el.text || "";
+          } else if (el.type === "button") {
+            element = document.createElement("button");
+            element.type = "button";
+            element.className = "btn btn-sm btn-primary";
+            element.contentEditable = "true";
+            element.textContent = el.text || "";
+          } else if (el.type === "list") {
+            element = document.createElement("div");
+            element.innerHTML = `<ul><li contenteditable="true">${escapeHtml(el.text || "")}</li></ul>`;
+          } else if (el.type === "table") {
+            element = document.createElement("div");
+            element.innerHTML = `
+              <table border="1" style="width:100%; border-collapse: collapse;">
+                <tr>
+                  <th>Заголовок 1</th>
+                  <th>Заголовок 2</th>
+                </tr>
+                <tr>
+                  <td>Ячейка 1</td>
+                  <td>Ячейка 2</td>
+                </tr>
+              </table>
+            `;
+          }
+
+          if (el.type === "img" || el.type === "link" || el.type === "media") {
+            element.addEventListener("input", function () {
+              const current = getData();
+              current.items[index].text = element.value.trim();
+              setData(current);
+              updateCode();
+            });
+          } else if (el.type === "list") {
+            element.querySelector("li").addEventListener("input", function (e) {
+              const current = getData();
+              current.items[index].text = e.target.textContent.trim();
+              setData(current);
+              updateCode();
+            });
+          } else if (el.type === "h1" || el.type === "p" || el.type === "button") {
+            element.addEventListener("input", function () {
+              const current = getData();
+              current.items[index].text = element.textContent.trim();
+              setData(current);
+              updateCode();
+            });
+          }
+
+          const removeBtn = document.createElement("button");
+          removeBtn.type = "button";
+          removeBtn.className = "cell-remove-btn";
+          removeBtn.textContent = "−";
+          removeBtn.style.top = "4px";
+          removeBtn.style.right = "0";
+
+          removeBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const current = getData();
+            current.items.splice(index, 1);
+            setData(current);
+            renderContainer();
+            updateCode();
+          });
+
+          row.appendChild(element);
+          row.appendChild(removeBtn);
+          containerBox.appendChild(row);
+        });
+
+        updateCode();
+      }
+
+      addBtn.addEventListener("click", function () {
+        const data = getData();
+
+        data.items.push({
+          type: typeSelect.value,
+          text: "",
+        });
+
+        setData(data);
+        renderContainer();
+      });
+
+      renderContainer();
+    }
+function bindImageSizeControls(item, preview, input) {
+  const img = preview.querySelector(".editable-img");
+  const widthInput = preview.querySelector(".img-width");
+  const heightInput = preview.querySelector(".img-height");
+
+  if (!img || !widthInput || !heightInput) return;
+
+  function saveImageData() {
+    const data = {
+      src: input.value,
+      width: widthInput.value,
+      height: heightInput.value
+    };
+
+    item.dataset.value = JSON.stringify(data);
+
+    img.style.width = data.width ? data.width + "px" : "auto";
+    img.style.height = data.height ? data.height + "px" : "auto";
+
+    updateCode();
+    saveBuilder();
+  }
+
+  widthInput.addEventListener("input", saveImageData);
+  heightInput.addEventListener("input", saveImageData);
+}
+function createItem(type, preset = "", savedValue = "") {
+        const item = document.createElement("div");
+      item.className = "canvas-item";
+      item.setAttribute("draggable", "true");
+item.dataset.type = type;
+item.dataset.value = "";
+item.dataset.blockId = "el-" + itemCounter++;
+item.dataset.font = "Inter";
+item.dataset.size = type === "h1" ? "32" : "16";
+item.dataset.weight = type === "h1" ? "700" : "400";
+item.dataset.color = "#111827";
+item.dataset.align = "left";
+
+      const actions = document.createElement("div");
+      actions.className = "actions";
+
+      const removeBtn = document.createElement("button");
+      actions.appendChild(removeBtn);
+removeBtn.className = "delete-block-btn";
+      removeBtn.type = "button";
+      removeBtn.textContent = "🗑";
+
+removeBtn.addEventListener("click", function (event) {
+  event.stopPropagation();
+item.remove();
+updateCode();
+saveBuilder();
+});
+
+item.addEventListener("dragstart", function () {
+  item.classList.add("dragging-block");
+});
+
+item.addEventListener("dragend", function () {
+  item.classList.remove("dragging-block");
+  updateCode();
+});
+
+let pageSection = canvas.querySelector(".page-section");
+
+if (!pageSection) {
+  pageSection = document.createElement("section");
+  pageSection.className = "page-section";
+  canvas.appendChild(pageSection);
+}
+
+pageSection.appendChild(item);
+      const names = {
+        h1: "Заголовок",
+        p: "Текст",
+        img: "Изображение",
+        button: "Кнопка",
+        table: "Таблица",
+        list: "Список",
+        form: "Форма",
+        media: "Медиа",
+        link: "Ссылка",
+        container: "Контейнеры",
+        css: "CSS",
+        js: "JavaScript",
+      };
+
+      const label = document.createElement("div");
+      label.className = "mb-2 fw-semibold";
+      label.textContent = names[type] || "Элемент";
+
+      const preview = document.createElement("div");
+      preview.className = "mt-2";
+
+      let input = null;
+
+      if (type === "css" || type === "js") {
+        const textarea = document.createElement("textarea");
+        textarea.className = "form-control form-control-sm mt-2";
+        textarea.rows = type === "css" ? 4 : 5;
+textarea.value = savedValue || (type === "css" ? getCssTemplate(preset) : getJsTemplate(preset));
+item.dataset.value = textarea.value;
+
+        textarea.addEventListener("input", function () {
+          item.dataset.value = textarea.value;
+          updateCode();
+        });
+
+        preview.appendChild(textarea);
+      } else if (type === "list") {
+        createListEditor(item, preview);
+      } else if (type === "form") {
+        createFormEditor(item, preview);
+      } else if (type === "media") {
+        createMediaEditor(item, preview);
+      } else if (type === "container") {
+        createContainerEditor(item, preview);
+      } else if (type !== "table") {
+        input = document.createElement(type === "p" ? "textarea" : "input");
+        input.className = "form-control form-control-sm mt-2";
+
+        if (type === "img") input.placeholder = "URL изображения";
+        else if (type === "link") input.placeholder = "URL ссылки";
+        else input.placeholder = "Введите текст";
+
+        if (type === "p") input.rows = 2;
+
+input.addEventListener("input", function () {
+  if (type === "img") {
+    item.dataset.value = JSON.stringify({
+      src: input.value,
+      width: 250,
+      height: ""
     });
+  } else {
+    item.dataset.value = input.value;
+  }
+
+  preview.innerHTML = createDefaultPreview(type, item.dataset.value);
+  bindImageSizeControls(item, preview, input);
+
+  updateCode();
+  saveBuilder();
+});
+      }
+
+      if (type === "table") {
+        preview.classList.add("table-preview");
+        preview.innerHTML = createTablePreview();
+
+        const table = preview.querySelector("table");
+        refreshCellButtons(table);
+
+        preview.querySelector(".add-row").addEventListener("click", function () {
+          addTableRow(table);
+        });
+
+        preview.querySelector(".add-column").addEventListener("click", function () {
+          addTableColumn(table);
+        });
+
+        table.addEventListener("click", function (event) {
+          if (event.target.classList.contains("cell-remove-btn")) {
+            event.preventDefault();
+            event.stopPropagation();
+            deleteCell(event.target.closest("th, td"), table);
+          }
+        });
+
+        preview.addEventListener("input", function () {
+          refreshCellButtons(table);
+          updateCode();
+        });
+      }
+
+      item.appendChild(actions);
+      item.appendChild(label);
+      item.appendChild(preview);
+
+if (input) {
+  item.appendChild(input);
+
+  if (savedValue) {
+    item.dataset.value = savedValue;
+
+    if (type === "img") {
+      let data;
+      try {
+        data = JSON.parse(savedValue);
+      } catch (e) {
+        data = { src: savedValue, width: 250, height: "" };
+      }
+
+      input.value = data.src || "";
+      preview.innerHTML = createDefaultPreview(type, savedValue);
+      bindImageSizeControls(item, preview, input);
+    } else {
+      input.value = savedValue;
+      preview.innerHTML = createDefaultPreview(type, savedValue);
+    }
+
+    updateCode();
+  } else {
+    input.dispatchEvent(new Event("input"));
+  }
 }
-document.getElementById('chat-fab').addEventListener('click', function() {
-    document.getElementById('chat-panel').classList.toggle('open');
-});
-document.getElementById('chat-close').addEventListener('click', function() {
-    document.getElementById('chat-panel').classList.remove('open');
-});
-document.getElementById('chat-send').addEventListener('click', sendChatMessage);
-document.getElementById('chat-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
+item.addEventListener("click", function (event) {
+  event.stopPropagation();
 });
 
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() { setTimeout(initEditor, 150); });
-} else {
-    setTimeout(initEditor, 150);
-}
-})();
-
-const assignmentToggle =
-    document.getElementById('assignmentToggle');
-
-const assignmentContent =
-    document.getElementById('assignmentContent');
-
-const assignmentArrow =
-    document.querySelector('.assignment-arrow');
-
-if (assignmentToggle) {
-
-    assignmentToggle.addEventListener('click', function() {
-
-        assignmentContent.classList.toggle('hidden');
-
-        assignmentArrow.classList.toggle('rotate');
-
+updateCode();
+saveBuilder();}
+    document.querySelectorAll(".tab-btn").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    document.querySelectorAll(".tab-btn").forEach(function (b) {
+      b.classList.remove("active");
     });
 
+    document.querySelectorAll(".tab-content").forEach(function (content) {
+      content.classList.remove("active");
+    });
+
+    btn.classList.add("active");
+    document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+  });
+});
+
+document.querySelectorAll("[data-add]").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    createItem(btn.dataset.add);
+  });
+});
+
+document.querySelectorAll("[data-css]").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    createItem("css", btn.dataset.css);
+  });
+});
+
+document.querySelectorAll("[data-js]").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    createItem("js", btn.dataset.js);
+  });
+});
+
+/* DRAG & DROP: HTML + CSS + JAVASCRIPT */
+document
+  .querySelectorAll("[data-add], [data-css], [data-js], [draggable='true']")
+  .forEach(function (item) {
+    item.setAttribute("draggable", "true");
+
+    item.addEventListener("dragstart", function () {
+      if (item.dataset.add) {
+        dragData = {
+          kind: "html",
+          value: item.dataset.add,
+        };
+      } else if (item.dataset.type) {
+        dragData = {
+          kind: "html",
+          value: item.dataset.type,
+        };
+      } else if (item.dataset.css) {
+        dragData = {
+          kind: "css",
+          value: item.dataset.css,
+        };
+      } else if (item.dataset.js) {
+        dragData = {
+          kind: "js",
+          value: item.dataset.js,
+        };
+      }
+    });
+  });
+
+canvas.addEventListener("dragover", function (event) {
+  event.preventDefault();
+
+  const draggingBlock = document.querySelector(".dragging-block");
+  if (!draggingBlock) return;
+
+  const container = canvas.querySelector(".page-section");
+  if (!container) return;
+
+  const afterElement = getDragAfterElement(container, event.clientY);
+
+  if (afterElement == null) {
+    container.appendChild(draggingBlock);
+  } else {
+    container.insertBefore(draggingBlock, afterElement);
+  }
+});
+
+canvas.addEventListener("drop", function (event) {
+  event.preventDefault();
+
+  if (!dragData) return;
+
+  if (dragData.kind === "html") {
+    createItem(dragData.value);
+  } else if (dragData.kind === "css") {
+    createItem("css", dragData.value);
+  } else if (dragData.kind === "js") {
+    createItem("js", dragData.value);
+  }
+
+  dragData = null;
+});
+
+document.getElementById("clear-canvas").addEventListener("click", function () {
+
+  if (!confirm("Вы точно хотите удалить ВСЕ блоки?")) return;
+
+  canvas.innerHTML = `
+    <p class="text-muted mb-0" id="canvas-empty">
+      Перетащите элемент сюда или нажмите кнопку слева.
+    </p>
+  `;
+
+  localStorage.removeItem(STORAGE_KEY);
+
+  updateCode();
+});
+
+loadBuilder();
+updateCode();
+document.getElementById("preview-page").addEventListener("click", function () {
+  const code = generatedCode.textContent;
+
+  if (!code.trim()) {
+    alert("Добавьте элементы перед предпросмотром");
+    return;
+  }
+
+  const previewWindow = window.open();
+
+  if (!previewWindow) {
+    alert("Браузер заблокировал окно");
+    return;
+  }
+
+const fullHtml = code.replace(
+  "<body>",
+  `<body>
+<button style="
+  position:fixed;
+  top:14px;
+  left:14px;
+  z-index:999;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 10px;
+  background:#ffffff;
+  color:#7c3aed;
+  border:1px solid #ddd6fe;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(124,58,237,.1);
+  transition:.15s;
+"
+onmouseover="this.style.background='#f5f3ff'"
+onmouseout="this.style.background='#ffffff'"
+onclick="window.close()">
+  ← Назад
+</button>
+  <div style="margin-top:50px;">`
+).replace(
+  "</body>",
+  `</div></body>`
+);
+
+previewWindow.document.open();
+previewWindow.document.write(fullHtml);
+previewWindow.document.close();
+});
+document.querySelectorAll(".tab-btn").forEach(function(btn){
+
+});
+document.querySelectorAll(".right-tab").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    document.querySelectorAll(".right-tab").forEach(function(b){
+      b.classList.remove("active");
+    });
+
+    document.querySelectorAll(".right-tab-content").forEach(function(content){
+      content.classList.remove("active");
+    });
+
+    btn.classList.add("active");
+    document.getElementById("right-" + btn.dataset.rightTab).classList.add("active");
+  });
+});
+document.querySelectorAll(".tab-fixed input").forEach(function(input){
+  input.addEventListener("input", function(){
+    const tab = input.closest(".tab-content");
+    const query = input.value.toLowerCase().trim();
+
+    tab.querySelectorAll(".list-group-item").forEach(function(item){
+      const text = item.textContent.toLowerCase();
+      item.style.display = text.includes(query) ? "" : "none";
+    });
+  });
+});
+function getDragAfterElement(container, y) {
+  const elements = [
+    ...container.querySelectorAll(".canvas-item:not(.dragging-block)")
+  ];
+
+  return elements.reduce(function (closest, child) {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+
+    if (offset < 0 && offset > closest.offset) {
+      return { offset: offset, element: child };
+    } else {
+      return closest;
+    }
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
-// АВТО РАЗМЕР ЧАТА
-function autoResizeChat() {
-
-    const panel =
-        document.getElementById('chat-panel');
-
-    const messages =
-        document.getElementById('chat-messages');
-
-    if (!panel || !messages) return;
-
-    const contentHeight =
-        messages.scrollHeight;
-
-    const finalHeight =
-        Math.min(
-            700,
-            contentHeight + 180
-        );
-
-    panel.style.height =
-        finalHeight + 'px';
-}
+document.querySelectorAll(".builder-sidebar [data-type]").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    createItem(btn.dataset.type);
+  });
+});
+  })();
 </script>
 {% endblock %}

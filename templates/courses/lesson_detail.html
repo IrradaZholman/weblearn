@@ -1,1385 +1,532 @@
-{% load django_bootstrap5 %}
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}WebLearn — Учим веб-программирование{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
- :root {
-    --primary: #6366f1;
-    --primary-dark: #4f46e5;
-    --accent: #22c55e;
-    --bg-light: #f8fafc;
-    --card-shadow: 0 4px 6px -1px rgba(0,0,0,.07),
-                   0 2px 4px -2px rgba(0,0,0,.06);
+{% block title %}{{ lesson.title }} — WebLearn{% endblock %}
 
-    --card-hover: 0 20px 25px -5px rgba(0,0,0,.1),
-                  0 8px 10px -6px rgba(0,0,0,.1);
+{% block extra_css %}
+<style>
+    /* Типографика и оформление текста урока */
+    .lesson-article {
+        background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+        border-radius: 20px;
+        border: 1px solid rgba(99, 102, 241, 0.12);
+        box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+        overflow: visible;
+    }
+    .lesson-article .card-body {
+        padding: 2rem 2.25rem 2.5rem;
+    }
+    @media (max-width: 576px) {
+        .lesson-article .card-body { padding: 1.25rem 1.25rem 1.75rem; }
+    }
+    .lesson-content {
+        font-size: 1.0625rem;
+        line-height: 1.75;
+        color: #334155;
+        max-width: 52rem;
+    }
+    .lesson-content .lesson-lead {
+        font-size: 1.2rem;
+        line-height: 1.65;
+        color: #1e293b;
+        margin-bottom: 1.75rem;
+        padding: 1rem 1.25rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.06));
+        border-radius: 12px;
+        border-left: 4px solid #6366f1;
+    }
+    .lesson-content h2 {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin-top: 2rem;
+        margin-bottom: 0.85rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #e2e8f0;
+        letter-spacing: -0.02em;
+    }
+    .lesson-content h2:first-child { margin-top: 0; }
+    .lesson-content h3 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-top: 1.5rem;
+        margin-bottom: 0.65rem;
+    }
+    .lesson-content p {
+        margin-bottom: 1rem;
+    }
+    .lesson-content ul,
+    .lesson-content ol {
+        margin: 0.75rem 0 1.25rem;
+        padding-left: 1.35rem;
+    }
+    .lesson-content li {
+        margin-bottom: 0.5rem;
+        padding-left: 0.25rem;
+    }
+    .lesson-content li::marker {
+        color: #6366f1;
+    }
+    .lesson-content strong {
+        color: #1e293b;
+        font-weight: 600;
+    }
+    .lesson-content a:not(.btn) {
+        color: #4f46e5;
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+    .lesson-content a:not(.btn):hover {
+        color: #4338ca;
+    }
+    .lesson-content code {
+        font-family: 'JetBrains Mono', 'Consolas', monospace;
+        font-size: 0.88em;
+        background: #f1f5f9;
+        color: #c026d3;
+        padding: 0.15rem 0.45rem;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+    }
+    .lesson-content pre {
+        background: #0f172a;
+        color: #e2e8f0;
+        border-radius: 12px;
+        padding: 1.15rem 1.35rem;
+        margin: 1.25rem 0;
+        overflow-x: auto;
+        font-size: 0.875rem;
+        line-height: 1.55;
+        border: 1px solid #1e293b;
+    }
+    .lesson-content pre code {
+        background: transparent;
+        color: inherit;
+        border: none;
+        padding: 0;
+        font-size: inherit;
+    }
+    .lesson-content table {
+        width: 100%;
+        margin: 1.25rem 0;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+    .lesson-content table th {
+        background: #f8fafc;
+        color: #0f172a;
+        font-weight: 700;
+        text-align: left;
+        padding: 0.75rem 1rem;
+        border-bottom: 2px solid #e2e8f0;
+    }
+    .lesson-content table td {
+        padding: 0.65rem 1rem;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: top;
+    }
+    .lesson-content table tr:last-child td {
+        border-bottom: none;
+    }
+    .lesson-content .table-responsive {
+        margin: 1.25rem 0;
+        border-radius: 12px;
+    }
+    .lesson-content blockquote {
+        margin: 1.25rem 0;
+        padding: 1rem 1.25rem;
+        border-left: 4px solid #22c55e;
+        background: #f0fdf4;
+        color: #14532d;
+        border-radius: 0 12px 12px 0;
+    }
+    .lesson-content .lesson-cta {
+        margin-top: 2rem;
+        padding: 1.25rem 1.5rem;
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: #fff !important;
+        border-radius: 14px;
+        font-weight: 600;
+        font-size: 1.05rem;
+        text-align: center;
+        box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    }
+    .lesson-content .lesson-cta a {
+        color: #fff !important;
+        text-decoration: underline;
+    }
+    .code-example {
+        background: #1e293b;
+        color: #e2e8f0;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        overflow-x: auto;
+    }
+    .code-example pre {
+        margin: 0;
+        white-space: pre-wrap;
+    }
+    .inline-editor {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 1.5rem 0;
+    }
+    .editor-tabs {
+        background: #f8fafc;
+        border-bottom: 2px solid #e2e8f0;
+        display: flex;
+    }
+    .editor-tab {
+        padding: 0.75rem 1.5rem;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        color: #64748b;
+        transition: all 0.2s;
+        border-bottom: 3px solid transparent;
+    }
+    .editor-tab.active {
+        color: #6366f1;
+        background: white;
+        border-bottom-color: #6366f1;
+    }
+    .editor-tab:hover {
+        background: #f1f5f9;
+    }
+    .editor-content {
+        display: none;
+    }
+    .editor-content.active {
+        display: block;
+    }
+    .editor-textarea {
+        width: 100%;
+        min-height: 200px;
+        padding: 1rem;
+        border: none;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        resize: vertical;
+    }
+    .preview-pane {
+        border-top: 2px solid #e2e8f0;
+        padding: 1rem;
+        background: white;
+        min-height: 300px;
+    }
+    .preview-iframe {
+        width: 100%;
+        height: 400px;
+        border: none;
+        border-radius: 8px;
+        background: white;
+    }
+    .lesson-complete-badge {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+    .assignment-card {
+        border-left: 4px solid #6366f1;
+    }
+    .lesson-sidebar {
+        border-radius: 16px;
+        border: 1px solid rgba(99, 102, 241, 0.12);
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+    }
+    .lesson-sidebar .card-header {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        border-radius: 16px 16px 0 0 !important;
+    }
+    .lesson-sidebar .list-group-item {
+        border-radius: 10px !important;
+        margin-bottom: 4px;
+        transition: background 0.2s;
+    }
+    .lesson-sidebar .list-group-item:hover {
+        background: #f8fafc;
+    }
+    .container{
+    max-width:1280px;
 }
 
-/* GLOBAL */
-
-* {
-    scroll-behavior: smooth;
+.lesson-content{
+    max-width:900px;
+    font-size:1rem;
+    line-height:1.7;
 }
 
-body {
-    font-family: 'Nunito', -apple-system,
-                 BlinkMacSystemFont,
-                 'Segoe UI', sans-serif;
-
-    background: var(--bg-light);
-
-    min-height: 100vh;
-
-    display: flex;
-    flex-direction: column;
-
-    line-height: 1.6;
+.lesson-article .card-body{
+    padding:1.5rem 1.75rem;
 }
 
-/* NAVBAR */
-
-.navbar {
-
-    background:
-        linear-gradient(
-            135deg,
-            #6366f1 0%,
-            #8b5cf6 100%
-        ) !important;
-
-    box-shadow:
-        0 4px 14px rgba(99,102,241,.3);
-
-    backdrop-filter: blur(10px);
-
-    position: sticky;
-    top: 0;
-
-    z-index: 9999;
+.lesson-content h2{
+    font-size:1.25rem;
+    margin-top:1.5rem;
 }
 
-.navbar-brand {
-
-    font-weight: 800;
-
-    font-size: 1.5rem;
-
-    color: #fff !important;
-
-    letter-spacing: -0.5px;
+.lesson-content h3{
+    font-size:1.05rem;
 }
 
-.nav-link {
-
-    color: rgba(255,255,255,.92) !important;
-
-    font-weight: 700;
-
-    padding: .55rem 1rem !important;
-
-    border-radius: 10px;
-
-    transition: all .2s ease;
-
-    position: relative;
+.lesson-content p{
+    margin-bottom:.8rem;
 }
 
-.nav-link:hover {
-
-    background: rgba(255,255,255,.14);
-
-    color: #fff !important;
-
-    transform: translateY(-1px);
+.lesson-content pre{
+    padding:1rem;
+    font-size:.85rem;
 }
 
-/* BUTTONS */
-
-.btn-primary {
-
-    background:
-        linear-gradient(
-            135deg,
-            #6366f1,
-            #8b5cf6
-        );
-
-    border: none;
-
-    font-weight: 700;
-
-    padding: .65rem 1.5rem;
-
-    border-radius: 12px;
-
-    box-shadow:
-        0 4px 14px rgba(99,102,241,.35);
-
-    transition: all .3s ease;
+.lesson-content table{
+    font-size:.9rem;
+}
+.lesson-sidebar{
+    font-size:.9rem;
 }
 
-.btn-primary:hover {
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 8px 20px rgba(99,102,241,.45);
+.lesson-sidebar .list-group-item{
+    padding:.55rem .75rem !important;
 }
 
-.btn-success {
-
-    background:
-        linear-gradient(
-            135deg,
-            #22c55e,
-            #16a34a
-        );
-
-    border: none;
-
-    font-weight: 700;
-
-    border-radius: 12px;
-
-    transition: all .3s ease;
+.lesson-sidebar h5{
+    font-size:1rem;
 }
 
-.btn-success:hover {
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 8px 20px rgba(34,197,94,.35);
+.col-lg-3{
+    width:22%;
 }
 
-/* MAIN */
-
-main {
-    flex: 1;
+.col-lg-9{
+    width:78%;
+}
+.inline-editor{
+    margin:1rem 0;
 }
 
-/* HERO */
-
-.hero-gradient {
-
-    background:
-        linear-gradient(
-            135deg,
-            #6366f1 0%,
-            #8b5cf6 50%,
-            #a855f7 100%
-        );
+.editor-textarea{
+    min-height:160px;
+    font-size:.85rem;
 }
 
-/* CARDS */
-
-.card-custom {
-
-    border: none;
-
-    border-radius: 20px;
-
-    box-shadow: var(--card-shadow);
-
-    transition:
-        all .3s cubic-bezier(
-            0.4,
-            0,
-            0.2,
-            1
-        );
-
-    overflow: hidden;
+.preview-pane{
+    min-height:220px;
+    padding:.8rem;
 }
 
-.card-custom:hover {
-
-    transform: translateY(-6px);
-
-    box-shadow: var(--card-hover);
+.preview-iframe{
+    height:280px;
 }
 
-/* CODE FONT */
-
-.code-font {
-
-    font-family:
-        'JetBrains Mono',
-        'Courier New',
-        monospace;
+.editor-tab{
+    padding:.65rem 1rem;
+    font-size:.9rem;
+}
+h1.h3{
+    font-size:1.9rem !important;
 }
 
-/* FOOTER */
-
-footer {
-
-    background:
-        linear-gradient(
-            135deg,
-            #1e293b 0%,
-            #0f172a 100%
-        );
-
-    color: rgba(255,255,255,.82);
-
-    margin-top: auto;
-
-    padding: 2rem 0;
+.lesson-complete-badge{
+    font-size:.85rem;
+    padding:.45rem .8rem;
 }
 
-/* BREADCRUMB */
-
-.breadcrumb {
-
-    background: transparent;
-
-    padding: 0;
+.btn-success,
+.btn-primary{
+    padding:.6rem 1rem;
+    font-size:.9rem;
 }
+@media (min-width:1400px){
 
-.breadcrumb-item a {
-
-    color: #6366f1;
-
-    text-decoration: none;
-}
-
-.breadcrumb-item.active {
-    color: #64748b;
-}
-
-/* TABLE */
-
-table {
-
-    border-radius: 12px;
-
-    overflow: hidden;
-}
-
-/* ALERT */
-
-.alert {
-
-    border-radius: 12px;
-
-    border: none;
-}
-
-/* USER MENU */
-
-.user-dropdown .nav-link {
-
-    background: rgba(255,255,255,.12);
-
-    padding: .55rem 1rem !important;
-
-    border-radius: 14px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: .5rem;
-
-    font-weight: 700;
-}
-
-.user-dropdown .nav-link:hover {
-
-    background: rgba(255,255,255,.18);
-}
-
-.user-dropdown .dropdown-menu {
-
-    position: absolute !important;
-
-    top: 58px !important;
-
-    right: 0 !important;
-
-    left: auto !important;
-
-    border: none;
-
-    border-radius: 18px;
-
-    background: #ffffff !important;
-
-    padding: .6rem;
-
-    min-width: 240px;
-
-    z-index: 99999 !important;
-
-    box-shadow:
-        0 20px 40px rgba(15,23,42,.22);
-
-    animation: dropdownShow .18s ease;
-}
-
-.user-dropdown .dropdown-item {
-
-    border-radius: 12px;
-
-    padding: .85rem 1rem;
-
-    font-weight: 700;
-
-    color: #334155 !important;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: .7rem;
-
-    transition: .18s;
-}
-
-.user-dropdown .dropdown-item:hover {
-
-    background: #f5f3ff;
-
-    color: #7c3aed !important;
-}
-
-.user-dropdown .dropdown-divider {
-
-    margin: .45rem 0;
-}
-
-/* ANIMATION */
-
-@keyframes dropdownShow {
-
-    from {
-
-        opacity: 0;
-
-        transform: translateY(-8px);
+    .container{
+        max-width:1320px;
     }
 
-    to {
-
-        opacity: 1;
-
-        transform: translateY(0);
-    }
-}
-/* SPLASH SCREEN */
-
-#splash-screen {
-
-    display: flex;
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    transition: opacity .6s ease;
-
-    position: fixed;
-
-    inset: 0;
-
-    width: 100%;
-
-    height: 100vh;
-
-    z-index: 999999;
-
-    overflow: hidden;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #6366f1 0%,
-            #8b5cf6 50%,
-            #a855f7 100%
-        );
-}
-#splash-screen.show {
-
-    opacity: 1;
-
-    visibility: visible;
-}
-
-/* СВЕТ */
-
-.splash-bg::before {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-        radial-gradient(
-            circle at top left,
-            rgba(99,102,241,.9),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at center,
-            rgba(168,85,247,.22),
-            transparent 40%
-        ),
-        radial-gradient(
-            circle at bottom right,
-            rgba(139,92,246,.45),
-            transparent 35%
-        );
-
-    animation:
-        bgMove 8s ease-in-out infinite;
-}
-
-/* ВОЛНЫ */
-
-.splash-bg::after {
-
-    content: "";
-
-    position: absolute;
-
-    left: -10%;
-
-    bottom: -120px;
-
-    width: 120%;
-
-    height: 260px;
-
-    background:
-        rgba(255,255,255,.03);
-
-    border-radius:
-        50% 50% 0 0;
-
-    filter: blur(2px);
-
-    box-shadow:
-        0 -20px 60px rgba(255,255,255,.04);
-}
-
-/* HTML BOX */
-
-.code-box {
-
-    position: absolute;
-
-    left: 90px;
-
-    top: 120px;
-
-    width: 360px;
-
-    padding: 30px;
-
-    border-radius: 30px;
-
-    background:
-        rgba(255,255,255,.05);
-
-    border:
-        1px solid rgba(255,255,255,.08);
-
-    backdrop-filter: blur(12px);
-
-    color: rgba(255,255,255,.9);
-
-    font-family:
-        'JetBrains Mono',
-        monospace;
-
-    line-height: 2;
-
-    transform: rotate(-8deg);
-
-    box-shadow:
-        0 20px 50px rgba(0,0,0,.25);
-}
-
-/* FLOATING CARDS */
-
-.float-card {
-
-    position: absolute;
-
-    width: 130px;
-
-    height: 130px;
-
-    border-radius: 28px;
-
-    background:
-        rgba(255,255,255,.05);
-
-    border:
-        1px solid rgba(255,255,255,.08);
-
-    backdrop-filter: blur(10px);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: rgba(255,255,255,.9);
-
-    font-size: 2.2rem;
-
-    font-weight: 800;
-}
-
-.html-card {
-
-    right: 260px;
-
-    top: 150px;
-
-    transform: rotate(12deg);
-}
-
-.css-card {
-
-    right: 120px;
-
-    bottom: 200px;
-
-    transform: rotate(10deg);
-}
-
-.js-card {
-
-    left: 120px;
-
-    bottom: 180px;
-
-    transform: rotate(-12deg);
-}
-
-/* ТОЧКИ */
-
-.bg-dots {
-
-    position: absolute;
-
-    width: 120px;
-
-    height: 120px;
-
-    background-image:
-        radial-gradient(
-            rgba(255,255,255,.18) 2px,
-            transparent 2px
-        );
-
-    background-size: 18px 18px;
-
-    opacity: .4;
-}
-/* DECORATIONS */
-
-.decor-plus,
-.decor-circle,
-.decor-dot {
-
-    position: absolute;
-
-    z-index: 3;
-
-    pointer-events: none;
-}
-
-/* PLUS */
-
-.decor-plus {
-
-    color: rgba(180,120,255,.55);
-
-    font-size: 3rem;
-
-    font-weight: 300;
-
-    animation:
-        floatPlus 6s ease-in-out infinite;
-}
-
-/* CIRCLE */
-
-.decor-circle {
-
-    width: 22px;
-
-    height: 22px;
-
-    border-radius: 50%;
-
-    border:
-        4px solid rgba(168,85,247,.5);
-
-    animation:
-        pulseCircle 4s ease-in-out infinite;
-}
-
-/* DOT */
-
-.decor-dot {
-
-    width: 12px;
-
-    height: 12px;
-
-    border-radius: 50%;
-
-    background:
-        rgba(180,120,255,.7);
-
-    box-shadow:
-        0 0 18px rgba(180,120,255,.8);
-
-    animation:
-        pulseDot 3s ease-in-out infinite;
-}
-
-/* POSITIONS */
-
-.plus-1 {
-
-    top: 80px;
-
-    left: 520px;
-}
-
-.plus-2 {
-
-    top: 120px;
-
-    right: 340px;
-}
-
-.plus-3 {
-
-    top: 420px;
-
-    right: 470px;
-}
-
-.circle-1 {
-
-    left: 360px;
-
-    top: 520px;
-}
-
-.circle-2 {
-
-    right: 220px;
-
-    top: 250px;
-}
-
-.dot-1 {
-
-    left: 470px;
-
-    bottom: 120px;
-}
-
-.dot-2 {
-
-    right: 410px;
-
-    bottom: 190px;
-}
-
-.dot-3 {
-
-    top: 160px;
-
-    left: 63%;
-}
-
-/* ANIMATION */
-
-@keyframes floatPlus {
-
-    0% {
-
-        transform: translateY(0);
+    .lesson-content{
+        max-width:920px;
     }
 
-    50% {
-
-        transform: translateY(-12px);
-    }
-
-    100% {
-
-        transform: translateY(0);
+    .lesson-sidebar{
+        max-height:85vh;
+        overflow-y:auto;
     }
 }
-
-@keyframes pulseCircle {
-
-    0% {
-
-        transform: scale(1);
-
-        opacity: .5;
-    }
-
-    50% {
-
-        transform: scale(1.15);
-
-        opacity: 1;
-    }
-
-    100% {
-
-        transform: scale(1);
-
-        opacity: .5;
-    }
-}
-
-@keyframes pulseDot {
-
-    0% {
-
-        transform: scale(1);
-
-        opacity: .6;
-    }
-
-    50% {
-
-        transform: scale(1.4);
-
-        opacity: 1;
-    }
-
-    100% {
-
-        transform: scale(1);
-
-        opacity: .6;
-    }
-}
-.dots-1 {
-
-    top: 60px;
-
-    right: 80px;
-}
-
-.dots-2 {
-
-    bottom: 70px;
-
-    left: 60px;
-}
-/* CENTER CONTENT */
-/* WAVE LINES */
-
-.wave-line {
-
-    position: absolute;
-
-    left: -15%;
-
-    width: 140%;
-
-    border-radius: 50%;
-
-    pointer-events: none;
-
-    z-index: 2;
-}
-
-/* LINE 1 */
-
-.wave1 {
-
-    bottom: -40px;
-
-    height: 240px;
-
-    border:
-        2px solid rgba(180,120,255,.35);
-
-    opacity: .9;
-
-    animation:
-        waveMove1 8s ease-in-out infinite;
-}
-
-/* LINE 2 */
-
-.wave2 {
-
-    bottom: -5px;
-
-    height: 220px;
-
-    border:
-        2px solid rgba(170,110,255,.22);
-
-    opacity: .7;
-
-    animation:
-        waveMove2 10s ease-in-out infinite;
-}
-
-/* LINE 3 */
-
-.wave3 {
-
-    bottom: 35px;
-
-    height: 200px;
-
-    border:
-        2px solid rgba(255,255,255,.12);
-
-    opacity: .5;
-
-    animation:
-        waveMove3 12s ease-in-out infinite;
-}
-/* EXTRA GLOW */
-
-.wave1::after,
-.wave2::after,
-.wave3::after {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    border-radius: 50%;
-
-    filter: blur(12px);
-
-    opacity: .4;
-}
-
-.wave1::after {
-
-    border:
-        2px solid rgba(180,120,255,.3);
-}
-
-.wave2::after {
-
-    border:
-        2px solid rgba(170,110,255,.18);
-}
-
-.wave3::after {
-
-    border:
-        2px solid rgba(255,255,255,.08);
-}
-/* ANIMATION */
-
-@keyframes waveMove1 {
-
-    0% {
-
-        transform:
-            translateX(0)
-            scaleX(1);
-    }
-
-    50% {
-
-        transform:
-            translateX(-25px)
-            scaleX(1.03);
-    }
-
-    100% {
-
-        transform:
-            translateX(0)
-            scaleX(1);
-    }
-}
-
-@keyframes waveMove2 {
-
-    0% {
-
-        transform:
-            translateX(0);
-    }
-
-    50% {
-
-        transform:
-            translateX(20px);
-    }
-
-    100% {
-
-        transform:
-            translateX(0);
-    }
-}
-
-@keyframes waveMove3 {
-
-    0% {
-
-        transform:
-            translateX(0);
-    }
-
-    50% {
-
-        transform:
-            translateX(-15px);
-    }
-
-    100% {
-
-        transform:
-            translateX(0);
-    }
-}
-
-
-.splash-content {
-
-    position: relative;
-
-    z-index: 10;
-
-    text-align: center;
-
-    color: white;
-
-    animation:
-        contentShow 1.2s ease;
-}
-
-/* LOGO */
-
-.splash-logo {
-
-    width: 140px;
-
-    height: 140px;
-
-    margin: 0 auto 30px;
-
-    border-radius: 38px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 4rem;
-
-    font-weight: 800;
-
-    color: white;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.18),
-            rgba(255,255,255,.05)
-        );
-
-    border:
-        1px solid rgba(255,255,255,.12);
-
-    backdrop-filter: blur(12px);
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.28);
-
-    animation:
-        logoPulse 3s ease-in-out infinite;
-}
-
-/* TITLE */
-
-.splash-content h1 {
-
-    font-size: 4rem;
-
-    font-weight: 800;
-
-    letter-spacing: -2px;
-
-    margin-bottom: 6px;
-
-    line-height: 1;
-
-    text-shadow:
-        0 10px 30px rgba(0,0,0,.2);
-}
-
-/* SUBTITLE */
-
-.splash-content p {
-
-    font-size: 1.15rem;
-
-    font-weight: 500;
-
-    opacity: .88;
-
-    margin-bottom: 14px;
-}
-
-/* DESCRIPTION */
-
-.splash-content span {
-
-    display: block;
-
-    font-size: .88rem;
-
-    opacity: .78;
-
-    line-height: 1.6;
-}
-
-/* APPEAR */
-
-@keyframes contentShow {
-
-    from {
-
-        opacity: 0;
-
-        transform:
-            translateY(40px)
-            scale(.92);
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform:
-            translateY(0)
-            scale(1);
-    }
-}
-
-@keyframes bgMove {
-
-    0% {
-
-        transform: scale(1);
-    }
-
-    50% {
-
-        transform: scale(1.05);
-    }
-
-    100% {
-
-        transform: scale(1);
-    }
-}
-
-@keyframes splashFadeOut {
-
-    to {
-
-        opacity: 0;
-
-        visibility: hidden;
-
-        pointer-events: none;
-    }
-}
-
-@keyframes logoPulse {
-
-    0% {
-
-        transform: scale(1);
-    }
-
-    50% {
-
-        transform: scale(1.05);
-    }
-
-    100% {
-
-        transform: scale(1);
-    }
-}
-
-@keyframes bgFloat {
-
-    0% {
-
-        transform: scale(1);
-    }
-
-    50% {
-
-        transform: scale(1.05);
-    }
-
-    100% {
-
-        transform: scale(1);
-    }
-}
-
-/* MOBILE */
-
-@media (max-width: 768px) {
-
-    .splash-content h1 {
-
-        font-size: 3rem;
-    }
-
-    .splash-content p {
-
-        font-size: 1.3rem;
-    }
-.splash-logo {
-
-    width: 110px;
-
-    height: 110px;
-
-    font-size: 3rem;
-}
-}
-    </style>
-    {% block extra_css %}{% endblock %}
-</head>
-<body>
-<!-- SPLASH SCREEN -->
-<div id="splash-screen">
-
-    <div class="splash-bg">
-
-        <div class="code-box">
-            &lt;html&gt;<br>
-            &lt;head&gt;<br>
-            &lt;title&gt;WebLearn&lt;/title&gt;<br>
-            &lt;/head&gt;<br>
-            &lt;body&gt;<br>
-            &lt;h1&gt;Учись. Создавай.&lt;/h1&gt;<br>
-            &lt;/body&gt;<br>
-            &lt;/html&gt;
-        </div>
-
-        <div class="float-card html-card">
-            HTML
-        </div>
-
-        <div class="float-card css-card">
-            CSS
-        </div>
-
-        <div class="float-card js-card">
-            JS
-        </div>
-
-<div class="bg-dots dots-1"></div>
-<div class="bg-dots dots-2"></div>
-<!-- PLUS -->
-
-<div class="decor-plus plus-1">+</div>
-<div class="decor-plus plus-2">+</div>
-<div class="decor-plus plus-3">+</div>
-
-<!-- CIRCLES -->
-
-<div class="decor-circle circle-1"></div>
-<div class="decor-circle circle-2"></div>
-
-<!-- DOTS -->
-
-<div class="decor-dot dot-1"></div>
-<div class="decor-dot dot-2"></div>
-<div class="decor-dot dot-3"></div>
-<div class="wave-line wave1"></div>
-<div class="wave-line wave2"></div>
-<div class="wave-line wave3"></div>
-
-    </div>
-
-    <div class="splash-content">
-
-        <div class="splash-logo">
-            &lt;/&gt;
-        </div>
-
-        <h1>WebLearn</h1>
-
-        <p>Визуальная учебная среда</p>
-
-        <span>
-            Изучай HTML, CSS и JavaScript через практику
-        </span>
-
-    </div>
-
-</div>
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid px-4">
-            <a class="navbar-brand" href="{% url 'main:home' %}">WebLearn</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'main:home' %}">Главная</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'courses:course_list' %}">Курсы</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'editor:standalone' %}">Редактор</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'editor:builder' %}">Конструктор</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'courses:standalone_assignments' %}">Доп. задания</a></li>
-                </ul>
-                <ul class="navbar-nav">
-{% if user.is_authenticated %}
-
-<li class="nav-item dropdown user-dropdown">
-
-    <a class="nav-link dropdown-toggle"
-       href="#"
-       role="button"
-       data-bs-toggle="dropdown">
-
-        👤 {{ user.username }}
-
-    </a>
-
-    <ul class="dropdown-menu dropdown-menu-end">
-
-        <li>
-            <a class="dropdown-item"
-               href="{% url 'accounts:profile' %}">
-                👤 Профиль
-            </a>
-        </li>
-
-        {% if user.is_superuser %}
-        <li>
-            <a class="dropdown-item"
-               href="/admin/">
-                ⚙️ Админ-панель
-            </a>
-        </li>
-        {% endif %}
-        <li>
-            <a class="dropdown-item text-danger"
-               href="{% url 'accounts:logout' %}">
-                🚪 Выйти
-            </a>
-        </li>
-    </ul>
-</li>
-
-{% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Войти</a></li>
-                    <li class="nav-item"><a class="btn btn-light btn-sm ms-2" href="{% url 'accounts:register' %}">Регистрация</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Курсы</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'courses:course_detail' course.slug %}">{{ course.title }}</a></li>
+            <li class="breadcrumb-item active">{{ lesson.title }}</li>
+        </ol>
     </nav>
 
-{% if messages %}
-<div class="container-fluid px-4 mt-3">
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-
-    <footer class="py-4 mt-5">
-        <div class="container text-center">
-            <p class="mb-2">WebLearn — Визуальная учебная среда для обучения веб-программированию</p>
-            <div class="d-flex justify-content-center flex-wrap gap-3">
-                <a class="text-decoration-none text-light" href="{% url 'main:about' %}">О проекте</a>
-                <a class="text-decoration-none text-light" href="{% url 'main:contacts' %}">Контакты</a>
-                <a class="text-decoration-none text-light" href="{% url 'main:methodical' %}">Методическая рекомендация</a>
+    <div class="row">
+        <div class="col-lg-3 mb-4">
+            <div class="card card-custom border-0 sticky-top lesson-sidebar" style="top: 20px;">
+                <div class="card-header bg-white border-0 pt-4 pb-2">
+                    <h5 class="fw-bold mb-0">{{ course.title }}</h5>
+                </div>
+                <div class="card-body pt-0">
+                    <ul class="list-group list-group-flush">
+                        {% for l in course.lessons.all %}
+                        <li class="list-group-item border-0 px-0 {% if l == lesson %}bg-primary bg-opacity-10 rounded{% endif %}">
+                            <a href="{% url 'courses:lesson_detail' course.slug l.slug %}" 
+                               class="text-decoration-none d-flex justify-content-between align-items-center {% if l == lesson %}fw-bold text-primary{% else %}text-dark{% endif %}">
+                                <span>{{ l.title }}</span>
+                                {% if l.id in completed_lessons %}
+                                <span class="badge bg-success">✓</span>
+                                {% endif %}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
-    </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    {% block extra_js %}{% endblock %}
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <h1 class="h3 fw-bold mb-2">{{ lesson.title }}</h1>
+                    {% if is_completed %}
+                    <span class="lesson-complete-badge">✓ Урок выполнен</span>
+                    {% endif %}
+                </div>
+                {% if not is_completed %}
+                <form method="post" action="{% url 'courses:mark_lesson_complete' course.slug lesson.slug %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Отметить как выполненный</button>
+                </form>
+                {% endif %}
+            </div>
+
+            <div class="card card-custom border-0 mb-4 lesson-article">
+                <div class="card-body">
+                    <div class="lesson-content">
+                        {{ lesson.content|safe }}
+                    </div>
+                </div>
+            </div>
+
+            {% if lesson.example_code_html or lesson.example_code_css or lesson.example_code_js %}
+            <div class="card card-custom border-0 mb-4">
+                <div class="card-header bg-white border-0 pt-4 pb-2">
+                    <h3 class="h5 fw-bold">Попробуй сам</h3>
+                    <p class="text-muted small mb-0">Измени код ниже и посмотри результат</p>
+                </div>
+                <div class="card-body p-0">
+                    <div class="inline-editor">
+                        <div class="editor-tabs">
+                            <button class="editor-tab active" data-tab="html" style="background: #000; color: #fff; font-weight: 700;">HTML</button>
+                            <button class="editor-tab" data-tab="css" style="background: #1572b6; color: #fff; font-weight: 700;">CSS</button>
+                            <button class="editor-tab" data-tab="js" style="background: #f7df1e; color: #000; font-weight: 700;">JavaScript</button>
+                        </div>
+                        <div class="editor-content active" id="editor-html">
+                            <textarea class="editor-textarea" id="inline-html" placeholder="HTML код">{{ lesson.example_code_html|default:'' }}</textarea>
+                        </div>
+                        <div class="editor-content" id="editor-css">
+                            <textarea class="editor-textarea" id="inline-css" placeholder="CSS код">{{ lesson.example_code_css|default:'' }}</textarea>
+                        </div>
+                        <div class="editor-content" id="editor-js">
+                            <textarea class="editor-textarea" id="inline-js" placeholder="JavaScript код">{{ lesson.example_code_js|default:'' }}</textarea>
+                        </div>
+                        <div class="preview-pane">
+                            <h5 class="fw-bold mb-2">Превью:</h5>
+                            <iframe id="inline-preview" class="preview-iframe"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% for assignment in lesson.assignments.all %}
+            <div class="card card-custom border-0 assignment-card mb-4">
+                <div class="card-body p-4">
+                    <div class="bg-light p-3 rounded mb-3">
+                        <h3 class="h5 fw-bold mb-2">Задание: {{ assignment.title }}</h3>
+                        <p class="text-muted mb-0">{{ assignment.description|linebreaks }}</p>
+                    </div>
+                    <a href="{% url 'editor:editor' assignment.id %}" class="btn btn-primary">Выполнить в редакторе</a>
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if quiz %}
+            <div class="card card-custom border-0 mb-4">
+                <div class="card-body p-4">
+                    <h3 class="h5 fw-bold mb-3">Проверь свои знания</h3>
+                    <p class="text-muted mb-3">{{ quiz.description|default:'Пройди тест, чтобы проверить, насколько хорошо ты усвоил материал.' }}</p>
+                    <a href="{% url 'courses:quiz_detail' quiz.id %}" class="btn btn-success">Пройти тест</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
 <script>
-
-const splash = document.getElementById("splash-screen");
-
-// ПЕРВЫЙ ВХОД
-if(!sessionStorage.getItem("splashShown")){
-
-    splash.classList.add("show");
-
-    document.body.style.overflow = "hidden";
-
-    sessionStorage.setItem("splashShown", "true");
-
-    window.addEventListener("load", () => {
-
-        setTimeout(() => {
-
-            splash.style.opacity = "0";
-
-            setTimeout(() => {
-
-                splash.style.visibility = "hidden";
-
-                document.body.style.overflow = "auto";
-
-            }, 600);
-
-        }, 2500);
-
+// Встроенный эмулятор
+document.querySelectorAll('.editor-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        const tabName = this.dataset.tab;
+        
+        // Убираем активный класс со всех вкладок и контента
+        document.querySelectorAll('.editor-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.editor-content').forEach(c => c.classList.remove('active'));
+        
+        // Добавляем активный класс к выбранной вкладке и контенту
+        this.classList.add('active');
+        document.getElementById(`editor-${tabName}`).classList.add('active');
     });
+});
 
-}else{
-
-    splash.remove();
-
+function updateInlinePreview() {
+    const html = document.getElementById('inline-html').value;
+    const css = document.getElementById('inline-css').value;
+    const js = document.getElementById('inline-js').value;
+    const iframe = document.getElementById('inline-preview');
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    
+    doc.open();
+    doc.write(`
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>${css}</style>
+</head>
+<body>${html}<script>${js}<\/script></body>
+</html>
+    `);
+    doc.close();
 }
 
+['inline-html', 'inline-css', 'inline-js'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener('input', updateInlinePreview);
+    }
+});
+
+// Инициализация превью
+if (document.getElementById('inline-preview')) {
+    updateInlinePreview();
+}
 </script>
-</body>
-</html>
+{% endblock %}

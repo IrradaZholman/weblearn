@@ -1,46 +1,189 @@
 {% extends 'base.html' %}
 {% block title %}Дополнительные задания — WebLearn{% endblock %}
 
+{% block extra_css %}
+<style>
+
+.container{
+    max-width:1280px;
+}
+
+/* Карточки */
+
+.card.card-custom{
+    transition:.25s ease;
+    border-radius:16px;
+
+    display:flex;
+    flex-direction:column;
+}
+
+.card.card-custom:hover{
+    transform:translateY(-4px);
+}
+
+.card-body{
+    padding:1.25rem !important;
+
+    display:flex;
+    flex-direction:column;
+    height:100%;
+}
+
+.card-title{
+    font-size:1.15rem;
+    line-height:1.35;
+    margin-bottom:15px;
+    min-height:auto;
+}
+
+.card-text{
+    font-size:.95rem;
+    line-height:1.6;
+    margin-bottom:25px;
+    min-height:auto;
+}
+
+.btn-primary{
+    height:42px;
+    font-size:.9rem;
+    font-weight:600;
+
+    margin-top:auto;
+}
+
+/* Отступы */
+
+.row.g-4{
+    --bs-gutter-x:1.2rem;
+    --bs-gutter-y:1.2rem;
+}
+
+.badge{
+    font-size:.72rem;
+    padding:6px 10px;
+}
+
+/* Full HD */
+
+@media (min-width:1400px){
+
+    .container{
+        max-width:1300px;
+    }
+}
+
+/* Планшеты */
+
+@media (max-width:992px){
+
+    .container{
+        max-width:95%;
+    }
+}
+
+/* Телефоны */
+
+@media (max-width:768px){
+
+    .card-body{
+        padding:1rem !important;
+    }
+
+    .card-title{
+        font-size:1.05rem;
+    }
+
+    .card-text{
+        font-size:.9rem;
+    }
+}
+
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container py-5">
+
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'courses:course_list' %}">Курсы</a></li>
-            <li class="breadcrumb-item active">Дополнительные задания</li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'courses:course_list' %}">
+                    Курсы
+                </a>
+            </li>
+
+            <li class="breadcrumb-item active">
+                Дополнительные задания
+            </li>
         </ol>
     </nav>
 
     <div class="mb-4">
-        <h1 class="fw-bold mb-2">Дополнительные задания</h1>
-        <p class="lead text-muted">Выполняй задания отдельно, даже без прохождения всей темы. Отправляй работы на проверку и получай обратную связь.</p>
+        <h1 class="fw-bold mb-2">
+            Дополнительные задания
+        </h1>
+
+        <p class="lead text-muted">
+            Выполняй задания отдельно, даже без прохождения всей темы.
+            Отправляй работы на проверку и получай обратную связь.
+        </p>
     </div>
 
     {% if assignments %}
+
     <div class="row g-4">
+
         {% for assignment in assignments %}
+
         <div class="col-md-6 col-lg-4">
-            <div class="card card-custom h-100 border-0">
-                <div class="card-body p-4">
+
+<div class="card card-custom border-0">
+                <div class="card-body">
+
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <span class="badge 
+
+                        <span class="badge
                             {% if assignment.difficulty == 'easy' %}bg-success
                             {% elif assignment.difficulty == 'medium' %}bg-warning
                             {% else %}bg-danger{% endif %}">
                             {{ assignment.get_difficulty_display }}
                         </span>
+
                     </div>
-                    <h5 class="card-title fw-bold text-dark mb-3">{{ assignment.title }}</h5>
-                    <p class="card-text text-muted small mb-4">{{ assignment.description|truncatewords:20 }}</p>
-                    <a href="{% url 'editor:standalone_assignment' assignment.id %}" class="btn btn-primary w-100">Выполнить задание</a>
+
+                    <h5 class="card-title fw-bold text-dark mb-3">
+                        {{ assignment.title }}
+                    </h5>
+
+                    <p class="card-text text-muted small mb-4">
+                        {{ assignment.description|truncatewords:20 }}
+                    </p>
+
+                    <a href="{% url 'editor:standalone_assignment' assignment.id %}"
+                       class="btn btn-primary w-100">
+                        Выполнить задание
+                    </a>
+
                 </div>
+
             </div>
+
         </div>
+
         {% endfor %}
+
     </div>
+
     {% else %}
+
     <div class="alert alert-info">
-        <p class="mb-0">Дополнительные задания пока не добавлены.</p>
+        <p class="mb-0">
+            Дополнительные задания пока не добавлены.
+        </p>
     </div>
+
     {% endif %}
+
 </div>
 {% endblock %}

@@ -1252,8 +1252,8 @@ table {
     </div>
 
 </div>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid px-4">
             <a class="navbar-brand" href="{% url 'main:home' %}">WebLearn</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -1315,8 +1315,8 @@ table {
         </div>
     </nav>
 
-    {% if messages %}
-    <div class="container mt-3">
+{% if messages %}
+<div class="container-fluid px-4 mt-3">
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
             {{ message }}

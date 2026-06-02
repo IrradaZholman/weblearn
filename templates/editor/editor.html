@@ -1170,6 +1170,174 @@ min-height: 700px;
         min-height:600px !important;
     }
 }
+/* Общая высота редактора */
+.row.editor-container > [class*="col-"] > .card{
+    height: 560px !important;
+    min-height: 560px !important;
+}
+
+/* Блок задания */
+.assignment-info{
+    margin-bottom:6px;
+}
+
+.assignment-header{
+    padding:8px 14px !important;
+}
+
+.assignment-header h3{
+    font-size:13px !important;
+    font-weight:600 !important;
+}
+
+.assignment-content{
+    padding:0 14px 8px 14px !important;
+}
+
+.assignment-content p{
+    font-size:12px !important;
+    line-height:1.4 !important;
+}
+
+/* Сложность */
+.assignment-content .badge{
+    font-size:11px !important;
+    padding:4px 8px !important;
+}
+
+/* Стрелка */
+.assignment-arrow{
+    width:28px !important;
+    height:28px !important;
+    font-size:11px !important;
+}
+
+/* Вкладки */
+.nav-editor .nav-link{
+    padding:10px 12px !important;
+    font-size:12px !important;
+}
+
+/* Заголовок HTML код */
+.editor-header{
+    padding:8px 12px !important;
+    font-size:13px !important;
+}
+
+/* Номера строк */
+.line-numbers{
+    width:46px !important;
+    min-width:46px !important;
+    font-size:13px !important;
+}
+
+/* Код */
+.code-editor-wrapper textarea{
+    font-size:13px !important;
+    line-height:1.5 !important;
+}
+
+/* Превью */
+.preview-header{
+    padding:10px 14px !important;
+    font-size:13px !important;
+}
+
+/* Верхняя панель */
+.editor-top-bar{
+    padding:8px 12px !important;
+}
+
+.editor-top-bar h1{
+    font-size:15px !important;
+}
+/* Супер компактный режим */
+
+/* Зеленая панель */
+.assignment-info{
+    margin-bottom:4px !important;
+    border-radius:10px !important;
+}
+
+.assignment-header{
+    padding:6px 12px !important;
+    min-height:42px !important;
+}
+
+.assignment-header h3{
+    font-size:12px !important;
+    font-weight:600 !important;
+    line-height:1.2 !important;
+}
+
+.assignment-content{
+    display:none !important;
+}
+
+/* Верхняя панель */
+.editor-top-bar{
+    padding:6px 10px !important;
+    margin-bottom:4px !important;
+}
+
+.editor-top-bar h1{
+    font-size:14px !important;
+}
+
+/* Кнопки сверху */
+.editor-top-bar .badge{
+    font-size:11px !important;
+    padding:5px 8px !important;
+}
+
+.editor-top-bar .btn{
+    height:32px !important;
+    padding:0 10px !important;
+    font-size:12px !important;
+}
+
+/* Вкладки */
+.nav-editor .nav-link{
+    padding:8px !important;
+    font-size:11px !important;
+    min-height:44px !important;
+}
+
+/* Заголовки блоков */
+.editor-header,
+.preview-header{
+    padding:6px 10px !important;
+    font-size:12px !important;
+}
+
+/* Сам редактор */
+.row.editor-container > [class*="col-"] > .card{
+    height:500px !important;
+    min-height:500px !important;
+}
+
+/* Код */
+.line-numbers{
+    width:40px !important;
+    min-width:40px !important;
+    font-size:12px !important;
+}
+
+.code-editor-wrapper textarea{
+    font-size:12px !important;
+    padding:10px !important;
+    line-height:1.4 !important;
+}
+
+/* Панель ошибок */
+.errors-panel{
+    max-height:90px !important;
+}
+
+.errors-header{
+    padding:6px 10px !important;
+    font-size:12px !important;
+}
 </style>
 {% endblock %}
 
@@ -1226,21 +1394,13 @@ document.body.classList.add('editor-page');
             </div>
         </div>
 
-        <button type="button" class="assignment-arrow">
-            ▼
-        </button>
     </div>
 
 <div class="assignment-content" id="assignmentContent">            <p>
             {{ assignment.description|linebreaks }}
         </p>
 
-{% if standalone_assignment %}
-<span class="badge bg-light text-dark mt-2">
-    Сложность:
-    {{ standalone_assignment.get_difficulty_display }}
-</span>
-{% endif %}
+
     </div>
 
 </div>

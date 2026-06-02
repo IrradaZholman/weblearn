@@ -134,83 +134,215 @@ def profile(request):
     # ДОСТИЖЕНИЯ
     # ==========================
 
-    achievements_count = 0
-
-    if completed_lessons >= 1:
-        achievements_count += 1
-
-    if completed_lessons >= 5:
-        achievements_count += 1
-
-    if completed_lessons >= 10:
-        achievements_count += 1
-
-    if completed_lessons >= 20:
-        achievements_count += 1
-
-    if completed_lessons >= total_lessons and total_lessons > 0:
-        achievements_count += 1
-
-    if completed_lessons >= 3:
-        achievements_count += 1
-
-    if completed_lessons >= 6:
-        achievements_count += 1
-
-    if completed_lessons >= 9:
-        achievements_count += 1
-
-    if completed_lessons >= 12:
-        achievements_count += 1
-
-    if submissions.count() >= 1:
-        achievements_count += 1
-
-    if submissions.count() >= 10:
-        achievements_count += 1
-
-    if submissions.count() >= 25:
-        achievements_count += 1
-
-    if submissions.count() >= 50:
-        achievements_count += 1
-
-    if avg_grade >= 4.5:
-        achievements_count += 1
-
-    if avg_grade >= 5:
-        achievements_count += 1
-
     five_count = submissions.filter(grade=5).count()
-
-    if five_count >= 10:
-        achievements_count += 1
-
-    if five_count >= 20:
-        achievements_count += 1
-
-    if request.user.date_joined:
-        achievements_count += 1
 
     days_registered = (
         timezone.now().date()
         - request.user.date_joined.date()
     ).days
 
+    achievements_count = 0
+    achievements = []
+
+    if completed_lessons >= 1:
+        achievements_count += 1
+        achievements.append({
+            "title": "Старт обучения",
+            "desc": "Завершить первый урок",
+            "icon": "bi-rocket-takeoff-fill"
+        })
+
+    if completed_lessons >= 5:
+        achievements_count += 1
+        achievements.append({
+            "title": "Базовая подготовка",
+            "desc": "Завершить 5 уроков",
+            "icon": "bi-book-half"
+        })
+
+    if completed_lessons >= 10:
+        achievements_count += 1
+        achievements.append({
+            "title": "Завершён модуль",
+            "desc": "Завершить 10 уроков",
+            "icon": "bi-mortarboard-fill"
+        })
+
+    if completed_lessons >= 20:
+        achievements_count += 1
+        achievements.append({
+            "title": "Продвинутый уровень",
+            "desc": "Завершить 20 уроков",
+            "icon": "bi-fire"
+        })
+
+    if completed_lessons >= total_lessons and total_lessons > 0:
+        achievements_count += 1
+        achievements.append({
+            "title": "Лидер платформы",
+            "desc": "Завершить все уроки",
+            "icon": "bi-trophy-fill"
+        })
+
+    if completed_lessons >= 3:
+        achievements_count += 1
+        achievements.append({
+            "title": "Три урока",
+            "desc": "Завершить 3 урока",
+            "icon": "bi-1-circle-fill"
+        })
+
+    if completed_lessons >= 6:
+        achievements_count += 1
+        achievements.append({
+            "title": "Шесть уроков",
+            "desc": "Завершить 6 уроков",
+            "icon": "bi-2-circle-fill"
+        })
+
+    if completed_lessons >= 9:
+        achievements_count += 1
+        achievements.append({
+            "title": "Девять уроков",
+            "desc": "Завершить 9 уроков",
+            "icon": "bi-3-circle-fill"
+        })
+
+    if completed_lessons >= 12:
+        achievements_count += 1
+        achievements.append({
+            "title": "Двенадцать уроков",
+            "desc": "Завершить 12 уроков",
+            "icon": "bi-4-circle-fill"
+        })
+
+    if submissions.count() >= 1:
+        achievements_count += 1
+        achievements.append({
+            "title": "Первая работа",
+            "desc": "Отправить первую работу",
+            "icon": "bi-send-check-fill"
+        })
+
+    if submissions.count() >= 10:
+        achievements_count += 1
+        achievements.append({
+            "title": "Активный участник",
+            "desc": "Отправить 10 работ",
+            "icon": "bi-lightning-charge-fill"
+        })
+
+    if submissions.count() >= 25:
+        achievements_count += 1
+        achievements.append({
+            "title": "Практический опыт",
+            "desc": "Отправить 25 работ",
+            "icon": "bi-briefcase-fill"
+        })
+
+    if submissions.count() >= 50:
+        achievements_count += 1
+        achievements.append({
+            "title": "Project Specialist",
+            "desc": "Отправить 50 работ",
+            "icon": "bi-kanban-fill"
+        })
+
+    if avg_grade >= 4.5:
+        achievements_count += 1
+        achievements.append({
+            "title": "Высокая успеваемость",
+            "desc": "Средний балл выше 4.5",
+            "icon": "bi-graph-up-arrow"
+        })
+
+    if avg_grade >= 5:
+        achievements_count += 1
+        achievements.append({
+            "title": "Академическое превосходство",
+            "desc": "Средний балл 5.0",
+            "icon": "bi-award-fill"
+        })
+
+    if five_count >= 10:
+        achievements_count += 1
+        achievements.append({
+            "title": "Quality Expert",
+            "desc": "10 работ на отлично",
+            "icon": "bi-shield-check"
+        })
+
+    if five_count >= 20:
+        achievements_count += 1
+        achievements.append({
+            "title": "Excellence Award",
+            "desc": "20 работ на отлично",
+            "icon": "bi-gem"
+        })
+
+    if request.user.date_joined:
+        achievements_count += 1
+        achievements.append({
+            "title": "Первые шаги",
+            "desc": "Регистрация на платформе",
+            "icon": "bi-calendar-check"
+        })
+
     if days_registered >= 3:
         achievements_count += 1
+        achievements.append({
+            "title": "Постоянный ученик",
+            "desc": "3 дня на платформе",
+            "icon": "bi-clock-history"
+        })
 
     if days_registered >= 7:
         achievements_count += 1
+        achievements.append({
+            "title": "Неделя обучения",
+            "desc": "7 дней на платформе",
+            "icon": "bi-calendar-week"
+        })
 
     if days_registered >= 30:
         achievements_count += 1
+        achievements.append({
+            "title": "Месяц обучения",
+            "desc": "30 дней на платформе",
+            "icon": "bi-calendar-month"
+        })
 
     if days_registered >= 100:
         achievements_count += 1
+        achievements.append({
+            "title": "Верный платформе",
+            "desc": "100 дней на платформе",
+            "icon": "bi-hourglass-split"
+        })
 
     if completed_lessons >= 15 and avg_grade >= 4.8:
         achievements_count += 1
+        achievements.append({
+            "title": "Звезда обучения",
+            "desc": "15 уроков и средний балл 4.8+",
+            "icon": "bi-stars"
+        })
+
+    if quiz_attempts.count() >= 1:
+        achievements_count += 1
+        achievements.append({
+            "title": "Первый тест",
+            "desc": "Пройти первый тест",
+            "icon": "bi-patch-check-fill"
+        })
+
+    if quiz_attempts.count() >= 10:
+        achievements_count += 1
+        achievements.append({
+            "title": "Опытный тестировщик",
+            "desc": "Пройти 10 тестов",
+            "icon": "bi-ui-checks-grid"
+        })
 
     if (
         completed_lessons >= total_lessons
@@ -218,12 +350,13 @@ def profile(request):
         and avg_grade >= 5
     ):
         achievements_count += 1
+        achievements.append({
+            "title": "Легенда платформы",
+            "desc": "Все уроки + 50 работ + средний балл 5.0",
+            "icon": "bi-trophy-fill"
+        })
 
-    if quiz_attempts.count() >= 1:
-        achievements_count += 1
-
-    if quiz_attempts.count() >= 10:
-        achievements_count += 1
+    latest_achievements = list(reversed(achievements))[:3]
 
     print("completed_lessons =", completed_lessons)
     print("submissions =", submissions.count())
@@ -246,8 +379,8 @@ def profile(request):
         'achievements_count': achievements_count,
         'days_registered': days_registered,
         'five_count': five_count,
+        'latest_achievements': latest_achievements,
     })
-
 @login_required
 @require_POST
 def mark_lesson_complete(request, course_slug, lesson_slug):

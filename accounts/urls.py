@@ -22,5 +22,4 @@ urlpatterns = [
 
     path('profile/', courses_views.profile, name='profile'),
 
-    path('create-admin/', views.create_admin),
 ]

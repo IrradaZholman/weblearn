@@ -1423,20 +1423,472 @@ body{
     }
 }
 .achievement-list{
-    max-height:340px;
-    overflow-y:auto;
-    padding-right:6px;
+    max-height:none;
+    overflow:visible;
+    padding-right:0;
 }
 .navbar-brand{
     font-weight:900 !important;
     font-family:'Nunito',sans-serif !important;
+}
+/* Общий контейнер */
+.container{
+    max-width:1280px !important;
+}
+
+/* Заголовки */
+h1{
+    font-size:2.1rem !important;
+}
+
+h2{
+    font-size:1.7rem !important;
+}
+
+h3{
+    font-size:1.4rem !important;
+}
+
+/* Карточки */
+.card{
+    border-radius:14px !important;
+}
+
+.card-body{
+    padding:18px !important;
+}
+
+/* Кнопки */
+.btn{
+    height:40px !important;
+    font-size:.9rem !important;
+}
+
+/* Отступы между секциями */
+section,
+.profile-section,
+.dashboard-section{
+    margin-bottom:20px !important;
+}
+
+/* Текст */
+p{
+    font-size:.95rem;
+    line-height:1.5;
+}
+
+/* Карточки достижений */
+.achievement-item{
+    padding:10px 0 !important;
+}
+
+.achievement-icon{
+    width:54px !important;
+    height:54px !important;
+    font-size:1.4rem !important;
+}
+.container{
+    max-width: 1850px;
+    padding-left: 28px;
+    padding-right: 28px;
+}
+/* ===== QUICK ACTIONS ===== */
+
+.quick-card{
+    background:#fafafe;
+    border:none;
+    border-radius:26px;
+    padding:24px 14px;
+    text-align:center;
+    transition:.25s ease;
+    text-decoration:none;
+    color:#0f172a;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-height:160px;
+}
+
+.quick-card:hover{
+    transform:translateY(-5px);
+    background:#f5f3ff;
+    color:#7c3aed;
+}
+
+.quick-icon{
+    width:72px;
+    height:72px;
+    border-radius:22px;
+    margin:auto auto 16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f5f3ff;
+    font-size:1.8rem;
+    color:#7c3aed;
+}
+
+
+/* ===== MOTIVATION ===== */
+
+.motivation-box{
+    background:linear-gradient(
+        135deg,
+        #7c5cff 0%,
+        #6c4dff 45%,
+        #8a5cff 100%
+    );
+    color:white;
+    overflow:hidden;
+    position:relative;
+    border-radius:34px;
+}
+
+.motivation-box::before{
+    content:"";
+    position:absolute;
+    width:250px;
+    height:250px;
+    background:radial-gradient(
+        rgba(255,255,255,.18),
+        transparent 70%
+    );
+    right:-100px;
+    top:-100px;
+}
+
+.motivation-content{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    position:relative;
+    z-index:2;
+}
+
+.motivation-left{
+    display:flex;
+    align-items:flex-start;
+    gap:18px;
+}
+
+.quote-icon{
+    font-size:2rem;
+    opacity:.9;
+}
+
+.motivation-title{
+    font-size:2rem;
+    font-weight:800;
+    margin-bottom:10px;
+    color:#fff;
+}
+
+.motivation-text{
+    color:rgba(255,255,255,.92);
+    font-size:1.15rem;
+}
+
+.motivation-target{
+    font-size:4.5rem;
+    opacity:.9;
+    color:#fff;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .motivation-content{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .motivation-target{
+        font-size:3rem;
+    }
+
+    .motivation-title{
+        font-size:1.4rem;
+    }
+
+    .quick-card{
+        min-height:140px;
+    }
+}
+/* ===== ОБЩЕЕ УМЕНЬШЕНИЕ ===== */
+
+.profile-box{
+    padding:20px !important;
+    border-radius:24px !important;
+}
+
+.box-title{
+    font-size:1.2rem !important;
+    margin-bottom:18px !important;
+}
+
+/* Верхние карточки */
+
+.dashboard-card{
+    min-height:120px !important;
+    padding:18px !important;
+    border-radius:24px !important;
+}
+
+.card-icon{
+    width:52px !important;
+    height:52px !important;
+    border-radius:16px !important;
+}
+
+.card-icon i{
+    font-size:1.3rem !important;
+}
+
+.stat-number{
+    font-size:1.8rem !important;
+}
+
+.stat-label{
+    font-size:.82rem !important;
+}
+
+.card-bottom{
+    margin-top:12px !important;
+    font-size:.82rem !important;
+}
+
+/* Быстрые действия */
+
+.quick-card{
+    min-height:180px !important;
+    padding:16px 10px !important;
+    border-radius:20px !important;
+    font-size:.9rem !important;
+}
+
+.quick-icon{
+    width:58px !important;
+    height:58px !important;
+    border-radius:18px !important;
+    margin-bottom:12px !important;
+}
+
+.quick-icon i{
+    font-size:1.3rem !important;
+}
+
+/* Достижения */
+
+.achievement-item{
+    padding:8px 0 !important;
+}
+
+.achievement-icon{
+    width:42px !important;
+    height:42px !important;
+    font-size:1rem !important;
+}
+
+.achievement-left{
+    gap:10px !important;
+}
+
+.achievement-item .fw-bold{
+    font-size:.9rem !important;
+}
+
+.achievement-item .text-muted{
+    font-size:.75rem !important;
+}
+
+/* Мотивационный блок */
+
+.motivation-box{
+    padding:26px !important;
+    border-radius:28px !important;
+}
+
+.quote-icon{
+    font-size:1.5rem !important;
+}
+
+.motivation-title{
+    font-size:1.4rem !important;
+    margin-bottom:6px !important;
+}
+
+.motivation-text{
+    font-size:.9rem !important;
+}
+
+.motivation-target{
+    font-size:3rem !important;
+}
+
+/* Прогресс */
+
+.progress-circle{
+    width:120px !important;
+    height:120px !important;
+}
+
+.progress-inner{
+    width:90px !important;
+    height:90px !important;
+    font-size:1.7rem !important;
+}
+
+.purple-progress{
+    min-height:280px !important;
+}
+/* ===== КОМПАКТНЫЙ ПРОФИЛЬ ===== */
+
+.profile-box{
+    padding:20px !important;
+    border-radius:24px !important;
+}
+
+.box-title{
+    font-size:1.1rem !important;
+    margin-bottom:16px !important;
+}
+
+/* Прогресс */
+
+.purple-progress{
+    min-height:240px !important;
+    padding:20px !important;
+}
+
+.purple-progress .box-title{
+    font-size:1.1rem !important;
+    margin-bottom:12px !important;
+}
+
+.purple-progress h4{
+    font-size:1.1rem !important;
+    margin-bottom:10px !important;
+}
+
+.purple-progress p{
+    font-size:.85rem !important;
+    margin-bottom:12px !important;
+}
+
+.progress-circle{
+    width:95px !important;
+    height:95px !important;
+}
+
+.progress-inner{
+    width:70px !important;
+    height:70px !important;
+    font-size:1.3rem !important;
+}
+
+.progress-line{
+    height:8px !important;
+}
+
+.modern-btn{
+    padding:10px 20px !important;
+    font-size:.85rem !important;
+    margin-top:14px !important;
+}
+
+/* Достижения */
+
+.achievements-box{
+    min-height:auto !important;
+}
+
+.achievement-item{
+    padding:8px 0 !important;
+}
+
+.achievement-icon{
+    width:38px !important;
+    height:38px !important;
+    font-size:.9rem !important;
+}
+
+.achievement-left{
+    gap:10px !important;
+}
+
+.achievement-item .fw-bold{
+    font-size:.9rem !important;
+}
+
+.achievement-item .small{
+    font-size:.75rem !important;
+}
+
+/* Отступ между колонками */
+
+.row.g-4{
+    --bs-gutter-x:1rem !important;
+    --bs-gutter-y:1rem !important;
+}
+/* ===== БЫСТРЫЕ ДЕЙСТВИЯ ===== */
+
+.quick-card{
+    min-height:130px !important;
+    padding:12px 8px !important;
+    border-radius:18px !important;
+}
+
+.quick-icon{
+    width:54px !important;
+    height:54px !important;
+    border-radius:16px !important;
+    margin-bottom:10px !important;
+}
+
+.quick-icon i{
+    font-size:1.2rem !important;
+}
+
+.quick-card{
+    font-size:.85rem !important;
+    line-height:1.4 !important;
+}
+
+/* ===== МОТИВАЦИЯ ===== */
+
+.motivation-box{
+    padding:24px !important;
+    border-radius:24px !important;
+}
+
+.motivation-title{
+    font-size:1.1rem !important;
+    margin-bottom:4px !important;
+}
+
+.motivation-text{
+    font-size:.8rem !important;
+}
+
+.quote-icon{
+    font-size:1.4rem !important;
+}
+
+.motivation-target{
+    font-size:2.4rem !important;
+}
+
+.motivation-left{
+    gap:12px !important;
 }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<div class="container py-5">
+<div class="container py-3">
 
     <h1 class="profile-title">
         Личный профиль
@@ -1796,141 +2248,95 @@ body{
 
  <!-- RIGHT -->
 
+<!-- RIGHT -->
+
 <div class="col-lg-5">
 
-<!-- ACHIEVEMENTS -->
+    <!-- MOTIVATION -->
 
-<div class="profile-box achievements-box mb-4">
+    <div class="profile-box motivation-box mb-4">
 
-    <div class="box-title">
-        Последние достижения
-    </div>
-<div class="achievement-list">
+        <div class="motivation-content">
 
- {% if completed_lessons >= 1 %}
-<div class="achievement-item">
-    <div class="achievement-left">
-        <div class="achievement-icon">
-            <i class="bi bi-rocket-takeoff-fill"></i>
-        </div>
-        <div>
-            <div class="fw-bold">Старт обучения</div>
-            <div class="text-muted">
-                Завершён первый урок
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
+            <div class="motivation-left">
 
-{% if completed_lessons >= 5 %}
-<div class="achievement-item">
-    <div class="achievement-left">
-        <div class="achievement-icon">
-            <i class="bi bi-book-half"></i>
-        </div>
-        <div>
-            <div class="fw-bold">Базовая подготовка</div>
-            <div class="text-muted">
-                Завершено 5 уроков
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-
-{% if completed_lessons >= 10 %}
-<div class="achievement-item">
-    <div class="achievement-left">
-        <div class="achievement-icon">
-            <i class="bi bi-mortarboard-fill"></i>
-        </div>
-        <div>
-            <div class="fw-bold">Завершён модуль</div>
-            <div class="text-muted">
-                Завершено 10 уроков
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-
-{% if avg_grade >= 4.5 %}
-<div class="achievement-item">
-    <div class="achievement-left">
-        <div class="achievement-icon">
-            <i class="bi bi-graph-up-arrow"></i>
-        </div>
-        <div>
-            <div class="fw-bold">Высокая успеваемость</div>
-            <div class="text-muted">
-                Средний балл выше 4.5
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-
-{% if submissions.count >= 10 %}
-<div class="achievement-item">
-    <div class="achievement-left">
-        <div class="achievement-icon">
-            <i class="bi bi-lightning-charge-fill"></i>
-        </div>
-        <div>
-            <div class="fw-bold">Активный участник</div>
-            <div class="text-muted">
-                Отправлено 10 работ
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-{% if avg_grade >= 4.5 %}
-    <div class="achievement-item">
-        <div class="achievement-left">
-            <div class="achievement-icon">🎯</div>
-            <div>
-                <div class="fw-bold">Меткий ответ</div>
-                <div class="text-muted">
-                    Средний балл выше 4,5
+                <div class="quote-icon">
+                    <i class="bi bi-quote"></i>
                 </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
 
-    {% if submissions.count >= 10 %}
-    <div class="achievement-item">
-        <div class="achievement-left">
-            <div class="achievement-icon">💻</div>
-            <div>
-                <div class="fw-bold">Активный ученик</div>
-                <div class="text-muted">
-                    Отправлено 10 работ
+                <div>
+
+                    <div class="motivation-title">
+                        Каждый эксперт когда-то был новичком
+                    </div>
+
+                    <div class="motivation-text">
+                        Продолжайте в том же духе!
+                    </div>
+
                 </div>
+
             </div>
+
+            <div class="motivation-target">
+                <i class="bi bi-bullseye"></i>
+            </div>
+
         </div>
+
     </div>
-    {% endif %}
 
-    {% if completed_lessons == 0 and submissions.count == 0 %}
-    <div class="achievements-empty">
-        Пока нет достижений
+    <!-- ACHIEVEMENTS -->
+
+    <div class="profile-box achievements-box mb-4">
+
+        <div class="box-title">
+            Последние достижения
+        </div>
+
+        <div class="achievement-list">
+
+            {% for achievement in latest_achievements %}
+
+            <div class="achievement-item">
+
+                <div class="achievement-left">
+
+                    <div class="achievement-icon">
+                        <i class="bi {{ achievement.icon }}"></i>
+                    </div>
+
+                    <div>
+
+                        <div class="fw-bold">
+                            {{ achievement.title }}
+                        </div>
+
+                        <div class="text-muted small">
+                            {{ achievement.desc }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="possible-achievements-link"
+             data-bs-toggle="modal"
+             data-bs-target="#achievementsModal">
+             Посмотреть возможные достижения
+        </div>
+
     </div>
-    {% endif %}
-
-</div>
-
-<div class="possible-achievements-link"
-     data-bs-toggle="modal"
-     data-bs-target="#achievementsModal">
-     Посмотреть возможные достижения
-</div>
 
     <!-- QUICK ACTIONS -->
 
-    <div class="profile-box">
+    <div class="profile-box mb-4">
 
         <div class="box-title">
             Быстрые действия
@@ -1938,15 +2344,13 @@ body{
 
         <div class="row g-3">
 
-            <!-- COURSES -->
-
-            <div class="col-md-4">
+            <div class="col-4">
 
                 <a href="{% url 'courses:course_list' %}"
                    class="quick-card">
 
                     <div class="quick-icon">
-                       <i class="bi bi-book"></i> 
+                        <i class="bi bi-book"></i>
                     </div>
 
                     Каталог курсов
@@ -1955,77 +2359,39 @@ body{
 
             </div>
 
- <!-- EDITOR -->
+            <div class="col-4">
 
-<div class="col-md-4">
+                <a href="/editor/"
+                   class="quick-card">
 
-    <a href="/editor/"
-       class="quick-card">
+                    <div class="quick-icon">
+                        <i class="bi bi-code-slash"></i>
+                    </div>
 
-        <div class="quick-icon">
-            <i class="bi bi-code-slash"></i>
-        </div>
+                    Редактор кода
 
-        Редактор кода
-
-    </a>
-
-</div>
-
-<!-- BUILDER -->
-
-<div class="col-md-4">
-
-    <a href="{% url 'editor:builder' %}"
-       class="quick-card">
-
-        <div class="quick-icon">
-            <i class="bi bi-grid-1x2-fill"></i>
-        </div>
-
-        Конструктор сайтов
-
-    </a>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- MOTIVATION -->
-
-<div class="profile-box motivation-box mb-4">
-
-    <div class="motivation-content">
-
-        <div class="motivation-left">
-
-            <div class="quote-icon">
-                <i class="bi bi-quote"></i>
-            </div>
-
-            <div>
-
-                <div class="motivation-title">
-                    Каждый эксперт когда-то был новичком
-                </div>
-
-                <div class="motivation-text">
-                    Продолжайте в том же духе!
-                </div>
+                </a>
 
             </div>
 
-        </div>
+            <div class="col-4">
 
-        <div class="motivation-target">
-            <i class="bi bi-bullseye"></i>
+                <a href="{% url 'editor:builder' %}"
+                   class="quick-card">
+
+                    <div class="quick-icon">
+                        <i class="bi bi-grid-1x2-fill"></i>
+                    </div>
+
+                    Конструктор сайтов
+
+                </a>
+
+            </div>
+
         </div>
 
     </div>
-
-</div>
 
 </div> <!-- END RIGHT -->
 

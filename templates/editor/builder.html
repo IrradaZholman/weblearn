@@ -179,7 +179,7 @@ h1.h3{
   background:#fff;
   border:1px solid #e9d5ff;
   border-radius:16px;
-  padding:22px;
+  padding:14px;
   margin-bottom:18px;
   box-shadow:0 8px 24px rgba(124,58,237,.06);
 }
@@ -342,7 +342,8 @@ h2.h5.fw-bold.mb-2{
 }
 @media(max-width:992px){
 .builder-layout{
-  grid-template-columns: 320px 1fr;
+    grid-template-columns:260px 1fr;
+    gap:14px;
 }
 
   .d-flex.justify-content-end.mb-3{
@@ -376,20 +377,20 @@ h2.h5.fw-bold.mb-2{
   align-items: start;
 }
 
-/* левая панель */
 .builder-sidebar{
-  height: calc(100vh - 190px);
-  overflow: hidden;
+    height:820px !important;
 }
 
-.builder-sidebar .card-body{
-  height: 100%;
-  overflow-y: auto;
+.builder-canvas{
+    min-height:700px;
+    max-height:700px;
+    overflow:auto;
 }
 
-/* правая рабочая область */
-.builder-layout > .card:not(.builder-sidebar){
-  min-width: 0;
+.code-output{
+    min-height:700px;
+    max-height:700px;
+    overflow:auto;
 }
 
 .right-tabs{
@@ -577,8 +578,8 @@ h2.h5.fw-bold.mb-2{
 }
 
 .tab-btn{
-  padding: 11px 4px !important;
-  font-size: 13px !important;
+  padding:9px 4px !important;
+  font-size:12px !important;
 }
 
 .tab-fixed{
@@ -606,9 +607,9 @@ h2.h5.fw-bold.mb-2{
 }
 
 .list-group-item{
-  padding: 10px 12px !important;
-  min-height: 44px !important;
-  font-size: 14px !important;
+  padding:8px 10px !important;
+  min-height:38px !important;
+  font-size:13px !important;
 }
   .delete-block-btn{
   width:32px;
@@ -624,26 +625,7 @@ h2.h5.fw-bold.mb-2{
   opacity:.5;
   border:2px dashed #7c3aed;
 }
-.clear-btn{
-  display:flex;
-  align-items:center;
-  gap:10px;
 
-  background:#fee2e2;
-  color:#dc2626;
-
-  border:none;
-  border-radius:14px;
-
-  padding:10px 14px;
-  font-weight:700;
-  font-size:14px;
-
-  cursor:pointer;
-  transition:.2s;
-
-  box-shadow:0 6px 18px rgba(220,38,38,.15);
-}
 
 /* иконка */
 .clear-btn .icon{
@@ -676,8 +658,10 @@ h2.h5.fw-bold.mb-2{
   transform:scale(.97);
 }
 .canvas-item img{
-  max-width: 150px;
-  border-radius:12px;
+    max-width:100% !important;
+    height:auto;
+    display:block;
+    border-radius:12px;
 }
 /* чтобы на маленьком экране не ломалось */
 @media(max-width:1300px){
@@ -734,8 +718,8 @@ h2.h5.fw-bold.mb-2{
     width:calc(100% - 40px);
     margin:20px !important;
 
-    min-height:calc(100vh - 220px);
-    max-height:none !important;
+  min-height:600px;
+  max-height:600px;
 
     overflow:auto;
 
@@ -798,6 +782,162 @@ h2.h5.fw-bold.mb-2{
 }
 .container{
     max-width:100% !important;
+}
+.builder-layout{
+    display:grid;
+    grid-template-columns:260px 1fr;
+    gap:12px;
+}
+.builder-sidebar{
+    width:260px;
+}
+
+.builder-canvas{
+    min-height:500px !important;
+    max-height:500px !important;
+}
+
+.code-output{
+    min-height:500px !important;
+    max-height:500px !important;
+}
+.clear-btn{
+    padding:4px 8px;
+    font-size:11px;
+    min-height:30px;
+}
+
+.clear-btn .icon{
+    width:20px;
+    height:20px;
+    font-size:12px;
+}
+
+#preview-page{
+    padding:4px 8px;
+    font-size:11px;
+    min-height:30px;
+}
+h1.h3{
+    font-size:24px;
+}
+.text-muted.mb-3{
+    font-size:15px;
+}
+/* Все блоки */
+.canvas-item{
+    padding:8px !important;
+    margin-bottom:8px !important;
+}
+
+/* Заголовок блока "Заголовок" */
+.canvas-item .fw-semibold{
+    font-size:11px !important;
+    margin-bottom:4px !important;
+}
+
+/* Поля ввода */
+.canvas-item .form-control{
+    height:34px !important;
+    padding:4px 8px !important;
+    font-size:12px !important;
+}
+
+/* textarea */
+.canvas-item textarea.form-control{
+    min-height:55px !important;
+}
+
+/* Предпросмотр H1 */
+.canvas-item h1{
+    font-size:24px !important;
+    line-height:1.15 !important;
+    margin-bottom:6px !important;
+}
+
+/* Предпросмотр текста */
+.canvas-item p{
+    font-size:13px !important;
+    line-height:1.4 !important;
+    margin-bottom:6px !important;
+}
+
+/* Кнопки */
+.canvas-item button{
+    padding:6px 12px !important;
+    font-size:12px !important;
+}
+/* Кнопка Предпросмотр */
+#preview-page{
+    padding:4px 10px !important;
+    font-size:12px !important;
+    height:36px !important;
+    min-height:36px !important;
+    border-radius:12px !important;
+}
+
+/* Кнопка Очистить всё */
+.btn-clear{
+    padding:4px 10px !important;
+    font-size:12px !important;
+    height:36px !important;
+    min-height:36px !important;
+    border-radius:12px !important;
+}
+
+/* расстояние между ними */
+.d-flex.gap-2{
+    gap:8px !important;
+}
+#preview-page,
+.btn-clear{
+    padding:2px 8px !important;
+    height:32px !important;
+    min-height:32px !important;
+    font-size:11px !important;
+    line-height:1 !important;
+}
+/* Левая панель выбора блоков */
+.builder-layout{
+    grid-template-columns:220px 1fr !important;
+    gap:10px !important;
+}
+
+.builder-sidebar{
+    width:220px !important;
+    min-width:220px !important;
+    max-width:220px !important;
+}
+
+/* Рабочая область */
+.builder-canvas{
+    min-height:420px !important;
+    max-height:420px !important;
+    padding:12px !important;
+}
+
+/* Карточка справа */
+.builder-layout > .card{
+    min-height:auto !important;
+}
+
+/* Блоки слева */
+.list-group-item{
+    padding:6px 10px !important;
+    font-size:12px !important;
+    min-height:34px !important;
+}
+
+/* Поиск */
+.tab-fixed .form-control{
+    height:34px !important;
+    font-size:12px !important;
+}
+
+/* Заголовок Рабочая область */
+.right-tab-content h2.h5{
+    font-size:18px !important;
+    margin:12px 16px !important;
 }
 </style>
 {% endblock %}
@@ -916,12 +1056,11 @@ h2.h5.fw-bold.mb-2{
   <div class="card-body">
 
     <div class="right-tabs">
-      <button type="button" class="right-tab active" data-right-tab="main">Основной</button>
+      <button type="button" class="right-tab active" data-right-tab="main">Блоки</button>
       <button type="button" class="right-tab" data-right-tab="code">Код</button>
     </div>
 
     <div class="right-tab-content active" id="right-main">
-      <h2 class="h5 fw-bold mb-3">Рабочая область</h2>
 
       <div id="canvas" class="builder-canvas mb-4">
         <p class="text-muted mb-0" id="canvas-empty">
@@ -931,7 +1070,6 @@ h2.h5.fw-bold.mb-2{
     </div>
 
     <div class="right-tab-content" id="right-code">
-      <h2 class="h5 fw-bold mb-2">Сгенерированный HTML / CSS / JavaScript</h2>
       <pre class="code-output" id="generated-code"></pre>
     </div>
 
@@ -1149,7 +1287,7 @@ ${items.map((item) => `  <li>${escapeHtml(item)}</li>`).join("\n")}
 
     function getMediaHtml(data) {
       const media = data.media || [];
-      if (!media.length) return `<!-- Медиа қосылмаған -->`;
+      if (!media.length) return `<!-- Медиа не добавлено -->`;
 
       return media
         .map(function (item) {
@@ -1162,14 +1300,14 @@ ${items.map((item) => `  <li>${escapeHtml(item)}</li>`).join("\n")}
           if (item.type === "video") {
             return `<video controls style="max-width:100%;">
   <source src="${src}" type="video/mp4">
-  Сіздің браузеріңіз video тегін қолдамайды.
+  Ваш браузер не поддерживает ваше video.
 </video>`;
           }
 
           if (item.type === "audio") {
             return `<audio controls>
   <source src="${src}" type="audio/mpeg">
-  Сіздің браузеріңіз audio тегін қолдамайды.
+  Ваш браузер не поддерживает ваше audio.
 </audio>`;
           }
 
@@ -1244,10 +1382,25 @@ if (type === "img") {
     return `<button>${escapeHtml(content || "Нажми меня")}</button>`;
   }
 
-  if (type === "link") {
-    const href = content || "https://example.com";
-    return `<a href="${escapeHtml(href)}" target="_blank">Перейти</a>`;
-  }
+if (type === "link") {
+
+    let data;
+
+    try {
+        data = JSON.parse(content || "{}");
+    } catch (e) {
+        data = {
+            url: content,
+            text: "Перейти"
+        };
+    }
+
+return `    <a href="${escapeHtml(data.url || '#')}"
+      target="_blank">
+      ${escapeHtml(data.text || 'Перейти')}
+</a>`;
+
+}
 
   return "";
 }
@@ -1326,31 +1479,27 @@ const cssCode = cssParts.length
       6
     )
   : "";
-  const htmlCode = htmlParts.length ? indent(htmlParts.join("\n\n"), 4) : "";
-
+const htmlCode = htmlParts.length
+    ? htmlParts.join("\n")
+    : "";
   const jsCode = jsParts.length
     ? indent(jsParts.join("\n\n"), 6)
     : "";
 
-  const finalCode = `<!doctype html>
+const finalCode = `<!doctype html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8">
     <title>Предпросмотр</title>
-
     <style>
 ${cssCode}
     </style>
   </head>
-
   <body>
-
 ${htmlCode}
-
     <script>
 ${jsCode}
     <\/script>
-
   </body>
 </html>`;
 
@@ -1470,9 +1619,16 @@ if (type === "img") {
 
   return `
     <div class="img-editor">
-      <img src="${escapeHtml(src)}" class="editable-img"
-           style="width:${width}px;${height ? `height:${height}px;` : "height:auto;"}display:block;margin-bottom:10px;border-radius:12px;">
-
+<img src="${escapeHtml(src)}"
+     class="editable-img"
+     style="
+        width:${width}px;
+        height:${height ? height + 'px' : 'auto'};
+        object-fit:cover;
+        display:block;
+        margin-bottom:10px;
+        border-radius:12px;
+     ">
       <div style="display:flex;gap:10px;margin-bottom:10px;">
         <input type="number" class="img-width form-control form-control-sm" value="${width}" placeholder="Ширина (px)">
         <input type="number" class="img-height form-control form-control-sm" value="${height}" placeholder="Высота (px)">
@@ -1481,10 +1637,21 @@ if (type === "img") {
   `;
 }
 
-  if (type === "link") {
-    const href = safeValue || "#";
-    return `<a href="${href}" target="_blank">Перейти</a>`;
-  }
+if (type === "link") {
+
+    let data;
+
+    try{
+        data = JSON.parse(value || "{}");
+    }catch(e){
+        data = {
+            url: value,
+            text: "Перейти"
+        };
+    }
+
+return `<a href="${data.url || '#'}" target="_blank">${data.text || 'Перейти'}</a>`;
+}
 
   return "";
 }
@@ -1688,7 +1855,7 @@ address: { label: "Адрес", type: "address", placeholder: "" },
           } else if (field.type === "country") {
             const select = document.createElement("select");
             select.className = "form-control form-control-sm";
-            select.innerHTML = `<option>Қазақстан</option><option>Өзбекстан</option><option>Қырғызстан</option><option>Ресей</option>`;
+            select.innerHTML = `<option>Казахстан</option><option>Узбекистан</option><option>Кыргыстан</option><option>Россия</option>`;
             row.appendChild(select);
             } else if (field.type === "address") {
   const box = document.createElement("div");
@@ -1918,7 +2085,7 @@ address: { label: "Адрес", type: "address", placeholder: "" },
         if (sourceSelect.value === "url") {
           const src = urlInput.value.trim();
           if (!src) {
-            alert("Ссылка енгізіңіз.");
+            alert("Добавьте ссылку");
             return;
           }
 
@@ -2023,11 +2190,25 @@ address: { label: "Адрес", type: "address", placeholder: "" },
                 : "URL видео";
             element.value = el.text || "";
           } else if (el.type === "button") {
-            element = document.createElement("button");
-            element.type = "button";
-            element.className = "btn btn-sm btn-primary";
-            element.contentEditable = "true";
-            element.textContent = el.text || "";
+
+    element = document.createElement("div");
+
+    element.innerHTML = `
+        <input
+            class="form-control form-control-sm mb-2 button-text"
+            placeholder="Текст кнопки"
+            value="${el.text || ''}">
+
+        <input
+            class="form-control form-control-sm mb-2 button-url"
+            placeholder="Ссылка"
+            value="${el.url || ''}">
+
+        <input
+            type="color"
+            class="form-control form-control-color button-color"
+            value="${el.color || '#7c3aed'}">
+    `;
           } else if (el.type === "list") {
             element = document.createElement("div");
             element.innerHTML = `<ul><li contenteditable="true">${escapeHtml(el.text || "")}</li></ul>`;
@@ -2095,18 +2276,62 @@ address: { label: "Адрес", type: "address", placeholder: "" },
 
         updateCode();
       }
+addBtn.addEventListener("click", function () {
 
-      addBtn.addEventListener("click", function () {
-        const data = getData();
+    const data = getData();
 
-        data.items.push({
-          type: typeSelect.value,
-          text: "",
-        });
+    let newItem = {
+        type: typeSelect.value
+    };
 
-        setData(data);
-        renderContainer();
-      });
+    switch(typeSelect.value){
+
+        case "h1":
+            newItem.text = "Введите заголовок";
+            break;
+
+        case "p":
+            newItem.text = "Введите текст";
+            break;
+
+        case "img":
+            newItem.text = "https://placehold.co/600x300";
+            break;
+
+        case "button":
+            newItem.text = "Кнопка";
+            newItem.url = "";
+            newItem.color = "#7c3aed";
+            break;
+
+        case "link":
+            newItem.text = "Перейти";
+            newItem.url = "";
+            break;
+
+        case "list":
+            newItem.listType = "ul";
+            newItem.items = ["Пункт списка"];
+            break;
+
+        case "media":
+            newItem.mediaType = "video";
+            newItem.src = "";
+            break;
+
+        case "table":
+            newItem.rows = 2;
+            newItem.cols = 2;
+            break;
+    }
+
+    data.items.push(newItem);
+
+    setData(data);
+    renderContainer();
+    updateCode();
+
+});
 
       renderContainer();
     }
@@ -2228,23 +2453,76 @@ item.dataset.value = textarea.value;
         createMediaEditor(item, preview);
       } else if (type === "container") {
         createContainerEditor(item, preview);
-      } else if (type !== "table") {
+      } else if (type !== "table") if(type === "link"){
+
+    const urlInput = document.createElement("input");
+    urlInput.className = "form-control form-control-sm mb-2";
+    urlInput.placeholder = "URL ссылки";
+
+    const textInput = document.createElement("input");
+    textInput.className = "form-control form-control-sm";
+    textInput.placeholder = "Текст ссылки";
+
+    preview.appendChild(urlInput);
+    preview.appendChild(textInput);
+
+    function saveLink(){
+
+        item.dataset.value = JSON.stringify({
+            url: urlInput.value,
+            text: textInput.value
+        });
+
+        updateCode();
+        saveBuilder();
+    }
+
+    urlInput.addEventListener("input", saveLink);
+    textInput.addEventListener("input", saveLink);
+
+}
+else {
+        
         input = document.createElement(type === "p" ? "textarea" : "input");
         input.className = "form-control form-control-sm mt-2";
 
         if (type === "img") input.placeholder = "URL изображения";
-        else if (type === "link") input.placeholder = "URL ссылки";
-        else input.placeholder = "Введите текст";
+if(type === "link"){
 
+    preview.innerHTML = `
+        <input class="form-control form-control-sm mb-2 link-url"
+               placeholder="URL ссылки">
+
+        <input class="form-control form-control-sm link-text"
+               placeholder="Текст ссылки">
+    `;
+
+    const urlInput = preview.querySelector(".link-url");
+    const textInput = preview.querySelector(".link-text");
+
+    function saveLink(){
+
+        item.dataset.value = JSON.stringify({
+            url: urlInput.value,
+            text: textInput.value
+        });
+
+        updateCode();
+        saveBuilder();
+    }
+
+    urlInput.addEventListener("input", saveLink);
+    textInput.addEventListener("input", saveLink);
+}
         if (type === "p") input.rows = 2;
 
 input.addEventListener("input", function () {
   if (type === "img") {
-    item.dataset.value = JSON.stringify({
-      src: input.value,
-      width: 250,
-      height: ""
-    });
+item.dataset.value = JSON.stringify({
+    src: input.value,
+    width: widthInput?.value || 900,
+    height: heightInput?.value || 250
+});
   } else {
     item.dataset.value = input.value;
   }

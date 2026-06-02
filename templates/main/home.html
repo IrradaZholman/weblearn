@@ -2,6 +2,8 @@
 {% block title %}WebLearn — Учим веб-программирование визуально{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
     .hero-gradient {
         background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
@@ -104,6 +106,640 @@
     .faq-item:hover {
         box-shadow: 0 4px 8px rgba(0,0,0,.1);
     }
+    .program-roadmap{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    position:relative;
+    margin-top:20px;
+    gap:20px;
+}
+
+.program-roadmap::before{
+    content:'';
+    position:absolute;
+    top:26px;
+    left:10%;
+    right:10%;
+    height:2px;
+    background:#e2e8f0;
+    z-index:0;
+}
+
+.roadmap-item{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    flex:1;
+}
+
+.roadmap-number{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:#6366f1;
+    color:#fff;
+    margin:0 auto 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:18px;
+}
+
+.roadmap-icon{
+    font-size:52px;
+    color:#6b7280;
+    margin-bottom:24px;
+}
+
+.roadmap-icon i{
+    font-weight:300;
+}
+
+.tech-modern{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:20px;
+    padding:30px;
+    transition:.3s;
+}
+
+.tech-modern:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+.tech-progress{
+    height:8px;
+    background:#eef2ff;
+    border-radius:30px;
+    overflow:hidden;
+    margin-top:15px;
+}
+
+.tech-progress span{
+    display:block;
+    height:100%;
+    background:#6366f1;
+}
+
+.process-step{
+    text-align:center;
+}
+
+.process-icon{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    background:#f8fafc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 20px;
+    font-size:32px;
+}
+
+.arrow-process{
+    font-size:32px;
+    color:#cbd5e1;
+}
+
+.achievement-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:16px;
+    padding:20px;
+    transition:.3s;
+}
+
+.achievement-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+.program-section,
+.tech-section,
+.process-section,
+.achievements-section{
+    background:#fff;
+}
+
+.tech-modern,
+.achievement-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:16px;
+    box-shadow:0 2px 10px rgba(0,0,0,.03);
+}
+
+.roadmap-number{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:#f3f4f6;
+    border:1px solid #e5e7eb;
+    color:#111827;
+}
+
+.roadmap-icon{
+    color:#6b7280;
+    font-size:42px;
+}
+
+.process-icon{
+    width:74px;
+    height:74px;
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+    color:#6b7280;
+}
+
+.arrow-process{
+    color:#cbd5e1;
+}
+
+
+
+.learning-list{
+    padding-left:18px;
+    margin:0;
+}
+
+.learning-list li{
+    margin-bottom:14px;
+    color:#374151;
+}
+.roadmap-icon{
+    width:90px;
+    height:90px;
+    margin:0 auto 24px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:58px;
+    color:#6b7280;
+}
+
+.roadmap-icon i{
+    transition:.3s;
+}
+
+.roadmap-item:hover .roadmap-icon i{
+    transform:translateY(-3px);
+    color:#4f46e5;
+}
+.roadmap-icon{
+    margin-bottom:12px;
+}
+
+.roadmap-item h5{
+    margin-bottom:8px;
+}
+.roadmap-wrapper{
+    position:relative;
+    display:flex;
+    justify-content:flex-start;
+    align-items:flex-start;
+    gap:15px;
+    padding:15px 0;
+}
+
+.roadmap-container{
+    flex:1;
+    display:flex;
+    justify-content:space-between;
+    position:relative;
+}
+
+.roadmap-line{
+    position:absolute;
+    left:0;
+    right:340px;
+    top:48px;
+    border-top:2px dashed #e5e7eb;
+    z-index:0;
+}
+
+.roadmap-step{
+    width:180px;
+    text-align:center;
+    position:relative;
+    z-index:2;
+}
+
+.step-number{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#f3f4f6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 35px;
+    font-weight:700;
+    color:#374151;
+    box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
+
+.step-icon{
+    font-size:40px;
+    color:#9ca3af;
+    margin-bottom:20px;
+}
+
+.js-icon{
+    font-size:42px;
+    font-weight:700;
+    letter-spacing:2px;
+}
+
+.roadmap-step h5{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:12px;
+    color:#111827;
+}
+
+.roadmap-step p{
+    font-size:14px;
+    line-height:1.7;
+    color:#6b7280;
+}
+
+.roadmap-skills{
+    width:320px;
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:16px;
+    padding:25px;
+    flex-shrink:0;
+}
+
+.roadmap-skills h5{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.roadmap-skills ul{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.roadmap-skills li{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:15px;
+    font-size:15px;
+    color:#374151;
+}
+
+.roadmap-skills i{
+    color:#6b7280;
+    margin-top:2px;
+}
+
+@media(max-width:1200px){
+
+    .roadmap-wrapper{
+        flex-direction:column;
+    }
+
+    .roadmap-container{
+        flex-wrap:wrap;
+        gap:30px;
+        justify-content:center;
+    }
+
+    .roadmap-line{
+        display:none;
+    }
+
+    .roadmap-skills{
+        width:100%;
+    }
+}
+.tech-card{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    padding:22px;
+    height:100%;
+    transition:.3s;
+}
+
+.tech-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+.tech-top{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+}
+
+.tech-icon{
+    width:42px;
+    height:42px;
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#f8fafc;
+    border-radius:8px;
+
+    font-size:22px;
+    color:#475569;
+}
+
+.tech-top h5{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:6px;
+}
+
+.tech-top p{
+    font-size:14px;
+    color:#6b7280;
+    line-height:1.7;
+    margin-bottom:18px;
+}
+
+.tech-tags{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:10px;
+}
+
+.tech-tags span{
+    background:#f3f4f6;
+    padding:7px 12px;
+    border-radius:8px;
+    font-size:13px;
+    color:#4b5563;
+    font-weight:500;
+}
+.tech-section .container{
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+.row.align-items-start{
+    margin-left:18px;
+}
+.workflow-section{
+    display:flex;
+    align-items:flex-start;
+    gap:60px;
+}
+
+.workflow-title{
+    width:180px;
+    flex-shrink:0;
+}
+
+.workflow-title h2{
+    font-size:36px;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.workflow-title p{
+    color:#6b7280;
+    line-height:1.6;
+}
+
+.workflow-steps{
+    flex:1;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    margin-left:-40px;
+
+}
+
+.workflow-step{
+    width:160px;
+    text-align:center;
+}
+
+.workflow-icon{
+    width:72px;
+    height:72px;
+    border-radius:50%;
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    margin:0 auto 18px;
+
+    font-size:28px;
+    color:#6b7280;
+}
+
+.workflow-step h6{
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.workflow-step p{
+    font-size:13px;
+    color:#6b7280;
+    line-height:1.7;
+}
+
+.workflow-arrow{
+    margin-top:25px;
+    color:#cbd5e1;
+    font-size:22px;
+}
+.workflow-section{
+    margin-top:0;
+}
+.achievement-preview{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:16px;
+    padding:18px;
+    height:100%;
+
+    display:flex;
+    align-items:center;
+    gap:14px;
+
+    transition:.25s;
+}
+
+.achievement-preview:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.achievement-preview-icon{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+
+    background:#f8fafc;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:24px;
+    color:#6b7280;
+
+    flex-shrink:0;
+}
+
+.achievement-preview-content h6{
+    margin:0 0 4px;
+    font-weight:700;
+    font-size:15px;
+}
+
+.achievement-preview-content p{
+    margin:0;
+    color:#6b7280;
+    font-size:13px;
+    line-height:1.4;
+}.achievement-row{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    flex-wrap:wrap;
+}
+
+.achievement-item{
+    width:220px;
+}
+
+.achievement-preview{
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:16px;
+    padding:14px 16px;
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    min-height:90px;
+    width:100%;
+}
+section{
+    padding-top:45px !important;
+    padding-bottom:45px !important;
+}
+/* HTML */
+.roadmap-step:nth-child(1) .step-icon{
+    color:#e34f26;
+}
+
+/* Продвинутый HTML */
+.roadmap-step:nth-child(2) .step-icon{
+    color:#f97316;
+}
+
+/* CSS */
+.roadmap-step:nth-child(3) .step-icon{
+    color:#1572b6;
+}
+
+/* JavaScript */
+.roadmap-step:nth-child(4) .step-icon{
+    color:#f7df1e;
+}
+
+/* Проект */
+.roadmap-step:nth-child(5) .step-icon{
+    color:#10b981;
+}
+.fa-html5{
+    color:#e34f26 !important;
+}
+
+.fa-css3-alt{
+    color:#1572b6 !important;
+}
+
+.fa-js{
+    color:#f7df1e !important;
+}
+/* Книга */
+.fa-book-open{
+    color:#2563eb;
+}
+
+/* Видео */
+.fa-circle-play{
+    color:#ef4444;
+}
+
+/* Код */
+.workflow-step .fa-code{
+    color:#06b6d4;
+}
+
+/* Загрузка */
+.fa-cloud-arrow-up{
+    color:#10b981;
+}
+
+/* Достижения */
+.workflow-step .fa-star{
+    color:#f59e0b;
+}
+/* Первый шаг */
+.fa-trophy{
+    color:#f59e0b;
+}
+
+/* Практик */
+.achievement-preview .fa-code{
+    color:#06b6d4;
+}
+
+/* Отличник */
+.achievement-preview .fa-star{
+    color:#facc15;
+}
+
+/* Создатель */
+.achievement-preview .fa-rocket{
+    color:#ef4444;
+}
+
+/* Мастер */
+.fa-crown{
+    color:#a855f7;
+}
+.fa-book-open{
+    color:#2563eb;
+}
+.fa-file-lines{
+    color:#7c3aed;
+}
+/* Основы HTML */
+.roadmap-step:nth-child(1) .step-icon{
+    color:#e34f26;
+}
+
+/* Продвинутый HTML */
+.roadmap-step:nth-child(2) .step-icon{
+    color:#8b5cf6;
+}
 </style>
 {% endblock %}
 
@@ -131,7 +767,7 @@
                     <a href="{% url 'courses:course_list' %}"
                        class="btn btn-light btn-lg px-4">
 
-                        <span>🚀</span>
+                        <span></span>
                         Начать обучение
 
                     </a>
@@ -139,7 +775,7 @@
                     <a href="{% url 'editor:standalone' %}"
                        class="btn btn-outline-light btn-lg px-4">
 
-                        <span>💻</span>
+                        <span></span>
                         Попробовать редактор
 
                     </a>
@@ -192,328 +828,390 @@ style="font-size: 0.9rem;"><code>&lt;!DOCTYPE html&gt;
     </div>
 
 </section>
-<!-- Statistics Section -->
-<section class="py-5 bg-white">
+<section class="pt-5 pb-2 bg-white">
     <div class="container">
-        <div class="row g-4">
-            <div class="col-md-3 col-6">
-                <div class="stat-card">
-                    <div class="stat-number">{{ stats.courses_count|default:4 }}</div>
-                    <div class="text-muted fw-semibold">Курсов</div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="stat-card">
-                    <div class="stat-number">{{ stats.lessons_count|default:25 }}</div>
-                    <div class="text-muted fw-semibold">Уроков</div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="stat-card">
-                    <div class="stat-number">{{ stats.submissions_count|default:0 }}</div>
-                    <div class="text-muted fw-semibold">Отправлено работ</div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="stat-card">
-                    <div class="stat-number">{{ stats.users_count|default:0 }}</div>
-                    <div class="text-muted fw-semibold">Учеников</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Why WebLearn Section -->
+<h2 class="fw-bold text-center mb-2">
+Программа обучения
+</h2>
+
+<p class="text-center text-muted mb-4">
+Пошаговый путь от основ до собственного проекта
+</p>
+<div class="roadmap-wrapper">
+
+    <div class="roadmap-line"></div>
+
+    <div class="roadmap-container">
+
+        <div class="roadmap-step">
+            <div class="step-number">1</div>
+            <div class="step-icon">
+                <i class="fa-solid fa-code"></i>
+            </div>
+            <h5>Основы HTML</h5>
+            <p>
+                Изучите структуру веб-страницы, теги,
+                атрибуты и семантику.
+            </p>
+        </div>
+
+        <div class="roadmap-step">
+            <div class="step-number">2</div>
+            <div class="step-icon">
+                <i class="fa-solid fa-pen-ruler"></i>
+            </div>
+            <h5>Продвинутый HTML</h5>
+            <p>
+                Формы, таблицы, медиа элементы
+                и работа с мультимедиа.
+            </p>
+        </div>
+
+        <div class="roadmap-step">
+            <div class="step-number">3</div>
+            <div class="step-icon">
+                <i class="fa-brands fa-css3-alt"></i>
+            </div>
+            <h5>Изучение CSS</h5>
+            <p>
+                Стилизация страниц, селекторы,
+                Flexbox, Grid.
+            </p>
+        </div>
+
+        <div class="roadmap-step">
+            <div class="step-number">4</div>
+            <div class="step-icon js-icon">
+                JS
+            </div>
+            <h5>Изучение JavaScript</h5>
+            <p>
+                Переменные, функции, DOM,
+                события и валидация.
+            </p>
+        </div>
+
+        <div class="roadmap-step">
+            <div class="step-number">5</div>
+            <div class="step-icon">
+                <i class="fa-solid fa-rocket"></i>
+            </div>
+            <h5>Итоговый проект</h5>
+            <p>
+                Создайте свой сайт и закрепите
+                навыки на практике.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="roadmap-skills">
+
+        <h5>Что ты научишься делать:</h5>
+
+        <ul>
+            <li><i class="fa-regular fa-circle-check"></i> Создавать структуру веб-страниц</li>
+            <li><i class="fa-regular fa-circle-check"></i> Оформлять сайты с помощью CSS</li>
+            <li><i class="fa-regular fa-circle-check"></i> Добавлять интерактивность на JavaScript</li>
+            <li><i class="fa-regular fa-circle-check"></i> Работать с формами </li>
+            <li><i class="fa-regular fa-circle-check"></i> Публиковать проекты </li>
+        </ul>
+
+    </div>
+
+</div>
+</section>
 <section class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">Почему WebLearn?</h2>
-            <p class="lead text-muted">Современная платформа для изучения веб-программирования с нуля</p>
-        </div>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 border-0">
-                    <div class="card-body text-center">
-                        <div class="feature-icon bg-primary bg-opacity-10">
-                            <span>👁️</span>
-                        </div>
-                        <h5 class="card-title fw-bold mb-3">Визуальный результат</h5>
-                        <p class="card-text text-muted">Видишь результат кода сразу в превью. Учись на практике, экспериментируй и сразу видь изменения.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 border-0">
-                    <div class="card-body text-center">
-                        <div class="feature-icon bg-success bg-opacity-10">
-                            <span>📝</span>
-                        </div>
-                        <h5 class="card-title fw-bold mb-3">Проверка заданий</h5>
-                        <p class="card-text text-muted">Отправляй работы на проверку и получай подробные комментарии преподавателя. Узнавай свои ошибки и улучшайся.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 border-0">
-                    <div class="card-body text-center">
-                        <div class="feature-icon bg-warning bg-opacity-10">
-                            <span>🚀</span>
-                        </div>
-                        <h5 class="card-title fw-bold mb-3">Без регистрации</h5>
-                        <p class="card-text text-muted">Начни учиться сразу. Регистрация нужна только для сохранения прогресса и получения оценок.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 border-0">
-                    <div class="card-body text-center">
-                        <div class="feature-icon bg-info bg-opacity-10">
-                            <span>📚</span>
-                        </div>
-                        <h5 class="card-title fw-bold mb-3">25 подробных уроков</h5>
-                        <p class="card-text text-muted">От основ HTML до создания интерактивных сайтов. Каждый урок с примерами кода и практическими заданиями.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 border-0">
-                    <div class="card-body text-center">
-                        <div class="feature-icon bg-danger bg-opacity-10">
-                            <span>✅</span>
-                        </div>
-                        <h5 class="card-title fw-bold mb-3">Тесты и проверка знаний</h5>
-                        <p class="card-text text-muted">После каждого урока проходи тест для закрепления материала. Проверяй свои знания и отслеживай прогресс.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 border-0">
-                    <div class="card-body text-center">
-                        <div class="feature-icon bg-secondary bg-opacity-10">
-                            <span>💡</span>
-                        </div>
-                        <h5 class="card-title fw-bold mb-3">Интерактивные примеры</h5>
-                        <p class="card-text text-muted">В каждом уроке есть встроенный редактор с примером кода. Меняй код и сразу видь результат.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="container">
 
-<!-- Program Section -->
-<section class="py-5 bg-white">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 mb-4 mb-lg-0">
-                <h2 class="display-5 fw-bold mb-4">Программа обучения</h2>
-                <p class="lead text-muted mb-4">Систематический подход к изучению веб-разработки</p>
-                <div class="program-container">
-                    <div class="program-step">
-                        <h5 class="fw-bold mb-2">Основы HTML</h5>
-                        <p class="text-muted">Изучи структуру веб-страниц, основные теги, работу с текстом, списками и ссылками.</p>
-                    </div>
-                    <div class="program-step">
-                        <h5 class="fw-bold mb-2">Продвинутый HTML</h5>
-                        <p class="text-muted">Формы, таблицы, семантические элементы HTML5, встраивание мультимедиа.</p>
-                    </div>
-                    <div class="program-step">
-                        <h5 class="fw-bold mb-2">Изучение CSS</h5>
-                        <p class="text-muted">Стилизация страниц, адаптивная верстка, современные техники оформления.</p>
-                    </div>
-                    <div class="program-step">
-                        <h5 class="fw-bold mb-2">Изучение JavaScript</h5>
-                        <p class="text-muted">Программирование, работа с DOM, обработка событий, валидация форм.</p>
-                    </div>
-                    <div class="program-step">
-                        <h5 class="fw-bold mb-2">Итоговый проект</h5>
-                        <p class="text-muted">Создай свой интерактивный сайт, используя все изученные технологии.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card card-custom border-0 p-4">
-                    <h4 class="fw-bold mb-3">Что ты научишься делать:</h4>
-                    <ul class="list-unstyled">
-                        <li class="mb-3">
-                            <span class="badge bg-primary me-2">✓</span>
-                            Создавать структуру веб-страниц
-                        </li>
-                        <li class="mb-3">
-                            <span class="badge bg-primary me-2">✓</span>
-                            Оформлять сайты с помощью CSS
-                        </li>
-                        <li class="mb-3">
-                            <span class="badge bg-primary me-2">✓</span>
-                            Добавлять интерактивность на JavaScript
-                        </li>
-                        <li class="mb-3">
-                            <span class="badge bg-primary me-2">✓</span>
-                            Создавать адаптивные сайты
-                        </li>
-                        <li class="mb-3">
-                            <span class="badge bg-primary me-2">✓</span>
-                            Работать с формами и валидацией
-                        </li>
-                        <li class="mb-3">
-                            <span class="badge bg-primary me-2">✓</span>
-                            Использовать современные веб-технологии
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    <div class="text-center mb-3">
 
-<!-- Technologies Section -->
+        <h2 class="fw-bold">
+            Технологии, которые ты изучишь
+        </h2>
+
+        <p class="text-muted">
+            Актуальные инструменты веб-разработки
+        </p>
+
+    </div>
+
+    <div class="row g-4 justify-content-center">
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+
+                <div class="tech-card">
+
+                    <div class="tech-top">
+
+                        <div class="tech-icon">
+                            <i class="fa-brands fa-html5"></i>
+                        </div>
+
+                        <div>
+                            <h5>HTML5</h5>
+
+                            <p>
+                                Структура, семантика,
+                                формы, мультимедиа
+                                и многое другое.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="tech-tags">
+                        <span>Структура</span>
+                        <span>Семантика</span>
+                        <span>Формы</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="tech-card">
+
+                    <div class="tech-top">
+
+                        <div class="tech-icon">
+                            <i class="fa-brands fa-css3-alt"></i>
+                        </div>
+
+                        <div>
+                            <h5>CSS3</h5>
+
+                            <p>
+                                Стилизация, Flexbox,
+                                Grid, анимации и
+                                адаптивность.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="tech-tags">
+                        <span>Flexbox</span>
+                        <span>Grid</span>
+                        <span>Адаптивность</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="tech-card">
+
+                    <div class="tech-top">
+
+                        <div class="tech-icon">
+                            <i class="fa-brands fa-js"></i>
+                        </div>
+
+                        <div>
+                            <h5>JavaScript</h5>
+
+                            <p>
+                                DOM, события,
+                                валидация,
+                                ES6+ возможности.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="tech-tags">
+                        <span>DOM</span>
+                        <span>События</span>
+                        <span>ES6+</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+</div>
+
+</div>
+</section>
+<section class="pt-5 pb-5 bg-white">
+    <div class="container">
+
+<div class="workflow-section">
+
+    <div class="workflow-title">
+
+        <h2>Как это работает?</h2>
+
+        <p>
+            Простой процесс обучения
+            для максимального результата
+        </p>
+
+    </div>
+
+    <div class="workflow-steps">
+
+        <div class="workflow-step">
+            <div class="workflow-icon">
+<i class="fa-solid fa-book-open"></i>            </div>
+
+            <h6>Выбери курс</h6>
+
+            <p>
+                Начни с основ HTML или выбери интересующий раздел.
+            </p>
+        </div>
+
+        <div class="workflow-arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+        </div>
+
+<div class="workflow-step">
+    <div class="workflow-icon">
+        <i class="fa-solid fa-file-lines"></i>
+    </div>
+
+    <h6>Изучи материал</h6>
+
+    <p>
+        Ознакомься с теорией и примерами
+        выполнения заданий.
+    </p>
+</div>
+
+        <div class="workflow-arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+        </div>
+
+        <div class="workflow-step">
+            <div class="workflow-icon">
+                <i class="fa-solid fa-code"></i>
+            </div>
+
+            <h6>Практикуйся</h6>
+
+            <p>
+                Выполняй задания
+                и проверяй результат.
+            </p>
+        </div>
+
+        <div class="workflow-arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+        </div>
+
+        <div class="workflow-step">
+            <div class="workflow-icon">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+
+            <h6>Отправь на проверку</h6>
+
+            <p>
+                Преподаватель проверит
+                работу и даст обратную связь.
+            </p>
+        </div>
+
+        <div class="workflow-arrow">
+            <i class="fa-solid fa-arrow-right"></i>
+        </div>
+
+        <div class="workflow-step">
+            <div class="workflow-icon">
+                <i class="fa-regular fa-star"></i>
+            </div>
+
+            <h6>Получай достижения</h6>
+
+            <p>
+                Зарабатывай награды
+                и отслеживай прогресс.
+            </p>
+        </div>
+
+    </div>
+  </div>
+</div>
+</section>
 <section class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">Технологии, которые ты изучишь</h2>
-            <p class="lead text-muted">Актуальные инструменты веб-разработки</p>
-        </div>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 border-0 text-center">
-                    <div class="mb-3">
-                        <span style="font-size: 4rem;">📄</span>
-                    </div>
-                    <h4 class="fw-bold mb-3">HTML5</h4>
-                    <p class="text-muted">Современная разметка веб-страниц. Семантические элементы, формы, мультимедиа.</p>
-                    <div class="mt-3">
-                        <span class="tech-badge">Структура</span>
-                        <span class="tech-badge">Семантика</span>
-                        <span class="tech-badge">Формы</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 border-0 text-center">
-                    <div class="mb-3">
-                        <span style="font-size: 4rem;">🎨</span>
-                    </div>
-                    <h4 class="fw-bold mb-3">CSS3</h4>
-                    <p class="text-muted">Стилизация и оформление. Flexbox, Grid, адаптивный дизайн, анимации.</p>
-                    <div class="mt-3">
-                        <span class="tech-badge">Flexbox</span>
-                        <span class="tech-badge">Grid</span>
-                        <span class="tech-badge">Адаптивность</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-custom h-100 p-4 border-0 text-center">
-                    <div class="mb-3">
-                        <span style="font-size: 4rem;">⚙️</span>
-                    </div>
-                    <h4 class="fw-bold mb-3">JavaScript</h4>
-                    <p class="text-muted">Программирование для веба. DOM, события, асинхронность, валидация.</p>
-                    <div class="mt-3">
-                        <span class="tech-badge">DOM</span>
-                        <span class="tech-badge">События</span>
-                        <span class="tech-badge">ES6+</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="container">
 
-<!-- How It Works Section -->
-<section class="py-5 bg-white">
-    <div class="container">
-        <h2 class="text-center display-5 fw-bold mb-5">Как это работает?</h2>
-        <div class="row g-4 justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <a href="{% url 'courses:course_list' %}" class="text-decoration-none">
-                    <div class="card card-custom h-100 border-0 overflow-hidden">
-                        <div class="card-body p-4 text-center">
-                            <div class="bg-primary bg-opacity-10 rounded-3 p-4 mb-3 d-inline-block">
-                                <span class="fs-1">📚</span>
-                            </div>
-                            <h5 class="card-title fw-bold text-dark mb-2">Выбери курс</h5>
-                            <p class="card-text text-muted">Начни с основ HTML или выбери интересующий раздел. Все курсы структурированы и идут от простого к сложному.</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <a href="{% url 'editor:standalone' %}" class="text-decoration-none">
-                    <div class="card card-custom h-100 border-0 overflow-hidden">
-                        <div class="card-body p-4 text-center">
-                            <div class="bg-success bg-opacity-10 rounded-3 p-4 mb-3 d-inline-block">
-                                <span class="fs-1">✏️</span>
-                            </div>
-                            <h5 class="card-title fw-bold text-dark mb-2">Изучай и практикуйся</h5>
-                            <p class="card-text text-muted">Читай теорию, смотри примеры кода и сразу пробуй в встроенном редакторе. Видь результат в реальном времени.</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card card-custom h-100 border-0 overflow-hidden">
-                    <div class="card-body p-4 text-center">
-                        <div class="bg-warning bg-opacity-10 rounded-3 p-4 mb-3 d-inline-block">
-                            <span class="fs-1">📤</span>
-                        </div>
-                        <h5 class="card-title fw-bold text-dark mb-2">Отправляй на проверку</h5>
-                        <p class="card-text text-muted">Выполняй задания и отправляй работы преподавателю. Получай обратную связь и улучшай свои навыки.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<h2 class="fw-bold mb-2">
+Достижения и награды
+</h2>
 
-<!-- FAQ Section -->
-<section class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">Часто задаваемые вопросы</h2>
-            <p class="lead text-muted">Ответы на популярные вопросы</p>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="faq-item">
-                    <h5 class="fw-bold mb-2">Нужна ли регистрация?</h5>
-                    <p class="text-muted mb-0">Нет, регистрация не обязательна. Ты можешь начать учиться сразу. Регистрация нужна только для сохранения прогресса и получения оценок за задания.</p>
-                </div>
-                <div class="faq-item">
-                    <h5 class="fw-bold mb-2">Сколько времени займет обучение?</h5>
-                    <p class="text-muted mb-0">Курс рассчитан на несколько недель при регулярных занятиях. Каждый урок занимает 30-60 минут. Ты можешь учиться в своем темпе.</p>
-                </div>
-                <div class="faq-item">
-                    <h5 class="fw-bold mb-2">Нужны ли предварительные знания?</h5>
-                    <p class="text-muted mb-0">Нет, курс подходит для начинающих. Мы начинаем с самых основ и постепенно переходим к более сложным темам.</p>
-                </div>
-                <div class="faq-item">
-                    <h5 class="fw-bold mb-2">Можно ли выполнять задания отдельно?</h5>
-                    <p class="text-muted mb-0">Да! У нас есть раздел "Дополнительные задания", где ты можешь выполнять задания разной сложности без прохождения всего курса.</p>
-                </div>
-                <div class="faq-item">
-                    <h5 class="fw-bold mb-2">Как проверяются задания?</h5>
-                    <p class="text-muted mb-0">Ты отправляешь свою работу через редактор, и преподаватель проверяет её вручную. Ты получишь оценку и комментарии с рекомендациями.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<p class="text-muted mb-5">
+Мотивируй себя и отслеживай прогресс
+</p>
 
-<!-- CTA Section -->
-<section class="py-5 bg-white">
-    <div class="container text-center">
-        <h2 class="display-5 fw-bold mb-4">Готов начать обучение?</h2>
-        <p class="lead text-muted mb-4">Присоединяйся к другим ученикам и начни создавать свои первые сайты уже сегодня!</p>
-        <div class="d-flex gap-3 justify-content-center flex-wrap">
-            <a href="{% url 'courses:course_list' %}" class="btn btn-primary btn-lg px-5">
-                <span>🚀</span> Начать обучение
-            </a>
-            <a href="{% url 'editor:standalone' %}" class="btn btn-outline-primary btn-lg px-5">
-                <span>💻</span> Попробовать редактор
-            </a>
+<div class="achievement-row">
+<div class="achievement-item"> <div class="achievement-preview">
+        <div class="achievement-preview-icon">
+            <i class="fa-solid fa-trophy"></i>
+        </div>
+        <div class="achievement-preview-content">
+            <h6>Первый шаг</h6>
+            <p>Завершите первый урок</p>
         </div>
     </div>
+</div>
+
+<div class="achievement-item">   <div class="achievement-preview">
+        <div class="achievement-preview-icon">
+            <i class="fa-solid fa-code"></i>
+        </div>
+        <div class="achievement-preview-content">
+            <h6>Практик</h6>
+            <p>Выполните 20 заданий</p>
+        </div>
+    </div>
+</div>
+
+<div class="achievement-item">  <div class="achievement-preview">
+        <div class="achievement-preview-icon">
+            <i class="fa-regular fa-star"></i>
+        </div>
+        <div class="achievement-preview-content">
+            <h6>Отличник</h6>
+            <p>Получите 15 оценок 5/5</p>
+        </div>
+    </div>
+</div>
+
+<div class="achievement-item">  <div class="achievement-preview">
+        <div class="achievement-preview-icon">
+            <i class="fa-solid fa-rocket"></i>
+        </div>
+        <div class="achievement-preview-content">
+            <h6>Создатель</h6>
+            <p>Опубликуйте свой проект</p>
+        </div>
+    </div>
+</div>
+
+<div class="achievement-item">   <div class="achievement-preview">
+        <div class="achievement-preview-icon">
+            <i class="fa-solid fa-crown"></i>
+        </div>
+        <div class="achievement-preview-content">
+            <h6>Мастер</h6>
+            <p>Завершите все курсы</p>
+        </div>
+    </div>
+</div>
+
+</div>
+
+</div>
 </section>
 {% endblock %}

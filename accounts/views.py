@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 
 
@@ -12,16 +12,13 @@ class CustomLoginView(LoginView):
 
     redirect_authenticated_user = True
 
-    # КУДА ПЕРЕНАПРАВЛЯТЬ ПОСЛЕ ВХОДА
     def get_success_url(self):
 
         user = self.request.user
 
-        # ЕСЛИ АДМИН
         if user.is_superuser:
             return '/admin/'
 
-        # ЕСЛИ ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ
         return '/'
 
 
@@ -40,7 +37,6 @@ def register(request):
 
             login(request, user)
 
-            # ПОСЛЕ РЕГИСТРАЦИИ
             if user.is_superuser:
                 return redirect('/admin/')
 
@@ -50,3 +46,11 @@ def register(request):
         form = UserCreationForm()
 
     return render(request, 'accounts/register.html', {'form': form})
+
+
+# ВЫХОД ИЗ АККАУНТА
+def logout_view(request):
+
+    logout(request)
+
+    return redirect('/')

@@ -1323,15 +1323,12 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
             </a>
         </li>
         {% endif %}
-<li>
-    <form action="{% url 'accounts:logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit"
-                class="dropdown-item text-danger border-0 bg-transparent w-100 text-start">
-            🚪 Выйти
-        </button>
-    </form>
-</li>
+        <li>
+            <a class="dropdown-item text-danger"
+               href="{% url 'accounts:logout' %}">
+                🚪 Выйти
+            </a>
+        </li>
     </ul>
 </li>
 

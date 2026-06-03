@@ -94,10 +94,21 @@ class QuizAdmin(admin.ModelAdmin):
 
 @admin.register(QuizAttempt)
 class QuizAttemptAdmin(admin.ModelAdmin):
-    list_display = ['user', 'quiz', 'score', 'passed', 'completed_at']
+    list_display = [
+        'user',
+        'quiz',
+        'score',
+        'passed',
+        'completed_date'
+    ]
+
     list_filter = ['passed', 'quiz']
     search_fields = ['user__username']
     readonly_fields = ['completed_at']
+
+    def completed_date(self, obj):
+        return obj.completed_at.strftime('%d.%m.%Y')
+
 
 
 @admin.register(UserProgress)

@@ -10,7 +10,6 @@ class AchievementAdmin(admin.ModelAdmin):
     list_display = [
         'user',
         'title',
-        'created_at'
     ]
 
     search_fields = [
@@ -21,7 +20,7 @@ class AchievementAdmin(admin.ModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['title', 'order', 'created_at']
+    list_display = ['title', 'order']
     prepopulated_fields = {'slug': ('title',)}
     fieldsets = (
         (None, {'fields': ('title', 'slug', 'order', 'icon')}),
@@ -32,7 +31,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ['title', 'course', 'order', 'created_at']
+    list_display = ['title', 'course', 'order']
     list_filter = ['course']
     prepopulated_fields = {'slug': ('title',)}
     fieldsets = (
@@ -56,10 +55,16 @@ class StandaloneAssignmentAdmin(admin.ModelAdmin):
 
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'assignment', 'standalone_assignment', 'user', 'status', 'grade', 'created_at']
+    list_display = [
+    'id',
+    'assignment',
+    'standalone_assignment',
+    'user',
+    'status',
+    'grade'
+]   
     list_filter = ['status']
     search_fields = ['user__username', 'comment']
-    readonly_fields = ['created_at']
     list_editable = ['status', 'grade']
     fieldsets = (
         (None, {'fields': ('assignment', 'standalone_assignment', 'user', 'status', 'grade')}),
@@ -103,16 +108,13 @@ class QuizAttemptAdmin(admin.ModelAdmin):
 
     list_filter = ['passed', 'quiz']
     search_fields = ['user__username']
-    readonly_fields = ['completed_at']
 
-    def completed_date(self, obj):
-        return obj.completed_at.strftime('%d.%m.%Y')
 
 
 
 @admin.register(UserProgress)
 class UserProgressAdmin(admin.ModelAdmin):
-    list_display = ['user', 'lesson', 'course', 'completed', 'updated_at']
+    list_display = ['user', 'lesson', 'course', 'completed']
     list_filter = ['completed', 'lesson__course']
     search_fields = ['user__username']
     readonly_fields = ['updated_at']
@@ -120,7 +122,6 @@ class UserProgressAdmin(admin.ModelAdmin):
 
 @admin.register(CourseReview)
 class CourseReviewAdmin(admin.ModelAdmin):
-    list_display = ['user', 'course', 'rating', 'created_at']
+    list_display = ['user', 'course', 'rating']
     list_filter = ['rating', 'course']
     search_fields = ['user__username', 'text']
-    readonly_fields = ['created_at']

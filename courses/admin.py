@@ -4,18 +4,7 @@ from .models import (
     Quiz, Question, Answer, QuizAttempt, UserProgress,
     CourseReview, Achievement
 )
-@admin.register(Achievement)
-class AchievementAdmin(admin.ModelAdmin):
 
-    list_display = [
-        'user',
-        'title',
-    ]
-
-    search_fields = [
-        'user__username',
-        'title'
-    ]
 
 
 @admin.register(Course)
@@ -56,21 +45,43 @@ class StandaloneAssignmentAdmin(admin.ModelAdmin):
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
     list_display = [
-    'id',
-    'assignment',
-    'standalone_assignment',
-    'user',
-    'status',
-    'grade'
-]   
+        'id',
+        'task_name',
+        'user',
+        'status',
+        'grade'
+    ]
+
     list_filter = ['status']
     search_fields = ['user__username', 'comment']
     list_editable = ['status', 'grade']
+
     fieldsets = (
-        (None, {'fields': ('assignment', 'standalone_assignment', 'user', 'status', 'grade')}),
-        ('Работа ученика', {'fields': ('code', 'comment')}),
-        ('Проверка', {'fields': ('reviewer_comment', 'reviewed_at')}),
+        (None, {
+            'fields': (
+                'assignment',
+                'standalone_assignment',
+                'user',
+                'status',
+                'grade'
+            )
+        }),
+        ('Работа ученика', {
+            'fields': ('code', 'comment')
+        }),
+        ('Проверка', {
+            'fields': ('reviewer_comment', 'reviewed_at')
+        }),
     )
+
+    def task_name(self, obj):
+        if obj.assignment:
+            return obj.assignment.title
+        if obj.standalone_assignment:
+            return obj.standalone_assignment.title
+        return '-'
+
+    task_name.short_description = 'Задание'
 
 
 class AnswerInline(admin.TabularInline):
@@ -120,8 +131,3 @@ class UserProgressAdmin(admin.ModelAdmin):
     readonly_fields = ['updated_at']
 
 
-@admin.register(CourseReview)
-class CourseReviewAdmin(admin.ModelAdmin):
-    list_display = ['user', 'course', 'rating']
-    list_filter = ['rating', 'course']
-    search_fields = ['user__username', 'text']

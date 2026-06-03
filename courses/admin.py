@@ -98,8 +98,7 @@ class QuizAttemptAdmin(admin.ModelAdmin):
         'user',
         'quiz',
         'score',
-        'passed',
-        'completed_date'
+        'passed'
     ]
 
     list_filter = ['passed', 'quiz']

@@ -42,8 +42,13 @@ class StandaloneAssignmentAdmin(admin.ModelAdmin):
     list_filter = ['difficulty']
 
 
+from django.contrib import admin
+from django.utils.html import format_html
+import json
+
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
+
     list_display = [
         'id',
         'task_name',
@@ -56,6 +61,8 @@ class SubmissionAdmin(admin.ModelAdmin):
     search_fields = ['user__username', 'comment']
     list_editable = ['status', 'grade']
 
+    readonly_fields = ['formatted_code']
+
     fieldsets = (
         (None, {
             'fields': (
@@ -67,12 +74,70 @@ class SubmissionAdmin(admin.ModelAdmin):
             )
         }),
         ('Работа ученика', {
-            'fields': ('code', 'comment')
+            'fields': (
+                'formatted_code',
+                'comment'
+            )
         }),
         ('Проверка', {
-            'fields': ('reviewer_comment', 'reviewed_at')
+            'fields': (
+                'reviewer_comment',
+                'reviewed_at'
+            )
         }),
     )
+
+    def formatted_code(self, obj):
+        if not obj.code:
+            return "-"
+
+        try:
+            data = json.loads(obj.code)
+
+            html_code = data.get("html", "")
+            css_code = data.get("css", "")
+            js_code = data.get("js", "")
+
+            result = ""
+
+            if html_code:
+                result += "HTML\n"
+                result += "=" * 50 + "\n"
+                result += html_code + "\n\n"
+
+            if css_code:
+                result += "CSS\n"
+                result += "=" * 50 + "\n"
+                result += css_code + "\n\n"
+
+            if js_code:
+                result += "JavaScript\n"
+                result += "=" * 50 + "\n"
+                result += js_code
+
+            return format_html(
+                '''
+                <pre style="
+                    white-space: pre-wrap;
+                    font-family: Consolas, monospace;
+                    background:#f8f9fa;
+                    border:1px solid #ddd;
+                    padding:15px;
+                    max-height:700px;
+                    overflow:auto;
+                    margin:0;
+                ">{}</pre>
+                ''',
+                result
+            )
+
+        except Exception:
+            return format_html(
+                '<pre style="white-space:pre-wrap;">{}</pre>',
+                obj.code
+            )
+
+    formatted_code.short_description = "Код ученика"
 
     def task_name(self, obj):
         if obj.assignment:
